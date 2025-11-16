@@ -1,0 +1,16 @@
+cost_date,plot_name,category,description,quantity,unit,unit_cost,total_cost,currency
+2024-01-08,North Field,seeds,Roma VF Tomato Seeds,0.5,kg,180.00,90.00,USD
+2024-01-08,South Field,seeds,Beefsteak Tomato Seeds,0.45,kg,200.00,90.00,USD
+2024-01-10,North Field,fertilizer,10-10-10 Compound Fertilizer,50,kg,1.50,75.00,USD
+2024-01-10,South Field,fertilizer,10-10-10 Compound Fertilizer,45,kg,1.50,67.50,USD
+2024-01-12,North Field,labor,Land Preparation,8,hours,15.00,120.00,USD
+2024-01-12,South Field,labor,Land Preparation,8,hours,15.00,120.00,USD
+2024-01-14,North Field,labor,Planting,12,hours,15.00,180.00,USD
+2024-01-14,South Field,labor,Planting,12,hours,15.00,180.00,USD
+2024-01-15,All Plots,equipment,Tractor Fuel,150,liters,1.20,180.00,USD
+2024-01-20,North Field,water,Irrigation Water,15,cubic_meters,0.50,7.50,USD
+2024-01-25,North Field,fertilizer,Nitrogen Fertilizer (46-0-0),15,kg,1.50,22.50,USD
+2024-02-01,East Field,seeds,Buttercrunch Lettuce Seeds,0.2,kg,120.00,24.00,USD
+2024-02-05,East Field,fertilizer,Organic Compost,200,kg,0.90,180.00,USD
+2024-02-10,North Field,pest_control,Organic Insecticide,2,liters,18.00,36.00,USD
+2024-03-01,All Plots,labor,Irrigation Maintenance,16,hours,15.00,240.00,USD

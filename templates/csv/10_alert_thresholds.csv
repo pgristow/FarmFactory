@@ -1,0 +1,14 @@
+plot_name,parameter,min_value,max_value,severity,active
+North Field,soil_moisture_percent,25,80,warning,true
+North Field,soil_moisture_percent,15,90,critical,true
+North Field,soil_ph_level,6.0,7.5,warning,true
+North Field,soil_ph_level,5.5,8.0,critical,true
+North Field,air_temp_celsius,5,35,warning,true
+North Field,air_temp_celsius,0,40,critical,true
+South Field,soil_moisture_percent,25,80,warning,true
+South Field,soil_moisture_percent,15,90,critical,true
+East Field,soil_moisture_percent,30,85,warning,true
+East Field,soil_moisture_percent,20,92,critical,true
+Main Plot,soil_moisture_percent,28,82,warning,true
+All Plots,wind_speed_kmh,0,50,warning,true
+All Plots,wind_speed_kmh,0,70,critical,true

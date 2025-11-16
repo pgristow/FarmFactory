@@ -1,0 +1,11 @@
+harvest_date,plot_name,crop_name,quantity_kg,quality_grade,revenue_usd,market,notes
+2024-04-02,East Field,Lettuce,450,Premium,900.00,Farmers Market,First harvest - excellent quality
+2024-04-09,East Field,Lettuce,380,Premium,760.00,Farmers Market,Second harvest
+2024-04-16,East Field,Lettuce,420,Premium,840.00,Local Restaurant,Direct sale to restaurant
+2024-05-16,North Field,Tomato,1250,Grade A,2500.00,Wholesale Distributor,Early season premium price
+2024-05-23,North Field,Tomato,1580,Grade A,2844.00,Wholesale Distributor,Peak production
+2024-05-30,North Field,Tomato,1420,Grade A,2556.00,Wholesale Distributor,Consistent quality
+2024-05-22,South Field,Tomato,980,Grade A,1960.00,Farmers Market,Direct to consumer
+2024-05-29,South Field,Tomato,1150,Grade A,2300.00,Farmers Market,High demand
+2024-05-28,West Plot,Bell Pepper,680,Premium,2040.00,Local Restaurant,Specialty variety premium
+2024-06-22,Main Plot,Corn,3200,Grade A,4800.00,Wholesale Distributor,Sweet corn harvest

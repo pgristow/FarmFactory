@@ -1,0 +1,13 @@
+observation_date,plot_name,growth_stage,bbch_code,height_cm,canopy_cover_percent,health_score,notes
+2024-01-22,North Field,germination,9,5.2,5,8,Good germination rate - 95%
+2024-01-29,North Field,vegetative,12,15.8,15,8,Strong early growth
+2024-02-05,North Field,vegetative,14,28.5,30,9,Excellent vegetative development
+2024-02-12,North Field,vegetative,16,42.3,48,8,Some leaf curl observed on 5% of plants
+2024-02-19,North Field,flowering,61,58.7,65,8,First flowers appearing
+2024-02-26,North Field,flowering,65,68.2,75,9,Full flowering stage
+2024-03-05,North Field,fruiting,71,72.5,80,8,Fruit set beginning
+2024-03-12,North Field,fruiting,75,75.3,85,9,Good fruit development
+2024-02-08,East Field,vegetative,13,8.5,25,9,Lettuce heads forming nicely
+2024-02-15,East Field,vegetative,16,12.3,45,9,Ready for first harvest soon
+2024-01-27,Main Plot,germination,11,8.2,10,8,Corn emergence uniform
+2024-02-03,Main Plot,vegetative,13,22.5,18,8,Good early vigor
