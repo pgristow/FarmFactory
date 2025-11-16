@@ -1,0 +1,104 @@
+FarmFactory Project Directory Structure
+========================================
+
+FarmFactory/
+│
+├── 📋 Project Management & Documentation
+│   ├── PROJECT_STATUS.md              ⭐ Sprint tracking, task assignments, risks
+│   ├── CONTRIBUTING.md                ⭐ Development guidelines, coding standards
+│   ├── CHANGELOG.md                   ⭐ Version history tracking
+│   ├── PROJECT_SETUP_SUMMARY.md       ⭐ Complete setup summary
+│   ├── FARM_OPTIMIZATION_PLAN.md         Detailed system architecture
+│   ├── IMPLEMENTATION_GUIDE.md           Step-by-step dev guide
+│   ├── README.md                         Project overview
+│   ├── .gitignore                     ⭐ Comprehensive ignore patterns
+│   └── .env.example                      Environment template
+│
+├── 🐍 Backend (FastAPI)
+│   ├── app/
+│   │   ├── api/v1/endpoints/            API route handlers
+│   │   ├── models/                      SQLAlchemy database models
+│   │   ├── schemas/                     Pydantic validation schemas
+│   │   ├── services/                    Business logic layer
+│   │   ├── tasks/                       Celery async tasks
+│   │   ├── utils/                       Utility functions
+│   │   ├── core/                        Core configurations
+│   │   ├── config.py                    Settings management
+│   │   ├── database.py                  Database connection
+│   │   └── main.py                      FastAPI application
+│   ├── alembic/                         Database migrations
+│   │   └── versions/                    Migration files
+│   ├── tests/
+│   │   ├── unit/                        Unit tests
+│   │   ├── integration/                 Integration tests
+│   │   ├── e2e/                         End-to-end tests
+│   │   └── performance/                 Performance tests
+│   ├── requirements.txt                 Python dependencies
+│   ├── Dockerfile                       Production container
+│   └── README.md                        Backend documentation
+│
+├── ⚛️  Frontend (React + TypeScript)
+│   ├── src/
+│   │   ├── components/
+│   │   │   ├── common/                  Reusable components
+│   │   │   ├── farms/                   Farm components
+│   │   │   ├── plots/                   Plot components
+│   │   │   ├── dashboard/               Dashboard components
+│   │   │   ├── import/                  Import components
+│   │   │   └── analytics/               Analytics components
+│   │   ├── pages/                       Page components
+│   │   ├── services/                    API client
+│   │   ├── hooks/                       Custom React hooks
+│   │   ├── types/                       TypeScript types
+│   │   ├── utils/                       Utility functions
+│   │   └── tests/                       Component tests
+│   ├── public/                          Static assets
+│   ├── tests/                           E2E tests
+│   ├── package.json                     Dependencies
+│   ├── Dockerfile.dev                   Dev container
+│   └── README.md                        Frontend documentation
+│
+├── 📚 Documentation
+│   ├── README.md                     ⭐ Documentation hub
+│   ├── api/
+│   │   └── README.md                 ⭐ API reference guide
+│   ├── user-guide/
+│   │   └── README.md                 ⭐ User getting started
+│   ├── developer-guide/
+│   │   └── README.md                 ⭐ Developer setup
+│   └── architecture/
+│       └── README.md                 ⭐ System architecture
+│
+├── 🗂️  Templates & Data
+│   ├── templates/csv/                   CSV import templates
+│   ├── uploads/                         User-uploaded files
+│   └── logs/                            Application logs
+│
+├── 🔧 Infrastructure & DevOps
+│   ├── docker-compose.yml               Development environment
+│   ├── docker-compose.prod.yml          Production environment
+│   ├── infrastructure/
+│   │   ├── docker/                      Docker configs
+│   │   └── kubernetes/                  K8s manifests
+│   ├── monitoring/
+│   │   ├── prometheus/                  Metrics collection
+│   │   ├── grafana/                     Dashboards
+│   │   └── alertmanager/                Alert routing
+│   └── scripts/                         Utility scripts
+│
+└── 📊 Project Statistics
+    ├── Total Directories: 44
+    ├── Documentation Files: 13
+    ├── Lines of Documentation: ~3,100
+    └── Team Members: 5
+
+Legend:
+⭐ = Created in this setup session
+📋 = Project management
+🐍 = Backend (Python/FastAPI)
+⚛️  = Frontend (React/TypeScript)
+📚 = Documentation
+🗂️  = Data and templates
+🔧 = Infrastructure and DevOps
+📊 = Statistics
+

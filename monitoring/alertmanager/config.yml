@@ -1,0 +1,78 @@
+# Alertmanager Configuration for FarmFactory
+
+global:
+  resolve_timeout: 5m
+
+# The root route
+route:
+  group_by: ['alertname', 'cluster', 'service']
+  group_wait: 10s
+  group_interval: 10s
+  repeat_interval: 12h
+  receiver: 'default'
+  routes:
+    - match:
+        severity: critical
+      receiver: 'critical'
+      continue: true
+    - match:
+        severity: warning
+      receiver: 'warning'
+
+# Receivers
+receivers:
+  - name: 'default'
+    # Default receiver - logs to console
+    webhook_configs:
+      - url: 'http://localhost:5001/webhook'
+        send_resolved: true
+
+  - name: 'critical'
+    # Critical alerts - email + webhook
+    email_configs:
+      - to: '${ADMIN_EMAIL:-admin@farmfactory.com}'
+        from: '${ALERT_EMAIL_FROM:-alerts@farmfactory.com}'
+        smarthost: '${SMTP_HOST:-smtp.gmail.com}:${SMTP_PORT:-587}'
+        auth_username: '${SMTP_USER}'
+        auth_password: '${SMTP_PASSWORD}'
+        headers:
+          Subject: '[CRITICAL] FarmFactory Alert: {{ .GroupLabels.alertname }}'
+        text: |
+          {{ range .Alerts }}
+          Alert: {{ .Labels.alertname }}
+          Severity: {{ .Labels.severity }}
+          Summary: {{ .Annotations.summary }}
+          Description: {{ .Annotations.description }}
+          {{ end }}
+    # Uncomment to enable Slack notifications
+    # slack_configs:
+    #   - api_url: 'YOUR_SLACK_WEBHOOK_URL'
+    #     channel: '#farmfactory-alerts'
+    #     title: '[CRITICAL] {{ .GroupLabels.alertname }}'
+    #     text: '{{ range .Alerts }}{{ .Annotations.description }}{{ end }}'
+
+  - name: 'warning'
+    # Warning alerts - email only
+    email_configs:
+      - to: '${ADMIN_EMAIL:-admin@farmfactory.com}'
+        from: '${ALERT_EMAIL_FROM:-alerts@farmfactory.com}'
+        smarthost: '${SMTP_HOST:-smtp.gmail.com}:${SMTP_PORT:-587}'
+        auth_username: '${SMTP_USER}'
+        auth_password: '${SMTP_PASSWORD}'
+        headers:
+          Subject: '[WARNING] FarmFactory Alert: {{ .GroupLabels.alertname }}'
+        text: |
+          {{ range .Alerts }}
+          Alert: {{ .Labels.alertname }}
+          Severity: {{ .Labels.severity }}
+          Summary: {{ .Annotations.summary }}
+          Description: {{ .Annotations.description }}
+          {{ end }}
+
+# Inhibition rules
+inhibit_rules:
+  - source_match:
+      severity: 'critical'
+    target_match:
+      severity: 'warning'
+    equal: ['alertname', 'instance']

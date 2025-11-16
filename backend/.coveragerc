@@ -1,0 +1,102 @@
+# Coverage.py configuration for FarmFactory backend
+
+[run]
+# Source code to measure
+source = app
+
+# Files to omit from coverage
+omit =
+    */tests/*
+    */test_*.py
+    */__pycache__/*
+    */venv/*
+    */env/*
+    */migrations/*
+    */alembic/*
+    */.venv/*
+    */site-packages/*
+    app/__init__.py
+    app/config.py
+
+# Enable branch coverage
+branch = True
+
+# Parallel mode for multi-process coverage
+parallel = False
+
+# Data file location
+data_file = .coverage
+
+[report]
+# Regexes for lines to exclude from consideration
+exclude_lines =
+    # Have to re-enable the standard pragma
+    pragma: no cover
+
+    # Don't complain about missing debug-only code
+    def __repr__
+    def __str__
+
+    # Don't complain if tests don't hit defensive assertion code
+    raise AssertionError
+    raise NotImplementedError
+
+    # Don't complain if non-runnable code isn't run
+    if __name__ == .__main__.:
+    if TYPE_CHECKING:
+
+    # Don't complain about abstract methods
+    @abstractmethod
+    @abstract
+
+    # Don't complain about pass statements
+    pass
+
+    # Don't complain about ellipsis
+    \.\.\.
+
+# Ignore errors
+ignore_errors = False
+
+# Precision for coverage percentage
+precision = 2
+
+# Show missing lines
+show_missing = True
+
+# Skip covered files in report
+skip_covered = False
+
+# Skip empty files
+skip_empty = True
+
+# Sort by coverage percentage
+sort = Cover
+
+[html]
+# HTML report directory
+directory = htmlcov
+
+# Title for HTML report
+title = FarmFactory Backend Coverage Report
+
+[xml]
+# XML report output
+output = coverage.xml
+
+[json]
+# JSON report output
+output = coverage.json
+show_contexts = True
+
+# Coverage thresholds
+# Fail if coverage falls below these percentages
+[coverage:minimum]
+# Overall coverage threshold
+total = 80
+
+# Per-file coverage threshold
+file = 70
+
+# Branch coverage threshold
+branch = 75
