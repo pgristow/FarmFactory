@@ -1,0 +1,863 @@
+{
+  "version": "1.0",
+  "description": "KPI and metrics definitions for FarmFactory dashboards",
+  "created": "2025-11-17",
+  "kpis": {
+    "water_management": {
+      "total_water_used_30d": {
+        "name": "Total Water Used (30 Days)",
+        "description": "Total irrigation water volume in the last 30 days",
+        "category": "water_management",
+        "formula": "SUM(irrigation_events.volume_liters WHERE event_date >= CURRENT_DATE - 30)",
+        "data_sources": [
+          {
+            "table": "irrigation_events",
+            "fields": ["volume_liters", "event_date"]
+          }
+        ],
+        "unit": "liters",
+        "display_format": "0,0",
+        "target_value": null,
+        "threshold": {
+          "good": {
+            "operator": "<=",
+            "value": 50000,
+            "color": "#4CAF50"
+          },
+          "warning": {
+            "operator": "between",
+            "value": [50000, 75000],
+            "color": "#FF9800"
+          },
+          "critical": {
+            "operator": ">",
+            "value": 75000,
+            "color": "#F44336"
+          }
+        },
+        "calculation_method": "aggregation",
+        "refresh_frequency": "daily"
+      },
+      "water_use_efficiency": {
+        "name": "Water Use Efficiency",
+        "description": "Liters of water used per kilogram of yield",
+        "category": "water_management",
+        "formula": "SUM(irrigation_events.volume_liters) / SUM(harvests.quantity_kg)",
+        "data_sources": [
+          {
+            "table": "irrigation_events",
+            "fields": ["volume_liters"]
+          },
+          {
+            "table": "harvests",
+            "fields": ["quantity_kg"]
+          }
+        ],
+        "unit": "liters/kg",
+        "display_format": "0.00",
+        "target_value": 200,
+        "threshold": {
+          "excellent": {
+            "operator": "<=",
+            "value": 150,
+            "color": "#4CAF50"
+          },
+          "good": {
+            "operator": "between",
+            "value": [150, 250],
+            "color": "#8BC34A"
+          },
+          "warning": {
+            "operator": "between",
+            "value": [250, 350],
+            "color": "#FF9800"
+          },
+          "critical": {
+            "operator": ">",
+            "value": 350,
+            "color": "#F44336"
+          }
+        },
+        "calculation_method": "ratio",
+        "refresh_frequency": "weekly"
+      },
+      "irrigation_frequency": {
+        "name": "Irrigation Frequency",
+        "description": "Average number of irrigation events per week",
+        "category": "water_management",
+        "formula": "COUNT(irrigation_events) / (DATEDIFF(MAX(event_date), MIN(event_date)) / 7)",
+        "data_sources": [
+          {
+            "table": "irrigation_events",
+            "fields": ["event_date"]
+          }
+        ],
+        "unit": "events/week",
+        "display_format": "0.0",
+        "target_value": 3,
+        "threshold": {
+          "good": {
+            "operator": "between",
+            "value": [2, 4],
+            "color": "#4CAF50"
+          },
+          "warning": {
+            "operator": "not_between",
+            "value": [2, 4],
+            "color": "#FF9800"
+          }
+        },
+        "calculation_method": "time_based_average",
+        "refresh_frequency": "daily"
+      },
+      "water_cost_per_m3": {
+        "name": "Cost Per Cubic Meter",
+        "description": "Average cost of water per cubic meter",
+        "category": "water_management",
+        "formula": "SUM(irrigation_events.cost) / (SUM(irrigation_events.volume_liters) / 1000)",
+        "data_sources": [
+          {
+            "table": "irrigation_events",
+            "fields": ["cost", "volume_liters"]
+          }
+        ],
+        "unit": "USD/m³",
+        "display_format": "$0.00",
+        "target_value": 0.50,
+        "threshold": {
+          "good": {
+            "operator": "<=",
+            "value": 0.50,
+            "color": "#4CAF50"
+          },
+          "warning": {
+            "operator": "between",
+            "value": [0.50, 1.00],
+            "color": "#FF9800"
+          },
+          "critical": {
+            "operator": ">",
+            "value": 1.00,
+            "color": "#F44336"
+          }
+        },
+        "calculation_method": "ratio",
+        "refresh_frequency": "weekly"
+      }
+    },
+    "nutrient_management": {
+      "npk_balance_current": {
+        "name": "NPK Balance (Current)",
+        "description": "Current nitrogen, phosphorus, potassium levels vs optimal",
+        "category": "nutrient_management",
+        "formula": "{\n  \"nitrogen\": SUM(nutrient_applications.nitrogen_kg) / plots.area_hectares,\n  \"phosphorus\": SUM(nutrient_applications.phosphorus_kg) / plots.area_hectares,\n  \"potassium\": SUM(nutrient_applications.potassium_kg) / plots.area_hectares\n}",
+        "data_sources": [
+          {
+            "table": "nutrient_applications",
+            "fields": ["nitrogen_kg", "phosphorus_kg", "potassium_kg", "application_date"]
+          },
+          {
+            "table": "plots",
+            "fields": ["area_hectares"]
+          }
+        ],
+        "unit": "kg/ha",
+        "display_format": "N: 0.0, P: 0.0, K: 0.0",
+        "target_value": {
+          "nitrogen": 120,
+          "phosphorus": 60,
+          "potassium": 100
+        },
+        "threshold": {
+          "good": {
+            "operator": "within_range",
+            "nitrogen": [100, 140],
+            "phosphorus": [50, 70],
+            "potassium": [80, 120],
+            "color": "#4CAF50"
+          },
+          "warning": {
+            "operator": "outside_range",
+            "color": "#FF9800"
+          }
+        },
+        "calculation_method": "multi_metric",
+        "refresh_frequency": "daily"
+      },
+      "nutrient_use_efficiency": {
+        "name": "Nutrient Use Efficiency",
+        "description": "Kilograms of yield per kilogram of fertilizer applied",
+        "category": "nutrient_management",
+        "formula": "SUM(harvests.quantity_kg) / SUM(nutrient_applications.nitrogen_kg + nutrient_applications.phosphorus_kg + nutrient_applications.potassium_kg)",
+        "data_sources": [
+          {
+            "table": "harvests",
+            "fields": ["quantity_kg"]
+          },
+          {
+            "table": "nutrient_applications",
+            "fields": ["nitrogen_kg", "phosphorus_kg", "potassium_kg"]
+          }
+        ],
+        "unit": "kg yield/kg fertilizer",
+        "display_format": "0.00",
+        "target_value": 15,
+        "threshold": {
+          "excellent": {
+            "operator": ">=",
+            "value": 20,
+            "color": "#4CAF50"
+          },
+          "good": {
+            "operator": "between",
+            "value": [15, 20],
+            "color": "#8BC34A"
+          },
+          "warning": {
+            "operator": "between",
+            "value": [10, 15],
+            "color": "#FF9800"
+          },
+          "critical": {
+            "operator": "<",
+            "value": 10,
+            "color": "#F44336"
+          }
+        },
+        "calculation_method": "ratio",
+        "refresh_frequency": "weekly"
+      },
+      "nutrient_cost_per_hectare": {
+        "name": "Nutrient Cost Per Hectare",
+        "description": "Total fertilizer cost per hectare",
+        "category": "nutrient_management",
+        "formula": "SUM(nutrient_applications.cost) / plots.area_hectares",
+        "data_sources": [
+          {
+            "table": "nutrient_applications",
+            "fields": ["cost"]
+          },
+          {
+            "table": "plots",
+            "fields": ["area_hectares"]
+          }
+        ],
+        "unit": "USD/ha",
+        "display_format": "$0,0.00",
+        "target_value": 500,
+        "threshold": {
+          "good": {
+            "operator": "<=",
+            "value": 500,
+            "color": "#4CAF50"
+          },
+          "warning": {
+            "operator": "between",
+            "value": [500, 800],
+            "color": "#FF9800"
+          },
+          "critical": {
+            "operator": ">",
+            "value": 800,
+            "color": "#F44336"
+          }
+        },
+        "calculation_method": "ratio",
+        "refresh_frequency": "weekly"
+      },
+      "application_frequency": {
+        "name": "Fertilizer Application Frequency",
+        "description": "Average applications per month",
+        "category": "nutrient_management",
+        "formula": "COUNT(nutrient_applications) / (DATEDIFF(MAX(application_date), MIN(application_date)) / 30)",
+        "data_sources": [
+          {
+            "table": "nutrient_applications",
+            "fields": ["application_date"]
+          }
+        ],
+        "unit": "applications/month",
+        "display_format": "0.0",
+        "target_value": 2,
+        "threshold": {
+          "good": {
+            "operator": "between",
+            "value": [2, 4],
+            "color": "#4CAF50"
+          },
+          "warning": {
+            "operator": "not_between",
+            "value": [2, 4],
+            "color": "#FF9800"
+          }
+        },
+        "calculation_method": "time_based_average",
+        "refresh_frequency": "weekly"
+      }
+    },
+    "environmental": {
+      "avg_temperature_7d": {
+        "name": "Average Temperature (7 Days)",
+        "description": "Mean temperature over the last 7 days",
+        "category": "environmental",
+        "formula": "AVG(environmental_readings.temperature_celsius WHERE reading_time >= CURRENT_TIMESTAMP - INTERVAL '7 days')",
+        "data_sources": [
+          {
+            "table": "environmental_readings",
+            "fields": ["temperature_celsius", "reading_time"]
+          }
+        ],
+        "unit": "°C",
+        "display_format": "0.0",
+        "target_value": null,
+        "threshold": {
+          "optimal": {
+            "operator": "between",
+            "value": [20, 28],
+            "color": "#4CAF50"
+          },
+          "acceptable": {
+            "operator": "between",
+            "value": [15, 32],
+            "color": "#FFC107"
+          },
+          "critical": {
+            "operator": "outside",
+            "value": [15, 32],
+            "color": "#F44336"
+          }
+        },
+        "calculation_method": "aggregation",
+        "refresh_frequency": "hourly"
+      },
+      "soil_moisture_avg": {
+        "name": "Average Soil Moisture",
+        "description": "Current average soil moisture percentage",
+        "category": "environmental",
+        "formula": "AVG(environmental_readings.soil_moisture_percent WHERE reading_time >= CURRENT_TIMESTAMP - INTERVAL '24 hours')",
+        "data_sources": [
+          {
+            "table": "environmental_readings",
+            "fields": ["soil_moisture_percent", "reading_time"]
+          }
+        ],
+        "unit": "%",
+        "display_format": "0.0",
+        "target_value": 60,
+        "threshold": {
+          "excellent": {
+            "operator": "between",
+            "value": [55, 75],
+            "color": "#4CAF50"
+          },
+          "good": {
+            "operator": "between",
+            "value": [40, 85],
+            "color": "#8BC34A"
+          },
+          "warning": {
+            "operator": "between",
+            "value": [30, 95],
+            "color": "#FF9800"
+          },
+          "critical": {
+            "operator": "outside",
+            "value": [30, 95],
+            "color": "#F44336"
+          }
+        },
+        "calculation_method": "aggregation",
+        "refresh_frequency": "hourly"
+      },
+      "total_rainfall_30d": {
+        "name": "Total Rainfall (30 Days)",
+        "description": "Cumulative rainfall in the last 30 days",
+        "category": "environmental",
+        "formula": "SUM(environmental_readings.rainfall_mm WHERE reading_time >= CURRENT_DATE - 30)",
+        "data_sources": [
+          {
+            "table": "environmental_readings",
+            "fields": ["rainfall_mm", "reading_time"]
+          }
+        ],
+        "unit": "mm",
+        "display_format": "0.0",
+        "target_value": null,
+        "threshold": {
+          "drought": {
+            "operator": "<",
+            "value": 25,
+            "color": "#F44336"
+          },
+          "low": {
+            "operator": "between",
+            "value": [25, 50],
+            "color": "#FF9800"
+          },
+          "normal": {
+            "operator": "between",
+            "value": [50, 150],
+            "color": "#4CAF50"
+          },
+          "high": {
+            "operator": ">",
+            "value": 150,
+            "color": "#2196F3"
+          }
+        },
+        "calculation_method": "aggregation",
+        "refresh_frequency": "daily"
+      },
+      "growing_degree_days": {
+        "name": "Growing Degree Days",
+        "description": "Accumulated heat units for crop development",
+        "category": "environmental",
+        "formula": "SUM(GREATEST(0, (MAX(temperature_celsius) + MIN(temperature_celsius)) / 2 - 10)) WHERE reading_time >= planting_date",
+        "data_sources": [
+          {
+            "table": "environmental_readings",
+            "fields": ["temperature_celsius", "reading_time"]
+          },
+          {
+            "table": "plantings",
+            "fields": ["planting_date"]
+          }
+        ],
+        "unit": "GDD",
+        "display_format": "0",
+        "target_value": null,
+        "threshold": {
+          "info_only": true
+        },
+        "calculation_method": "custom",
+        "base_temperature": 10,
+        "refresh_frequency": "daily"
+      }
+    },
+    "crop_performance": {
+      "days_to_maturity_variance": {
+        "name": "Days to Maturity (Actual vs Expected)",
+        "description": "Difference between actual and expected days to maturity",
+        "category": "crop_performance",
+        "formula": "DATEDIFF(harvests.harvest_date, plantings.planting_date) - crops.days_to_maturity",
+        "data_sources": [
+          {
+            "table": "harvests",
+            "fields": ["harvest_date"]
+          },
+          {
+            "table": "plantings",
+            "fields": ["planting_date"]
+          },
+          {
+            "table": "crops",
+            "fields": ["days_to_maturity"]
+          }
+        ],
+        "unit": "days",
+        "display_format": "+0;-0",
+        "target_value": 0,
+        "threshold": {
+          "on_time": {
+            "operator": "between",
+            "value": [-5, 5],
+            "color": "#4CAF50"
+          },
+          "acceptable": {
+            "operator": "between",
+            "value": [-10, 10],
+            "color": "#FFC107"
+          },
+          "delayed": {
+            "operator": ">",
+            "value": 10,
+            "color": "#FF9800"
+          },
+          "early": {
+            "operator": "<",
+            "value": -10,
+            "color": "#2196F3"
+          }
+        },
+        "calculation_method": "difference",
+        "refresh_frequency": "on_harvest"
+      },
+      "growth_rate": {
+        "name": "Growth Rate",
+        "description": "Average plant height increase per day",
+        "category": "crop_performance",
+        "formula": "(MAX(phenology_observations.height_cm) - MIN(phenology_observations.height_cm)) / DATEDIFF(MAX(observation_date), MIN(observation_date))",
+        "data_sources": [
+          {
+            "table": "phenology_observations",
+            "fields": ["height_cm", "observation_date"]
+          }
+        ],
+        "unit": "cm/day",
+        "display_format": "0.00",
+        "target_value": null,
+        "threshold": {
+          "excellent": {
+            "operator": ">=",
+            "value": 0.5,
+            "color": "#4CAF50"
+          },
+          "good": {
+            "operator": "between",
+            "value": [0.3, 0.5],
+            "color": "#8BC34A"
+          },
+          "slow": {
+            "operator": "<",
+            "value": 0.3,
+            "color": "#FF9800"
+          }
+        },
+        "calculation_method": "rate_of_change",
+        "refresh_frequency": "weekly"
+      },
+      "health_score_avg": {
+        "name": "Average Health Score",
+        "description": "Mean plant health score from observations",
+        "category": "crop_performance",
+        "formula": "AVG(phenology_observations.health_score WHERE observation_date >= CURRENT_DATE - 30)",
+        "data_sources": [
+          {
+            "table": "phenology_observations",
+            "fields": ["health_score", "observation_date"]
+          }
+        ],
+        "unit": "score (1-10)",
+        "display_format": "0.0",
+        "target_value": 8,
+        "threshold": {
+          "excellent": {
+            "operator": ">=",
+            "value": 8,
+            "color": "#4CAF50"
+          },
+          "good": {
+            "operator": "between",
+            "value": [7, 8],
+            "color": "#8BC34A"
+          },
+          "fair": {
+            "operator": "between",
+            "value": [5, 7],
+            "color": "#FFC107"
+          },
+          "poor": {
+            "operator": "<",
+            "value": 5,
+            "color": "#F44336"
+          }
+        },
+        "calculation_method": "aggregation",
+        "refresh_frequency": "weekly"
+      },
+      "yield_per_hectare_projected": {
+        "name": "Projected Yield Per Hectare",
+        "description": "Estimated yield based on current growth and historical data",
+        "category": "crop_performance",
+        "formula": "(AVG(phenology_observations.health_score) / 10) * crops.expected_yield_per_hectare * (current_growing_days / crops.days_to_maturity)",
+        "data_sources": [
+          {
+            "table": "phenology_observations",
+            "fields": ["health_score"]
+          },
+          {
+            "table": "crops",
+            "fields": ["expected_yield_per_hectare", "days_to_maturity"]
+          },
+          {
+            "table": "plantings",
+            "fields": ["planting_date"]
+          }
+        ],
+        "unit": "kg/ha",
+        "display_format": "0,0",
+        "target_value": null,
+        "threshold": {
+          "info_only": true
+        },
+        "calculation_method": "projection",
+        "refresh_frequency": "weekly"
+      }
+    },
+    "financial": {
+      "total_revenue_season": {
+        "name": "Total Revenue (Season)",
+        "description": "Total revenue from harvests this season",
+        "category": "financial",
+        "formula": "SUM(harvests.quantity_kg * harvests.price_per_kg)",
+        "data_sources": [
+          {
+            "table": "harvests",
+            "fields": ["quantity_kg", "price_per_kg", "harvest_date"]
+          }
+        ],
+        "unit": "USD",
+        "display_format": "$0,0.00",
+        "target_value": null,
+        "threshold": {
+          "info_only": true
+        },
+        "calculation_method": "aggregation",
+        "refresh_frequency": "daily"
+      },
+      "total_costs_season": {
+        "name": "Total Costs (Season)",
+        "description": "Total input costs this season",
+        "category": "financial",
+        "formula": "SUM(input_costs.amount)",
+        "data_sources": [
+          {
+            "table": "input_costs",
+            "fields": ["amount", "date"]
+          }
+        ],
+        "unit": "USD",
+        "display_format": "$0,0.00",
+        "target_value": null,
+        "threshold": {
+          "info_only": true
+        },
+        "calculation_method": "aggregation",
+        "refresh_frequency": "daily"
+      },
+      "profit_margin": {
+        "name": "Profit Margin",
+        "description": "Profit as percentage of revenue",
+        "category": "financial",
+        "formula": "((SUM(harvests.quantity_kg * harvests.price_per_kg) - SUM(input_costs.amount)) / SUM(harvests.quantity_kg * harvests.price_per_kg)) * 100",
+        "data_sources": [
+          {
+            "table": "harvests",
+            "fields": ["quantity_kg", "price_per_kg"]
+          },
+          {
+            "table": "input_costs",
+            "fields": ["amount"]
+          }
+        ],
+        "unit": "%",
+        "display_format": "0.0",
+        "target_value": 30,
+        "threshold": {
+          "excellent": {
+            "operator": ">=",
+            "value": 40,
+            "color": "#4CAF50"
+          },
+          "good": {
+            "operator": "between",
+            "value": [25, 40],
+            "color": "#8BC34A"
+          },
+          "acceptable": {
+            "operator": "between",
+            "value": [15, 25],
+            "color": "#FFC107"
+          },
+          "low": {
+            "operator": "between",
+            "value": [0, 15],
+            "color": "#FF9800"
+          },
+          "loss": {
+            "operator": "<",
+            "value": 0,
+            "color": "#F44336"
+          }
+        },
+        "calculation_method": "percentage",
+        "refresh_frequency": "daily"
+      },
+      "roi_per_plot": {
+        "name": "ROI Per Plot",
+        "description": "Return on investment by plot",
+        "category": "financial",
+        "formula": "((SUM(harvests.quantity_kg * harvests.price_per_kg) - SUM(input_costs.amount)) / SUM(input_costs.amount)) * 100",
+        "data_sources": [
+          {
+            "table": "harvests",
+            "fields": ["quantity_kg", "price_per_kg", "planting_id"]
+          },
+          {
+            "table": "input_costs",
+            "fields": ["amount", "plot_id"]
+          },
+          {
+            "table": "plantings",
+            "fields": ["plot_id"]
+          }
+        ],
+        "unit": "%",
+        "display_format": "0.0",
+        "target_value": 50,
+        "threshold": {
+          "excellent": {
+            "operator": ">=",
+            "value": 75,
+            "color": "#4CAF50"
+          },
+          "good": {
+            "operator": "between",
+            "value": [50, 75],
+            "color": "#8BC34A"
+          },
+          "acceptable": {
+            "operator": "between",
+            "value": [25, 50],
+            "color": "#FFC107"
+          },
+          "low": {
+            "operator": "between",
+            "value": [0, 25],
+            "color": "#FF9800"
+          },
+          "loss": {
+            "operator": "<",
+            "value": 0,
+            "color": "#F44336"
+          }
+        },
+        "calculation_method": "percentage",
+        "refresh_frequency": "weekly"
+      },
+      "cost_per_kg_produced": {
+        "name": "Cost Per Kilogram",
+        "description": "Production cost per kg of yield",
+        "category": "financial",
+        "formula": "SUM(input_costs.amount) / SUM(harvests.quantity_kg)",
+        "data_sources": [
+          {
+            "table": "input_costs",
+            "fields": ["amount"]
+          },
+          {
+            "table": "harvests",
+            "fields": ["quantity_kg"]
+          }
+        ],
+        "unit": "USD/kg",
+        "display_format": "$0.00",
+        "target_value": null,
+        "threshold": {
+          "info_only": true
+        },
+        "calculation_method": "ratio",
+        "refresh_frequency": "weekly"
+      }
+    }
+  },
+  "dashboard_layouts": {
+    "water_management_dashboard": {
+      "kpis": [
+        "total_water_used_30d",
+        "water_use_efficiency",
+        "irrigation_frequency",
+        "water_cost_per_m3"
+      ],
+      "charts": [
+        "irrigation.water_usage_timeline",
+        "irrigation.water_by_method",
+        "irrigation.irrigation_frequency"
+      ]
+    },
+    "nutrient_management_dashboard": {
+      "kpis": [
+        "npk_balance_current",
+        "nutrient_use_efficiency",
+        "nutrient_cost_per_hectare",
+        "application_frequency"
+      ],
+      "charts": [
+        "nutrients.npk_balance_multiline",
+        "nutrients.nutrient_cost_timeline",
+        "nutrients.nutrient_type_breakdown"
+      ]
+    },
+    "environmental_dashboard": {
+      "kpis": [
+        "avg_temperature_7d",
+        "soil_moisture_avg",
+        "total_rainfall_30d",
+        "growing_degree_days"
+      ],
+      "charts": [
+        "environmental.temperature_humidity_trends",
+        "environmental.soil_moisture_timeline",
+        "environmental.daily_environmental_summary",
+        "environmental.rainfall_cumulative"
+      ]
+    },
+    "crop_performance_dashboard": {
+      "kpis": [
+        "days_to_maturity_variance",
+        "growth_rate",
+        "health_score_avg",
+        "yield_per_hectare_projected"
+      ],
+      "charts": [
+        "phenology.growth_stages_timeline",
+        "phenology.height_over_time",
+        "phenology.health_score_timeline"
+      ]
+    },
+    "financial_dashboard": {
+      "kpis": [
+        "total_revenue_season",
+        "total_costs_season",
+        "profit_margin",
+        "roi_per_plot",
+        "cost_per_kg_produced"
+      ],
+      "charts": [
+        "financial.revenue_vs_costs",
+        "financial.cost_breakdown",
+        "financial.profit_margin_timeline"
+      ]
+    }
+  },
+  "metadata": {
+    "total_kpis": 24,
+    "categories": [
+      "water_management",
+      "nutrient_management",
+      "environmental",
+      "crop_performance",
+      "financial"
+    ],
+    "calculation_methods": [
+      "aggregation",
+      "ratio",
+      "time_based_average",
+      "multi_metric",
+      "difference",
+      "rate_of_change",
+      "projection",
+      "percentage",
+      "custom"
+    ],
+    "units": [
+      "liters",
+      "liters/kg",
+      "events/week",
+      "USD/m³",
+      "kg/ha",
+      "kg yield/kg fertilizer",
+      "USD/ha",
+      "applications/month",
+      "°C",
+      "%",
+      "mm",
+      "GDD",
+      "days",
+      "cm/day",
+      "score (1-10)",
+      "USD",
+      "USD/kg"
+    ]
+  }
+}

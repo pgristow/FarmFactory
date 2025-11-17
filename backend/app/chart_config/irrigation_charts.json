@@ -1,0 +1,183 @@
+{
+  "daily_water_usage": {
+    "type": "line",
+    "title": "Daily Water Usage",
+    "description": "Total water usage per day across all plots",
+    "xAxis": {
+      "field": "date",
+      "label": "Date",
+      "format": "MMM DD"
+    },
+    "yAxis": {
+      "field": "total_liters",
+      "label": "Water Volume",
+      "unit": "L",
+      "format": "0,0"
+    },
+    "aggregation": "sum",
+    "groupBy": "day",
+    "colors": ["#2196f3"],
+    "dataSource": {
+      "endpoint": "/api/v1/plots/{plot_id}/irrigation",
+      "aggregateEndpoint": "/api/v1/plots/{plot_id}/irrigation/summary"
+    },
+    "responsive": true,
+    "showLegend": true,
+    "showGrid": true,
+    "tooltip": {
+      "enabled": true,
+      "format": "{date}: {value} L"
+    }
+  },
+  "weekly_water_usage": {
+    "type": "bar",
+    "title": "Weekly Water Usage",
+    "description": "Total water usage aggregated by week",
+    "xAxis": {
+      "field": "week",
+      "label": "Week",
+      "format": "Week {n}"
+    },
+    "yAxis": {
+      "field": "total_liters",
+      "label": "Water Volume",
+      "unit": "L",
+      "format": "0,0"
+    },
+    "aggregation": "sum",
+    "groupBy": "week",
+    "colors": ["#1976d2"],
+    "showValues": true,
+    "responsive": true
+  },
+  "irrigation_methods_distribution": {
+    "type": "pie",
+    "title": "Irrigation Methods Distribution",
+    "description": "Distribution of irrigation methods used",
+    "dataField": "method",
+    "valueField": "count",
+    "colors": ["#2e7d32", "#66bb6a", "#81c784", "#a5d6a7"],
+    "labels": {
+      "drip": "Drip Irrigation",
+      "sprinkler": "Sprinkler",
+      "center_pivot": "Center Pivot",
+      "flood": "Flood Irrigation"
+    },
+    "showPercentage": true,
+    "showLegend": true,
+    "responsive": true
+  },
+  "water_usage_by_plot": {
+    "type": "bar",
+    "title": "Water Usage by Plot",
+    "description": "Comparison of total water usage across plots",
+    "xAxis": {
+      "field": "plot_name",
+      "label": "Plot"
+    },
+    "yAxis": {
+      "field": "total_liters",
+      "label": "Total Water Used",
+      "unit": "L",
+      "format": "0,0"
+    },
+    "colors": ["#4caf50"],
+    "aggregation": "sum",
+    "groupBy": "plot",
+    "showValues": true,
+    "horizontal": false,
+    "responsive": true
+  },
+  "irrigation_efficiency_trend": {
+    "type": "line",
+    "title": "Irrigation Efficiency Over Time",
+    "description": "Trend of irrigation efficiency ratings",
+    "xAxis": {
+      "field": "date",
+      "label": "Date",
+      "format": "MMM DD"
+    },
+    "yAxis": {
+      "field": "efficiency_rating",
+      "label": "Efficiency",
+      "unit": "%",
+      "format": "0.00",
+      "min": 0,
+      "max": 1
+    },
+    "aggregation": "average",
+    "groupBy": "day",
+    "colors": ["#ff9800"],
+    "showTrendline": true,
+    "targetLine": {
+      "value": 0.85,
+      "label": "Target Efficiency",
+      "color": "#4caf50"
+    },
+    "responsive": true
+  },
+  "water_duration_vs_volume": {
+    "type": "scatter",
+    "title": "Irrigation Duration vs Water Volume",
+    "description": "Relationship between irrigation duration and water volume",
+    "xAxis": {
+      "field": "duration_minutes",
+      "label": "Duration",
+      "unit": "min"
+    },
+    "yAxis": {
+      "field": "water_volume_liters",
+      "label": "Water Volume",
+      "unit": "L"
+    },
+    "colorBy": "method",
+    "colors": {
+      "drip": "#2e7d32",
+      "sprinkler": "#1976d2",
+      "center_pivot": "#ff9800"
+    },
+    "showLegend": true,
+    "responsive": true
+  },
+  "monthly_water_comparison": {
+    "type": "bar",
+    "title": "Monthly Water Usage Comparison",
+    "description": "Compare water usage across months",
+    "xAxis": {
+      "field": "month",
+      "label": "Month",
+      "format": "MMM"
+    },
+    "yAxis": {
+      "field": "total_liters",
+      "label": "Water Volume",
+      "unit": "L",
+      "format": "0,0"
+    },
+    "aggregation": "sum",
+    "groupBy": "month",
+    "colors": ["#0288d1"],
+    "showValues": true,
+    "responsive": true
+  },
+  "irrigation_frequency": {
+    "type": "heatmap",
+    "title": "Irrigation Frequency Calendar",
+    "description": "Heatmap showing irrigation frequency by day and plot",
+    "xAxis": {
+      "field": "date",
+      "label": "Date"
+    },
+    "yAxis": {
+      "field": "plot_name",
+      "label": "Plot"
+    },
+    "valueField": "event_count",
+    "colorScale": {
+      "min": 0,
+      "max": 5,
+      "colors": ["#e3f2fd", "#90caf9", "#42a5f5", "#1e88e5", "#1565c0"]
+    },
+    "responsive": true
+  }
+}

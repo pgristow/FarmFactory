@@ -1,0 +1,357 @@
+{
+  "time_periods": {
+    "hourly": {
+      "interval": "1 hour",
+      "format": "YYYY-MM-DD HH:00:00",
+      "recommended_for": [
+        "environmental_data",
+        "real_time_monitoring"
+      ]
+    },
+    "daily": {
+      "interval": "1 day",
+      "format": "YYYY-MM-DD",
+      "recommended_for": [
+        "irrigation_events",
+        "water_quality",
+        "phenology_observations",
+        "general_operations"
+      ]
+    },
+    "weekly": {
+      "interval": "7 days",
+      "format": "YYYY-[W]WW",
+      "recommended_for": [
+        "nutrient_applications",
+        "crop_health_trends",
+        "performance_reports"
+      ]
+    },
+    "monthly": {
+      "interval": "1 month",
+      "format": "YYYY-MM",
+      "recommended_for": [
+        "financial_summaries",
+        "kpi_dashboards",
+        "strategic_planning"
+      ]
+    },
+    "seasonal": {
+      "interval": "90 days",
+      "format": "YYYY-[Q]Q",
+      "recommended_for": [
+        "crop_cycle_analysis",
+        "annual_planning"
+      ]
+    }
+  },
+  "aggregation_rules": {
+    "irrigation": {
+      "daily": {
+        "total_water_liters": "sum",
+        "event_count": "count",
+        "avg_duration_minutes": "average",
+        "avg_efficiency_rating": "average"
+      },
+      "weekly": {
+        "total_water_liters": "sum",
+        "event_count": "count",
+        "avg_efficiency_rating": "average",
+        "cost_estimate": "sum"
+      },
+      "monthly": {
+        "total_water_liters": "sum",
+        "event_count": "count",
+        "avg_efficiency_rating": "average",
+        "total_cost": "sum"
+      }
+    },
+    "nutrients": {
+      "weekly": {
+        "total_n_kg": "sum",
+        "total_p_kg": "sum",
+        "total_k_kg": "sum",
+        "application_count": "count",
+        "total_cost_usd": "sum"
+      },
+      "monthly": {
+        "total_n_kg": "sum",
+        "total_p_kg": "sum",
+        "total_k_kg": "sum",
+        "npk_ratio": "calculated",
+        "application_count": "count",
+        "total_cost_usd": "sum",
+        "avg_cost_per_kg": "average"
+      }
+    },
+    "environmental": {
+      "hourly": {
+        "avg_temperature_c": "average",
+        "min_temperature_c": "min",
+        "max_temperature_c": "max",
+        "avg_humidity_percent": "average",
+        "avg_soil_moisture_percent": "average",
+        "total_rainfall_mm": "sum"
+      },
+      "daily": {
+        "avg_temperature_c": "average",
+        "min_temperature_c": "min",
+        "max_temperature_c": "max",
+        "avg_humidity_percent": "average",
+        "min_humidity_percent": "min",
+        "max_humidity_percent": "max",
+        "avg_soil_moisture_percent": "average",
+        "total_rainfall_mm": "sum",
+        "avg_light_intensity_lux": "average"
+      },
+      "weekly": {
+        "avg_temperature_c": "average",
+        "min_temperature_c": "min",
+        "max_temperature_c": "max",
+        "avg_humidity_percent": "average",
+        "avg_soil_moisture_percent": "average",
+        "total_rainfall_mm": "sum"
+      },
+      "monthly": {
+        "avg_temperature_c": "average",
+        "min_temperature_c": "min",
+        "max_temperature_c": "max",
+        "total_rainfall_mm": "sum"
+      }
+    },
+    "water_quality": {
+      "weekly": {
+        "avg_ph": "average",
+        "avg_ec_ds_per_m": "average",
+        "avg_tds_ppm": "average",
+        "avg_turbidity_ntu": "average",
+        "avg_dissolved_oxygen": "average",
+        "test_count": "count"
+      },
+      "monthly": {
+        "avg_ph": "average",
+        "min_ph": "min",
+        "max_ph": "max",
+        "avg_ec_ds_per_m": "average",
+        "avg_tds_ppm": "average",
+        "test_count": "count"
+      }
+    },
+    "phenology": {
+      "weekly": {
+        "avg_plant_height_cm": "average",
+        "height_change_cm": "calculated",
+        "avg_canopy_cover_percent": "average",
+        "avg_health_score": "average",
+        "avg_leaf_count": "average",
+        "observation_count": "count"
+      },
+      "monthly": {
+        "avg_plant_height_cm": "average",
+        "total_height_gain_cm": "calculated",
+        "avg_canopy_cover_percent": "average",
+        "avg_health_score": "average",
+        "growth_rate_cm_per_day": "calculated"
+      }
+    },
+    "financial": {
+      "daily": {
+        "total_costs_usd": "sum",
+        "total_revenue_usd": "sum",
+        "net_profit_usd": "calculated"
+      },
+      "weekly": {
+        "total_costs_usd": "sum",
+        "total_revenue_usd": "sum",
+        "net_profit_usd": "calculated",
+        "profit_margin_percent": "calculated"
+      },
+      "monthly": {
+        "total_costs_usd": "sum",
+        "total_revenue_usd": "sum",
+        "net_profit_usd": "calculated",
+        "profit_margin_percent": "calculated",
+        "roi_percent": "calculated",
+        "cost_per_hectare": "calculated"
+      },
+      "seasonal": {
+        "total_costs_usd": "sum",
+        "total_revenue_usd": "sum",
+        "net_profit_usd": "calculated",
+        "profit_margin_percent": "calculated",
+        "roi_percent": "calculated"
+      }
+    }
+  },
+  "rolling_averages": {
+    "7_day": {
+      "window": 7,
+      "unit": "days",
+      "applicable_to": [
+        "temperature",
+        "humidity",
+        "soil_moisture",
+        "health_score",
+        "water_usage"
+      ]
+    },
+    "30_day": {
+      "window": 30,
+      "unit": "days",
+      "applicable_to": [
+        "temperature",
+        "water_usage",
+        "costs",
+        "health_score",
+        "growth_rate"
+      ]
+    },
+    "90_day": {
+      "window": 90,
+      "unit": "days",
+      "applicable_to": [
+        "financial_metrics",
+        "yield_trends",
+        "seasonal_patterns"
+      ]
+    }
+  },
+  "cumulative_calculations": {
+    "rainfall": {
+      "type": "sum",
+      "reset_period": "monthly",
+      "applicable_fields": [
+        "rainfall_mm"
+      ]
+    },
+    "water_usage": {
+      "type": "sum",
+      "reset_period": "crop_cycle",
+      "applicable_fields": [
+        "total_water_liters"
+      ]
+    },
+    "costs": {
+      "type": "sum",
+      "reset_period": "monthly",
+      "applicable_fields": [
+        "fertilizer_costs",
+        "water_costs",
+        "labor_costs",
+        "equipment_costs"
+      ]
+    },
+    "revenue": {
+      "type": "sum",
+      "reset_period": "monthly",
+      "applicable_fields": [
+        "harvest_revenue"
+      ]
+    }
+  },
+  "special_calculations": {
+    "npk_ratio": {
+      "formula": "normalize([total_N, total_P, total_K])",
+      "output_format": "N:P:K",
+      "description": "Calculate the ratio of N:P:K nutrients applied"
+    },
+    "water_use_efficiency": {
+      "formula": "total_water_liters / total_harvest_kg",
+      "requires": [
+        "irrigation_data",
+        "harvest_data"
+      ],
+      "unit": "L/kg"
+    },
+    "profit_margin": {
+      "formula": "((revenue - costs) / revenue) * 100",
+      "requires": [
+        "revenue_data",
+        "cost_data"
+      ],
+      "unit": "%"
+    },
+    "growth_rate": {
+      "formula": "(current_height - previous_height) / days_elapsed",
+      "requires": [
+        "phenology_observations"
+      ],
+      "unit": "cm/day"
+    },
+    "quality_score": {
+      "formula": "weighted_average([ph_score, ec_score, turbidity_score, do_score], [0.3, 0.25, 0.25, 0.2])",
+      "requires": [
+        "water_quality_data"
+      ],
+      "unit": "index_0_100"
+    }
+  },
+  "aggregation_settings": {
+    "handle_null_values": {
+      "strategy": "exclude",
+      "options": [
+        "exclude",
+        "include_as_zero",
+        "interpolate"
+      ],
+      "notes": "Default is to exclude null values from calculations"
+    },
+    "minimum_data_points": {
+      "daily": 1,
+      "weekly": 3,
+      "monthly": 10,
+      "notes": "Minimum number of data points required for valid aggregation"
+    },
+    "outlier_detection": {
+      "enabled": true,
+      "method": "iqr",
+      "threshold": 1.5,
+      "action": "flag",
+      "notes": "Detect and flag outliers using interquartile range method"
+    },
+    "rounding": {
+      "temperature": 1,
+      "humidity": 1,
+      "water_volume": 0,
+      "costs": 2,
+      "percentages": 1,
+      "notes": "Number of decimal places for rounding"
+    }
+  },
+  "caching_strategy": {
+    "daily_aggregates": {
+      "cache_duration": "24 hours",
+      "refresh_schedule": "02:00 AM",
+      "invalidate_on": [
+        "new_data_import",
+        "manual_data_edit"
+      ]
+    },
+    "weekly_aggregates": {
+      "cache_duration": "7 days",
+      "refresh_schedule": "Monday 03:00 AM",
+      "invalidate_on": [
+        "new_data_import"
+      ]
+    },
+    "monthly_aggregates": {
+      "cache_duration": "30 days",
+      "refresh_schedule": "1st of month 04:00 AM",
+      "invalidate_on": [
+        "new_data_import",
+        "end_of_month_reconciliation"
+      ]
+    }
+  },
+  "performance_optimization": {
+    "use_materialized_views": true,
+    "use_continuous_aggregates": true,
+    "index_recommendations": [
+      "plot_id, timestamp",
+      "plot_id, date",
+      "planting_id, observation_date"
+    ],
+    "query_timeout": 30000,
+    "max_records_per_query": 100000
+  }
+}

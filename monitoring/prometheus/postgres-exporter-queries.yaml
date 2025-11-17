@@ -1,0 +1,378 @@
+# PostgreSQL Exporter Custom Queries
+# FarmFactory Sprint 3 - DO-203: TimescaleDB Performance Tuning
+#
+# These custom queries collect FarmFactory-specific metrics for Prometheus
+# and enable detailed performance monitoring in Grafana dashboards
+
+# =============================================================================
+# CACHE HIT RATIO METRICS
+# =============================================================================
+
+pg_cache_hit_ratio:
+  query: |
+    SELECT
+      'index' AS cache_type,
+      ROUND((SUM(idx_blks_hit) * 100.0 / NULLIF(SUM(idx_blks_hit + idx_blks_read), 0))::numeric, 2) AS hit_ratio
+    FROM pg_statio_user_indexes
+    UNION ALL
+    SELECT
+      'table' AS cache_type,
+      ROUND((SUM(heap_blks_hit) * 100.0 / NULLIF(SUM(heap_blks_hit + heap_blks_read), 0))::numeric, 2) AS hit_ratio
+    FROM pg_statio_user_tables
+    UNION ALL
+    SELECT
+      'overall' AS cache_type,
+      ROUND((SUM(heap_blks_hit + idx_blks_hit) * 100.0 /
+             NULLIF(SUM(heap_blks_hit + idx_blks_hit + heap_blks_read + idx_blks_read), 0))::numeric, 2) AS hit_ratio
+    FROM pg_statio_user_tables t
+    JOIN pg_statio_user_indexes i USING (relid)
+  metrics:
+    - cache_type:
+        usage: "LABEL"
+        description: "Type of cache (index, table, overall)"
+    - hit_ratio:
+        usage: "GAUGE"
+        description: "Cache hit ratio percentage"
+
+# =============================================================================
+# TABLE SIZE METRICS
+# =============================================================================
+
+pg_table_sizes:
+  query: |
+    SELECT
+      schemaname,
+      tablename,
+      pg_total_relation_size(schemaname||'.'||tablename) AS total_bytes,
+      pg_relation_size(schemaname||'.'||tablename) AS table_bytes,
+      pg_total_relation_size(schemaname||'.'||tablename) - pg_relation_size(schemaname||'.'||tablename) AS index_bytes
+    FROM pg_tables
+    WHERE schemaname = 'public'
+  metrics:
+    - schemaname:
+        usage: "LABEL"
+        description: "Schema name"
+    - tablename:
+        usage: "LABEL"
+        description: "Table name"
+    - total_bytes:
+        usage: "GAUGE"
+        description: "Total table size including indexes in bytes"
+    - table_bytes:
+        usage: "GAUGE"
+        description: "Table size in bytes"
+    - index_bytes:
+        usage: "GAUGE"
+        description: "Index size in bytes"
+
+# =============================================================================
+# TABLE ACTIVITY METRICS
+# =============================================================================
+
+pg_table_activity:
+  query: |
+    SELECT
+      schemaname,
+      relname AS tablename,
+      seq_scan,
+      seq_tup_read,
+      idx_scan,
+      idx_tup_fetch,
+      n_tup_ins,
+      n_tup_upd,
+      n_tup_del,
+      n_live_tup,
+      n_dead_tup,
+      ROUND(100.0 * n_dead_tup / NULLIF(n_live_tup + n_dead_tup, 0), 2) AS dead_tuple_percent
+    FROM pg_stat_user_tables
+  metrics:
+    - schemaname:
+        usage: "LABEL"
+        description: "Schema name"
+    - tablename:
+        usage: "LABEL"
+        description: "Table name"
+    - seq_scan:
+        usage: "COUNTER"
+        description: "Number of sequential scans"
+    - seq_tup_read:
+        usage: "COUNTER"
+        description: "Number of tuples read by sequential scans"
+    - idx_scan:
+        usage: "COUNTER"
+        description: "Number of index scans"
+    - idx_tup_fetch:
+        usage: "COUNTER"
+        description: "Number of tuples fetched by index scans"
+    - n_tup_ins:
+        usage: "COUNTER"
+        description: "Number of tuples inserted"
+    - n_tup_upd:
+        usage: "COUNTER"
+        description: "Number of tuples updated"
+    - n_tup_del:
+        usage: "COUNTER"
+        description: "Number of tuples deleted"
+    - n_live_tup:
+        usage: "GAUGE"
+        description: "Number of live tuples"
+    - n_dead_tup:
+        usage: "GAUGE"
+        description: "Number of dead tuples"
+    - dead_tuple_percent:
+        usage: "GAUGE"
+        description: "Percentage of dead tuples"
+
+# =============================================================================
+# INDEX USAGE METRICS
+# =============================================================================
+
+pg_index_usage:
+  query: |
+    SELECT
+      schemaname,
+      tablename,
+      indexname,
+      idx_scan,
+      idx_tup_read,
+      idx_tup_fetch,
+      pg_relation_size(indexrelid) AS index_size_bytes
+    FROM pg_stat_user_indexes
+  metrics:
+    - schemaname:
+        usage: "LABEL"
+        description: "Schema name"
+    - tablename:
+        usage: "LABEL"
+        description: "Table name"
+    - indexname:
+        usage: "LABEL"
+        description: "Index name"
+    - idx_scan:
+        usage: "COUNTER"
+        description: "Number of index scans"
+    - idx_tup_read:
+        usage: "COUNTER"
+        description: "Number of tuples read"
+    - idx_tup_fetch:
+        usage: "COUNTER"
+        description: "Number of tuples fetched"
+    - index_size_bytes:
+        usage: "GAUGE"
+        description: "Index size in bytes"
+
+# =============================================================================
+# SLOW QUERIES METRICS
+# =============================================================================
+
+pg_slow_queries:
+  query: |
+    SELECT
+      LEFT(query, 100) AS query_preview,
+      calls,
+      ROUND(total_exec_time::numeric, 2) AS total_time_ms,
+      ROUND(mean_exec_time::numeric, 2) AS mean_time_ms,
+      ROUND(max_exec_time::numeric, 2) AS max_time_ms
+    FROM pg_stat_statements
+    WHERE mean_exec_time > 100
+      AND query NOT LIKE '%pg_stat_statements%'
+    ORDER BY mean_exec_time DESC
+    LIMIT 10
+  metrics:
+    - query_preview:
+        usage: "LABEL"
+        description: "Query preview (first 100 characters)"
+    - calls:
+        usage: "COUNTER"
+        description: "Number of times executed"
+    - total_time_ms:
+        usage: "COUNTER"
+        description: "Total execution time in milliseconds"
+    - mean_time_ms:
+        usage: "GAUGE"
+        description: "Mean execution time in milliseconds"
+    - max_time_ms:
+        usage: "GAUGE"
+        description: "Maximum execution time in milliseconds"
+
+# =============================================================================
+# CONNECTION METRICS
+# =============================================================================
+
+pg_connection_states:
+  query: |
+    SELECT
+      COALESCE(state, 'unknown') AS state,
+      COUNT(*) AS connection_count
+    FROM pg_stat_activity
+    WHERE datname = current_database()
+    GROUP BY state
+  metrics:
+    - state:
+        usage: "LABEL"
+        description: "Connection state"
+    - connection_count:
+        usage: "GAUGE"
+        description: "Number of connections in this state"
+
+# =============================================================================
+# TIMESCALEDB CHUNK METRICS
+# =============================================================================
+
+pg_timescaledb_chunks:
+  query: |
+    SELECT
+      hypertable_name,
+      COUNT(*) AS total_chunks,
+      SUM(CASE WHEN is_compressed THEN 1 ELSE 0 END) AS compressed_chunks,
+      SUM(total_bytes) AS total_bytes,
+      SUM(CASE WHEN is_compressed THEN total_bytes ELSE 0 END) AS compressed_bytes
+    FROM timescaledb_information.chunks
+    GROUP BY hypertable_name
+  metrics:
+    - hypertable_name:
+        usage: "LABEL"
+        description: "Hypertable name"
+    - total_chunks:
+        usage: "GAUGE"
+        description: "Total number of chunks"
+    - compressed_chunks:
+        usage: "GAUGE"
+        description: "Number of compressed chunks"
+    - total_bytes:
+        usage: "GAUGE"
+        description: "Total size in bytes"
+    - compressed_bytes:
+        usage: "GAUGE"
+        description: "Compressed data size in bytes"
+
+# =============================================================================
+# TIMESCALEDB HYPERTABLE STATS
+# =============================================================================
+
+pg_timescaledb_hypertable_stats:
+  query: |
+    SELECT
+      hypertable_name,
+      num_chunks,
+      compression_enabled::int AS compression_enabled
+    FROM timescaledb_information.hypertables
+    WHERE schema_name = 'public'
+  metrics:
+    - hypertable_name:
+        usage: "LABEL"
+        description: "Hypertable name"
+    - num_chunks:
+        usage: "GAUGE"
+        description: "Number of chunks in hypertable"
+    - compression_enabled:
+        usage: "GAUGE"
+        description: "Whether compression is enabled (1=yes, 0=no)"
+
+# =============================================================================
+# VACUUM AND ANALYZE METRICS
+# =============================================================================
+
+pg_vacuum_stats:
+  query: |
+    SELECT
+      schemaname,
+      relname AS tablename,
+      EXTRACT(EPOCH FROM (NOW() - last_vacuum)) AS seconds_since_last_vacuum,
+      EXTRACT(EPOCH FROM (NOW() - last_autovacuum)) AS seconds_since_last_autovacuum,
+      EXTRACT(EPOCH FROM (NOW() - last_analyze)) AS seconds_since_last_analyze,
+      EXTRACT(EPOCH FROM (NOW() - last_autoanalyze)) AS seconds_since_last_autoanalyze
+    FROM pg_stat_user_tables
+  metrics:
+    - schemaname:
+        usage: "LABEL"
+        description: "Schema name"
+    - tablename:
+        usage: "LABEL"
+        description: "Table name"
+    - seconds_since_last_vacuum:
+        usage: "GAUGE"
+        description: "Seconds since last manual vacuum"
+    - seconds_since_last_autovacuum:
+        usage: "GAUGE"
+        description: "Seconds since last autovacuum"
+    - seconds_since_last_analyze:
+        usage: "GAUGE"
+        description: "Seconds since last manual analyze"
+    - seconds_since_last_autoanalyze:
+        usage: "GAUGE"
+        description: "Seconds since last autoanalyze"
+
+# =============================================================================
+# REPLICATION LAG (if replication is configured)
+# =============================================================================
+
+pg_replication_lag:
+  query: |
+    SELECT
+      COALESCE(application_name, 'unknown') AS application_name,
+      COALESCE(state, 'unknown') AS state,
+      COALESCE(EXTRACT(EPOCH FROM (NOW() - pg_last_xact_replay_timestamp())), 0) AS lag_seconds
+    FROM pg_stat_replication
+  metrics:
+    - application_name:
+        usage: "LABEL"
+        description: "Replication application name"
+    - state:
+        usage: "LABEL"
+        description: "Replication state"
+    - lag_seconds:
+        usage: "GAUGE"
+        description: "Replication lag in seconds"
+
+# =============================================================================
+# FARMFACTORY SPECIFIC METRICS
+# =============================================================================
+
+farmfactory_time_series_record_counts:
+  query: |
+    SELECT 'irrigation_events' AS table_name, COUNT(*) AS record_count FROM irrigation_events
+    UNION ALL
+    SELECT 'nutrient_applications', COUNT(*) FROM nutrient_applications
+    UNION ALL
+    SELECT 'environmental_readings', COUNT(*) FROM environmental_readings
+    UNION ALL
+    SELECT 'water_quality_tests', COUNT(*) FROM water_quality_tests
+    UNION ALL
+    SELECT 'phenology_observations', COUNT(*) FROM phenology_observations
+    UNION ALL
+    SELECT 'harvest_records', COUNT(*) FROM harvest_records
+  metrics:
+    - table_name:
+        usage: "LABEL"
+        description: "Time-series table name"
+    - record_count:
+        usage: "GAUGE"
+        description: "Total number of records in table"
+
+farmfactory_recent_data_volume:
+  query: |
+    SELECT
+      'irrigation_events_24h' AS metric,
+      COUNT(*) AS count
+    FROM irrigation_events
+    WHERE time > NOW() - INTERVAL '24 hours'
+    UNION ALL
+    SELECT
+      'environmental_readings_1h',
+      COUNT(*)
+    FROM environmental_readings
+    WHERE time > NOW() - INTERVAL '1 hour'
+    UNION ALL
+    SELECT
+      'nutrient_applications_7d',
+      COUNT(*)
+    FROM nutrient_applications
+    WHERE time > NOW() - INTERVAL '7 days'
+  metrics:
+    - metric:
+        usage: "LABEL"
+        description: "Recent data metric name"
+    - count:
+        usage: "GAUGE"
+        description: "Record count in time period"

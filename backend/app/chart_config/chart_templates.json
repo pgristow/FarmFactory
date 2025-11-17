@@ -1,0 +1,703 @@
+{
+  "version": "1.0",
+  "description": "Chart visualization templates for FarmFactory data types",
+  "created": "2025-11-17",
+  "charts": {
+    "irrigation": {
+      "water_usage_timeline": {
+        "name": "Water Usage Over Time",
+        "description": "Line chart showing irrigation water consumption over time",
+        "chart_type": "line",
+        "api_endpoint": "/api/v1/plots/{plot_id}/irrigation",
+        "query_params": {
+          "start_date": "{start_date}",
+          "end_date": "{end_date}",
+          "aggregation": "daily"
+        },
+        "x_axis": {
+          "field": "event_date",
+          "label": "Date",
+          "format": "MMM dd, yyyy",
+          "type": "datetime"
+        },
+        "y_axis": {
+          "field": "volume_liters",
+          "label": "Water Used (Liters)",
+          "format": "0,0",
+          "type": "numeric"
+        },
+        "colors": {
+          "primary": "#2196F3",
+          "secondary": "#1976D2"
+        },
+        "aggregation": "sum",
+        "default_period": "30d",
+        "responsive": true,
+        "show_legend": true,
+        "show_grid": true,
+        "tooltip_format": "{date}: {value} liters"
+      },
+      "water_by_method": {
+        "name": "Water Distribution by Method",
+        "description": "Pie chart showing water usage breakdown by irrigation method",
+        "chart_type": "pie",
+        "api_endpoint": "/api/v1/plots/{plot_id}/irrigation/summary",
+        "query_params": {
+          "start_date": "{start_date}",
+          "end_date": "{end_date}",
+          "group_by": "method"
+        },
+        "data_field": "method",
+        "value_field": "total_volume",
+        "label_field": "method",
+        "colors": {
+          "drip": "#4CAF50",
+          "sprinkler": "#2196F3",
+          "flood": "#FF9800",
+          "manual": "#9C27B0"
+        },
+        "aggregation": "sum",
+        "default_period": "30d",
+        "show_legend": true,
+        "show_percentage": true,
+        "tooltip_format": "{method}: {value} liters ({percentage}%)"
+      },
+      "irrigation_frequency": {
+        "name": "Irrigation Frequency",
+        "description": "Bar chart showing number of irrigation events per week",
+        "chart_type": "bar",
+        "api_endpoint": "/api/v1/plots/{plot_id}/irrigation",
+        "query_params": {
+          "start_date": "{start_date}",
+          "end_date": "{end_date}",
+          "aggregation": "weekly"
+        },
+        "x_axis": {
+          "field": "week",
+          "label": "Week",
+          "format": "Week of MMM dd",
+          "type": "datetime"
+        },
+        "y_axis": {
+          "field": "event_count",
+          "label": "Number of Events",
+          "format": "0",
+          "type": "numeric"
+        },
+        "colors": {
+          "primary": "#2196F3"
+        },
+        "aggregation": "count",
+        "default_period": "90d",
+        "show_grid": true
+      }
+    },
+    "nutrients": {
+      "npk_balance_multiline": {
+        "name": "NPK Balance Over Time",
+        "description": "Multi-line chart showing nitrogen, phosphorus, and potassium levels",
+        "chart_type": "multiline",
+        "api_endpoint": "/api/v1/plots/{plot_id}/nutrients",
+        "query_params": {
+          "start_date": "{start_date}",
+          "end_date": "{end_date}",
+          "aggregation": "daily"
+        },
+        "x_axis": {
+          "field": "application_date",
+          "label": "Date",
+          "format": "MMM dd",
+          "type": "datetime"
+        },
+        "y_axes": [
+          {
+            "field": "nitrogen_kg",
+            "label": "Nitrogen (kg)",
+            "color": "#4CAF50",
+            "format": "0.00"
+          },
+          {
+            "field": "phosphorus_kg",
+            "label": "Phosphorus (kg)",
+            "color": "#FF9800",
+            "format": "0.00"
+          },
+          {
+            "field": "potassium_kg",
+            "label": "Potassium (kg)",
+            "color": "#9C27B0",
+            "format": "0.00"
+          }
+        ],
+        "aggregation": "sum",
+        "default_period": "90d",
+        "show_legend": true,
+        "show_grid": true,
+        "tooltip_format": "{date}<br/>N: {nitrogen_kg} kg<br/>P: {phosphorus_kg} kg<br/>K: {potassium_kg} kg"
+      },
+      "nutrient_cost_timeline": {
+        "name": "Nutrient Cost Over Time",
+        "description": "Area chart showing cumulative nutrient costs",
+        "chart_type": "area",
+        "api_endpoint": "/api/v1/plots/{plot_id}/nutrients",
+        "query_params": {
+          "start_date": "{start_date}",
+          "end_date": "{end_date}",
+          "aggregation": "daily"
+        },
+        "x_axis": {
+          "field": "application_date",
+          "label": "Date",
+          "format": "MMM dd",
+          "type": "datetime"
+        },
+        "y_axis": {
+          "field": "cost",
+          "label": "Cost (USD)",
+          "format": "$0,0.00",
+          "type": "numeric"
+        },
+        "colors": {
+          "primary": "#FF9800",
+          "gradient_start": "#FF9800",
+          "gradient_end": "#FFE0B2"
+        },
+        "aggregation": "cumulative_sum",
+        "default_period": "90d",
+        "show_grid": true,
+        "fill_opacity": 0.6
+      },
+      "nutrient_type_breakdown": {
+        "name": "Nutrient Applications by Type",
+        "description": "Pie chart showing distribution of nutrient types applied",
+        "chart_type": "pie",
+        "api_endpoint": "/api/v1/plots/{plot_id}/nutrients/summary",
+        "query_params": {
+          "start_date": "{start_date}",
+          "end_date": "{end_date}",
+          "group_by": "nutrient_type"
+        },
+        "data_field": "nutrient_type",
+        "value_field": "application_count",
+        "label_field": "nutrient_type",
+        "colors": {
+          "organic": "#4CAF50",
+          "synthetic": "#FF5722",
+          "liquid": "#2196F3",
+          "granular": "#FFC107"
+        },
+        "aggregation": "count",
+        "default_period": "90d",
+        "show_legend": true,
+        "show_percentage": true
+      }
+    },
+    "environmental": {
+      "temperature_humidity_trends": {
+        "name": "Temperature & Humidity Trends",
+        "description": "Multi-line chart showing temperature and humidity over time",
+        "chart_type": "multiline",
+        "api_endpoint": "/api/v1/plots/{plot_id}/environmental",
+        "query_params": {
+          "start_date": "{start_date}",
+          "end_date": "{end_date}",
+          "aggregation": "hourly",
+          "metrics": "temperature,humidity"
+        },
+        "x_axis": {
+          "field": "reading_time",
+          "label": "Time",
+          "format": "MMM dd HH:mm",
+          "type": "datetime"
+        },
+        "y_axes": [
+          {
+            "field": "temperature_celsius",
+            "label": "Temperature (°C)",
+            "color": "#FF5722",
+            "format": "0.0",
+            "axis_id": "left"
+          },
+          {
+            "field": "humidity_percent",
+            "label": "Humidity (%)",
+            "color": "#2196F3",
+            "format": "0.0",
+            "axis_id": "right"
+          }
+        ],
+        "aggregation": "average",
+        "default_period": "7d",
+        "show_legend": true,
+        "show_grid": true,
+        "dual_axis": true
+      },
+      "soil_moisture_timeline": {
+        "name": "Soil Moisture Levels",
+        "description": "Line chart showing soil moisture percentage over time",
+        "chart_type": "line",
+        "api_endpoint": "/api/v1/plots/{plot_id}/environmental",
+        "query_params": {
+          "start_date": "{start_date}",
+          "end_date": "{end_date}",
+          "aggregation": "hourly",
+          "metric": "soil_moisture"
+        },
+        "x_axis": {
+          "field": "reading_time",
+          "label": "Time",
+          "format": "MMM dd HH:mm",
+          "type": "datetime"
+        },
+        "y_axis": {
+          "field": "soil_moisture_percent",
+          "label": "Soil Moisture (%)",
+          "format": "0.0",
+          "type": "numeric",
+          "min": 0,
+          "max": 100
+        },
+        "colors": {
+          "primary": "#795548"
+        },
+        "aggregation": "average",
+        "default_period": "7d",
+        "show_grid": true,
+        "threshold_lines": [
+          {
+            "value": 30,
+            "label": "Wilting Point",
+            "color": "#F44336"
+          },
+          {
+            "value": 70,
+            "label": "Field Capacity",
+            "color": "#4CAF50"
+          }
+        ]
+      },
+      "daily_environmental_summary": {
+        "name": "Daily Environmental Summary",
+        "description": "Bar chart showing daily averages of key metrics",
+        "chart_type": "bar",
+        "api_endpoint": "/api/v1/plots/{plot_id}/environmental",
+        "query_params": {
+          "start_date": "{start_date}",
+          "end_date": "{end_date}",
+          "aggregation": "daily"
+        },
+        "x_axis": {
+          "field": "date",
+          "label": "Date",
+          "format": "MMM dd",
+          "type": "datetime"
+        },
+        "y_axis": {
+          "field": "temperature_avg",
+          "label": "Avg Temperature (°C)",
+          "format": "0.0",
+          "type": "numeric"
+        },
+        "colors": {
+          "primary": "#FF9800"
+        },
+        "aggregation": "average",
+        "default_period": "30d",
+        "show_grid": true
+      },
+      "rainfall_cumulative": {
+        "name": "Cumulative Rainfall",
+        "description": "Area chart showing cumulative rainfall over time",
+        "chart_type": "area",
+        "api_endpoint": "/api/v1/plots/{plot_id}/environmental",
+        "query_params": {
+          "start_date": "{start_date}",
+          "end_date": "{end_date}",
+          "metric": "rainfall"
+        },
+        "x_axis": {
+          "field": "reading_time",
+          "label": "Date",
+          "format": "MMM dd",
+          "type": "datetime"
+        },
+        "y_axis": {
+          "field": "rainfall_mm",
+          "label": "Cumulative Rainfall (mm)",
+          "format": "0.0",
+          "type": "numeric"
+        },
+        "colors": {
+          "primary": "#2196F3",
+          "gradient_start": "#2196F3",
+          "gradient_end": "#BBDEFB"
+        },
+        "aggregation": "cumulative_sum",
+        "default_period": "30d",
+        "show_grid": true
+      }
+    },
+    "water_quality": {
+      "ph_trends": {
+        "name": "pH Levels Over Time",
+        "description": "Line chart showing water pH trends",
+        "chart_type": "line",
+        "api_endpoint": "/api/v1/plots/{plot_id}/water-quality",
+        "query_params": {
+          "start_date": "{start_date}",
+          "end_date": "{end_date}"
+        },
+        "x_axis": {
+          "field": "test_date",
+          "label": "Test Date",
+          "format": "MMM dd",
+          "type": "datetime"
+        },
+        "y_axis": {
+          "field": "ph",
+          "label": "pH Level",
+          "format": "0.00",
+          "type": "numeric",
+          "min": 5.5,
+          "max": 8.5
+        },
+        "colors": {
+          "primary": "#9C27B0"
+        },
+        "aggregation": "none",
+        "default_period": "90d",
+        "show_grid": true,
+        "threshold_lines": [
+          {
+            "value": 6.5,
+            "label": "Min Optimal",
+            "color": "#FFC107"
+          },
+          {
+            "value": 7.5,
+            "label": "Max Optimal",
+            "color": "#FFC107"
+          }
+        ]
+      },
+      "ec_trends": {
+        "name": "Electrical Conductivity Trends",
+        "description": "Line chart showing EC measurements over time",
+        "chart_type": "line",
+        "api_endpoint": "/api/v1/plots/{plot_id}/water-quality",
+        "query_params": {
+          "start_date": "{start_date}",
+          "end_date": "{end_date}"
+        },
+        "x_axis": {
+          "field": "test_date",
+          "label": "Test Date",
+          "format": "MMM dd",
+          "type": "datetime"
+        },
+        "y_axis": {
+          "field": "ec_ds_per_m",
+          "label": "EC (dS/m)",
+          "format": "0.00",
+          "type": "numeric"
+        },
+        "colors": {
+          "primary": "#00BCD4"
+        },
+        "aggregation": "none",
+        "default_period": "90d",
+        "show_grid": true
+      },
+      "water_quality_multiline": {
+        "name": "Water Quality Parameters",
+        "description": "Multi-line chart showing pH, EC, and TDS over time",
+        "chart_type": "multiline",
+        "api_endpoint": "/api/v1/plots/{plot_id}/water-quality",
+        "query_params": {
+          "start_date": "{start_date}",
+          "end_date": "{end_date}"
+        },
+        "x_axis": {
+          "field": "test_date",
+          "label": "Test Date",
+          "format": "MMM dd",
+          "type": "datetime"
+        },
+        "y_axes": [
+          {
+            "field": "ph",
+            "label": "pH",
+            "color": "#9C27B0",
+            "format": "0.00",
+            "axis_id": "left"
+          },
+          {
+            "field": "ec_ds_per_m",
+            "label": "EC (dS/m)",
+            "color": "#00BCD4",
+            "format": "0.00",
+            "axis_id": "right"
+          }
+        ],
+        "aggregation": "none",
+        "default_period": "90d",
+        "show_legend": true,
+        "show_grid": true,
+        "dual_axis": true
+      }
+    },
+    "phenology": {
+      "growth_stages_timeline": {
+        "name": "Growth Stages Timeline",
+        "description": "Bar chart showing progression through growth stages",
+        "chart_type": "bar",
+        "api_endpoint": "/api/v1/plantings/{planting_id}/phenology",
+        "query_params": {
+          "start_date": "{start_date}",
+          "end_date": "{end_date}"
+        },
+        "x_axis": {
+          "field": "observation_date",
+          "label": "Date",
+          "format": "MMM dd",
+          "type": "datetime"
+        },
+        "y_axis": {
+          "field": "growth_stage_numeric",
+          "label": "Growth Stage",
+          "format": "0",
+          "type": "categorical",
+          "categories": ["Germination", "Vegetative", "Flowering", "Fruiting", "Maturity"]
+        },
+        "colors": {
+          "Germination": "#8BC34A",
+          "Vegetative": "#4CAF50",
+          "Flowering": "#FFEB3B",
+          "Fruiting": "#FF9800",
+          "Maturity": "#795548"
+        },
+        "aggregation": "latest",
+        "default_period": "all",
+        "show_grid": false
+      },
+      "height_over_time": {
+        "name": "Plant Height Growth",
+        "description": "Line chart showing plant height increase over time",
+        "chart_type": "line",
+        "api_endpoint": "/api/v1/plantings/{planting_id}/phenology",
+        "query_params": {
+          "start_date": "{start_date}",
+          "end_date": "{end_date}"
+        },
+        "x_axis": {
+          "field": "observation_date",
+          "label": "Date",
+          "format": "MMM dd",
+          "type": "datetime"
+        },
+        "y_axis": {
+          "field": "height_cm",
+          "label": "Height (cm)",
+          "format": "0.0",
+          "type": "numeric",
+          "min": 0
+        },
+        "colors": {
+          "primary": "#4CAF50"
+        },
+        "aggregation": "none",
+        "default_period": "all",
+        "show_grid": true,
+        "show_trend_line": true
+      },
+      "health_score_timeline": {
+        "name": "Plant Health Score",
+        "description": "Line chart showing health score trends",
+        "chart_type": "line",
+        "api_endpoint": "/api/v1/plantings/{planting_id}/phenology",
+        "query_params": {
+          "start_date": "{start_date}",
+          "end_date": "{end_date}"
+        },
+        "x_axis": {
+          "field": "observation_date",
+          "label": "Date",
+          "format": "MMM dd",
+          "type": "datetime"
+        },
+        "y_axis": {
+          "field": "health_score",
+          "label": "Health Score",
+          "format": "0",
+          "type": "numeric",
+          "min": 1,
+          "max": 10
+        },
+        "colors": {
+          "primary": "#4CAF50"
+        },
+        "aggregation": "none",
+        "default_period": "all",
+        "show_grid": true,
+        "threshold_lines": [
+          {
+            "value": 7,
+            "label": "Good Health",
+            "color": "#4CAF50"
+          }
+        ]
+      }
+    },
+    "financial": {
+      "revenue_vs_costs": {
+        "name": "Revenue vs Costs",
+        "description": "Composed chart showing revenue and costs over time",
+        "chart_type": "composed",
+        "api_endpoint": "/api/v1/plots/{plot_id}/financial/summary",
+        "query_params": {
+          "start_date": "{start_date}",
+          "end_date": "{end_date}",
+          "aggregation": "monthly"
+        },
+        "x_axis": {
+          "field": "month",
+          "label": "Month",
+          "format": "MMM yyyy",
+          "type": "datetime"
+        },
+        "y_axes": [
+          {
+            "field": "total_revenue",
+            "label": "Revenue (USD)",
+            "color": "#4CAF50",
+            "format": "$0,0.00",
+            "chart_type": "bar"
+          },
+          {
+            "field": "total_costs",
+            "label": "Costs (USD)",
+            "color": "#F44336",
+            "format": "$0,0.00",
+            "chart_type": "bar"
+          },
+          {
+            "field": "profit",
+            "label": "Profit (USD)",
+            "color": "#2196F3",
+            "format": "$0,0.00",
+            "chart_type": "line"
+          }
+        ],
+        "aggregation": "sum",
+        "default_period": "365d",
+        "show_legend": true,
+        "show_grid": true
+      },
+      "cost_breakdown": {
+        "name": "Cost Breakdown by Category",
+        "description": "Pie chart showing distribution of input costs",
+        "chart_type": "pie",
+        "api_endpoint": "/api/v1/input-costs/summary",
+        "query_params": {
+          "start_date": "{start_date}",
+          "end_date": "{end_date}",
+          "group_by": "category"
+        },
+        "data_field": "category",
+        "value_field": "total_amount",
+        "label_field": "category",
+        "colors": {
+          "seeds": "#8BC34A",
+          "fertilizer": "#FF9800",
+          "water": "#2196F3",
+          "labor": "#9C27B0",
+          "equipment": "#607D8B",
+          "other": "#9E9E9E"
+        },
+        "aggregation": "sum",
+        "default_period": "90d",
+        "show_legend": true,
+        "show_percentage": true,
+        "tooltip_format": "{category}: ${value} ({percentage}%)"
+      },
+      "profit_margin_timeline": {
+        "name": "Profit Margin Trend",
+        "description": "Line chart showing profit margin percentage over time",
+        "chart_type": "line",
+        "api_endpoint": "/api/v1/plots/{plot_id}/financial/summary",
+        "query_params": {
+          "start_date": "{start_date}",
+          "end_date": "{end_date}",
+          "aggregation": "monthly"
+        },
+        "x_axis": {
+          "field": "month",
+          "label": "Month",
+          "format": "MMM yyyy",
+          "type": "datetime"
+        },
+        "y_axis": {
+          "field": "profit_margin_percent",
+          "label": "Profit Margin (%)",
+          "format": "0.0",
+          "type": "numeric"
+        },
+        "colors": {
+          "primary": "#4CAF50"
+        },
+        "aggregation": "calculated",
+        "calculation": "(total_revenue - total_costs) / total_revenue * 100",
+        "default_period": "365d",
+        "show_grid": true,
+        "threshold_lines": [
+          {
+            "value": 20,
+            "label": "Target Margin",
+            "color": "#FFC107"
+          }
+        ]
+      }
+    }
+  },
+  "common_settings": {
+    "responsive_breakpoints": {
+      "mobile": 480,
+      "tablet": 768,
+      "desktop": 1024
+    },
+    "default_colors": {
+      "primary": "#4CAF50",
+      "secondary": "#2196F3",
+      "success": "#8BC34A",
+      "warning": "#FF9800",
+      "danger": "#F44336",
+      "info": "#00BCD4"
+    },
+    "date_formats": {
+      "short": "MM/dd",
+      "medium": "MMM dd, yyyy",
+      "long": "MMMM dd, yyyy HH:mm",
+      "time": "HH:mm"
+    },
+    "number_formats": {
+      "decimal": "0.00",
+      "integer": "0",
+      "currency": "$0,0.00",
+      "percentage": "0.0%"
+    },
+    "chart_dimensions": {
+      "default_height": 400,
+      "mobile_height": 300,
+      "default_width": "100%"
+    },
+    "animation": {
+      "enabled": true,
+      "duration": 750,
+      "easing": "ease-out"
+    },
+    "export": {
+      "formats": ["PNG", "SVG", "CSV"],
+      "filename_pattern": "{chart_name}_{date}_{time}"
+    }
+  }
+}

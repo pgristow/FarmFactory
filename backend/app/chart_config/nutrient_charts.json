@@ -1,0 +1,207 @@
+{
+  "npk_balance_over_time": {
+    "type": "stacked_area",
+    "title": "NPK Balance Over Time",
+    "description": "Cumulative NPK nutrients applied over time",
+    "xAxis": {
+      "field": "date",
+      "label": "Date",
+      "format": "MMM DD"
+    },
+    "yAxis": {
+      "field": "amount_kg",
+      "label": "Nutrient Amount",
+      "unit": "kg",
+      "format": "0,0"
+    },
+    "series": [
+      {
+        "field": "nitrogen_kg",
+        "label": "Nitrogen (N)",
+        "color": "#4caf50"
+      },
+      {
+        "field": "phosphorus_kg",
+        "label": "Phosphorus (P)",
+        "color": "#ff9800"
+      },
+      {
+        "field": "potassium_kg",
+        "label": "Potassium (K)",
+        "color": "#2196f3"
+      }
+    ],
+    "aggregation": "sum",
+    "groupBy": "week",
+    "showLegend": true,
+    "responsive": true
+  },
+  "nutrient_costs_over_time": {
+    "type": "line",
+    "title": "Nutrient Costs Over Time",
+    "description": "Cumulative nutrient application costs",
+    "xAxis": {
+      "field": "date",
+      "label": "Date",
+      "format": "MMM DD"
+    },
+    "yAxis": {
+      "field": "cost_usd",
+      "label": "Cost",
+      "unit": "$",
+      "format": "0,0.00"
+    },
+    "aggregation": "sum",
+    "groupBy": "day",
+    "colors": ["#f44336"],
+    "showArea": true,
+    "cumulative": true,
+    "responsive": true
+  },
+  "application_methods_distribution": {
+    "type": "pie",
+    "title": "Application Methods Distribution",
+    "description": "Distribution of nutrient application methods",
+    "dataField": "application_method",
+    "valueField": "count",
+    "colors": ["#8bc34a", "#cddc39", "#ffeb3b", "#ffc107"],
+    "labels": {
+      "broadcast": "Broadcast",
+      "fertigation": "Fertigation",
+      "foliar": "Foliar Spray",
+      "side_dress": "Side Dress"
+    },
+    "showPercentage": true,
+    "showLegend": true,
+    "responsive": true
+  },
+  "nutrient_use_efficiency": {
+    "type": "bar",
+    "title": "Nutrient Use Efficiency",
+    "description": "Efficiency of nutrient application by plot",
+    "xAxis": {
+      "field": "plot_name",
+      "label": "Plot"
+    },
+    "yAxis": {
+      "field": "efficiency_ratio",
+      "label": "Efficiency Ratio",
+      "format": "0.00"
+    },
+    "colors": ["#4caf50"],
+    "showValues": true,
+    "targetLine": {
+      "value": 0.75,
+      "label": "Target Efficiency",
+      "color": "#ff9800"
+    },
+    "responsive": true
+  },
+  "npk_ratio_by_growth_stage": {
+    "type": "grouped_bar",
+    "title": "NPK Ratio by Growth Stage",
+    "description": "Average NPK ratios applied during different growth stages",
+    "xAxis": {
+      "field": "growth_stage",
+      "label": "Growth Stage"
+    },
+    "yAxis": {
+      "field": "percentage",
+      "label": "Percentage",
+      "unit": "%",
+      "format": "0"
+    },
+    "series": [
+      {
+        "field": "n_percent",
+        "label": "Nitrogen",
+        "color": "#4caf50"
+      },
+      {
+        "field": "p_percent",
+        "label": "Phosphorus",
+        "color": "#ff9800"
+      },
+      {
+        "field": "k_percent",
+        "label": "Potassium",
+        "color": "#2196f3"
+      }
+    ],
+    "aggregation": "average",
+    "showLegend": true,
+    "responsive": true
+  },
+  "nutrient_application_frequency": {
+    "type": "bar",
+    "title": "Application Frequency by Plot",
+    "description": "Number of nutrient applications per plot",
+    "xAxis": {
+      "field": "plot_name",
+      "label": "Plot"
+    },
+    "yAxis": {
+      "field": "application_count",
+      "label": "Number of Applications",
+      "format": "0"
+    },
+    "colors": ["#8bc34a"],
+    "showValues": true,
+    "responsive": true
+  },
+  "cost_per_hectare": {
+    "type": "bar",
+    "title": "Nutrient Cost per Hectare",
+    "description": "Total nutrient costs normalized by plot area",
+    "xAxis": {
+      "field": "plot_name",
+      "label": "Plot"
+    },
+    "yAxis": {
+      "field": "cost_per_ha",
+      "label": "Cost per Hectare",
+      "unit": "$/ha",
+      "format": "0,0.00"
+    },
+    "colors": ["#f44336"],
+    "showValues": true,
+    "responsive": true
+  },
+  "nutrient_timeline": {
+    "type": "timeline",
+    "title": "Nutrient Application Timeline",
+    "description": "Timeline view of all nutrient applications",
+    "dateField": "date",
+    "eventField": "nutrient_type",
+    "valueField": "amount_kg",
+    "colorBy": "application_method",
+    "showTooltip": true,
+    "responsive": true
+  },
+  "npk_balance_radar": {
+    "type": "radar",
+    "title": "NPK Balance Comparison",
+    "description": "Radar chart comparing NPK balance across plots",
+    "metrics": [
+      {
+        "field": "total_n",
+        "label": "Nitrogen",
+        "max": 100
+      },
+      {
+        "field": "total_p",
+        "label": "Phosphorus",
+        "max": 100
+      },
+      {
+        "field": "total_k",
+        "label": "Potassium",
+        "max": 100
+      }
+    ],
+    "seriesField": "plot_name",
+    "colors": ["#4caf50", "#2196f3", "#ff9800"],
+    "showLegend": true,
+    "responsive": true
+  }
+}

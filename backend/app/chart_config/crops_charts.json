@@ -1,0 +1,125 @@
+{
+  "crop_distribution": {
+    "type": "pie",
+    "title": "Crop Distribution",
+    "description": "Distribution of crops across all plots",
+    "dataField": "crop_name",
+    "valueField": "area_hectares",
+    "colors": ["#4caf50", "#8bc34a", "#cddc39", "#ffeb3b", "#ffc107", "#ff9800"],
+    "showPercentage": true,
+    "showLegend": true,
+    "responsive": true
+  },
+  "planting_calendar": {
+    "type": "gantt",
+    "title": "Planting Calendar",
+    "description": "Timeline of crop planting and harvest dates",
+    "startDateField": "planting_date",
+    "endDateField": "expected_harvest_date",
+    "labelField": "crop_name",
+    "seriesField": "plot_name",
+    "colors": ["#4caf50", "#2196f3", "#ff9800"],
+    "showLegend": true,
+    "responsive": true
+  },
+  "crop_yield_comparison": {
+    "type": "bar",
+    "title": "Crop Yield Comparison",
+    "description": "Compare actual vs expected yield by crop",
+    "xAxis": {
+      "field": "crop_name",
+      "label": "Crop"
+    },
+    "yAxis": {
+      "field": "yield_kg",
+      "label": "Yield",
+      "unit": "kg",
+      "format": "0,0"
+    },
+    "series": [
+      {
+        "field": "actual_yield",
+        "label": "Actual Yield",
+        "color": "#4caf50"
+      },
+      {
+        "field": "expected_yield",
+        "label": "Expected Yield",
+        "color": "#ff9800"
+      }
+    ],
+    "showLegend": true,
+    "showValues": true,
+    "responsive": true
+  },
+  "crop_area_by_plot": {
+    "type": "stacked_bar",
+    "title": "Crop Area by Plot",
+    "description": "Distribution of crop areas across plots",
+    "xAxis": {
+      "field": "plot_name",
+      "label": "Plot"
+    },
+    "yAxis": {
+      "field": "area_hectares",
+      "label": "Area",
+      "unit": "ha",
+      "format": "0.00"
+    },
+    "stackBy": "crop_name",
+    "colors": ["#4caf50", "#8bc34a", "#cddc39", "#ffeb3b"],
+    "showLegend": true,
+    "showValues": true,
+    "responsive": true
+  },
+  "crop_performance_matrix": {
+    "type": "table",
+    "title": "Crop Performance Summary",
+    "description": "Comprehensive crop performance metrics",
+    "columns": [
+      {
+        "field": "crop_name",
+        "label": "Crop",
+        "type": "text"
+      },
+      {
+        "field": "plot_name",
+        "label": "Plot",
+        "type": "text"
+      },
+      {
+        "field": "planting_date",
+        "label": "Planted",
+        "type": "date",
+        "format": "MMM DD"
+      },
+      {
+        "field": "days_to_harvest",
+        "label": "Days to Harvest",
+        "type": "number",
+        "format": "0"
+      },
+      {
+        "field": "yield_kg",
+        "label": "Yield (kg)",
+        "type": "number",
+        "format": "0,0"
+      },
+      {
+        "field": "yield_per_ha",
+        "label": "Yield/ha",
+        "type": "number",
+        "format": "0,0"
+      },
+      {
+        "field": "revenue_usd",
+        "label": "Revenue",
+        "type": "currency",
+        "format": "$0,0"
+      }
+    ],
+    "sortable": true,
+    "filterable": true,
+    "responsive": true
+  }
+}

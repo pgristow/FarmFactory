@@ -529,34 +529,281 @@ make init
 
 ## Performance Tuning
 
-### Database
-```bash
-# Increase connection pool
-DB_POOL_SIZE=20
-DB_MAX_OVERFLOW=40
+### Database Performance Tuning (Sprint 3 - DO-203)
 
-# PostgreSQL tuning (in docker-compose)
-- shared_buffers=256MB
-- effective_cache_size=1GB
+FarmFactory includes comprehensive database performance tuning optimized for time-series workloads. The configuration was implemented in Sprint 3 to support high-volume sensor data, irrigation events, and real-time monitoring.
+
+#### Configuration Files
+
+| File | Purpose | Location |
+|------|---------|----------|
+| `postgresql.conf` | PostgreSQL performance settings | `/infrastructure/database/postgresql.conf` |
+| `timescaledb.conf` | TimescaleDB-specific policies | `/infrastructure/database/timescaledb.conf` |
+| `init-performance.sql` | Monitoring views and extensions | `/infrastructure/database/init-performance.sql` |
+| `performance-report.sql` | Comprehensive performance report | `/scripts/performance-report.sql` |
+| `postgres-exporter-queries.yaml` | Prometheus custom metrics | `/monitoring/prometheus/postgres-exporter-queries.yaml` |
+
+#### Key Optimizations
+
+**Memory Configuration (8GB RAM server):**
+- `shared_buffers = 2GB` (25% of RAM)
+- `effective_cache_size = 6GB` (75% of RAM)
+- `work_mem = 64MB` (for sorting/aggregations)
+- `maintenance_work_mem = 512MB` (for VACUUM/INDEX)
+
+**TimescaleDB Settings:**
+- `timescaledb.max_background_workers = 8`
+- `max_parallel_workers = 8`
+- `max_parallel_workers_per_gather = 4`
+
+**SSD Optimization:**
+- `random_page_cost = 1.1` (lower than HDD default)
+- `effective_io_concurrency = 200`
+
+**Write Performance:**
+- `wal_buffers = 16MB`
+- `checkpoint_completion_target = 0.9`
+
+#### Compression and Retention Policies
+
+**Data Compression (90%+ storage reduction):**
+```sql
+-- Environmental readings: compress chunks older than 30 days
+-- Irrigation events: compress chunks older than 30 days
+-- Nutrient applications: compress chunks older than 30 days
+-- Water quality: compress chunks older than 60 days
 ```
 
-### Backend
+**Data Retention:**
+```sql
+-- Environmental readings: 2 years (high volume)
+-- Irrigation/nutrients/water quality: 5 years
+-- Phenology observations: 7 years
+-- Harvest records: unlimited (financial data)
+```
+
+**Apply TimescaleDB Policies:**
+```bash
+# Apply compression and retention policies
+make db-apply-timescale-config
+```
+
+#### Continuous Aggregates
+
+Pre-computed aggregations for fast dashboard queries:
+- `environmental_readings_hourly` - Hourly sensor data averages
+- `environmental_readings_daily` - Daily sensor data aggregates
+- `irrigation_daily_totals` - Daily water usage per plot
+- `nutrient_daily_totals` - Daily NPK applications
+
+These provide 10-100x faster queries for time-series visualizations.
+
+#### Performance Monitoring
+
+**Quick Performance Check:**
+```bash
+# Show quick summary
+make db-summary
+
+# Check cache hit ratio (target: >95%)
+make db-cache
+
+# View slow queries
+make db-stats
+
+# Check compression effectiveness
+make db-compression
+
+# View chunk statistics
+make db-chunks
+```
+
+**Comprehensive Performance Report:**
+```bash
+# Generate full report
+make db-performance
+```
+
+The report includes:
+- Database size and growth
+- Connection statistics
+- Cache hit ratios
+- Slow queries (>100ms)
+- Table sizes and bloat
+- Index usage statistics
+- TimescaleDB chunk stats
+- Compression savings
+- Performance recommendations
+
+**Monitoring Views Available:**
+- `v_slow_queries` - Queries averaging >100ms
+- `v_cache_hit_ratio` - Cache effectiveness (target: >95%)
+- `v_table_bloat` - Table sizes and index overhead
+- `v_index_usage` - Identify unused indexes
+- `v_chunk_stats` - TimescaleDB chunk statistics
+- `v_compression_stats` - Compression effectiveness
+- `v_active_queries` - Currently running queries
+- `v_table_activity` - Table modification statistics
+- `performance_summary()` - Quick overview function
+
+#### Grafana Dashboard
+
+A comprehensive database performance dashboard is available at:
+**http://localhost:3001/d/farmfactory-db-perf**
+
+The dashboard shows:
+- Overall cache hit ratio gauge
+- Cache hit ratio by type (table, index, overall)
+- Active connections count
+- Table sizes over time
+- Sequential vs index scan rates
+- Slow query execution times
+- TimescaleDB chunk statistics
+- Compression storage savings
+- Time-series record counts
+- Dead tuple percentage
+- Recent data volume
+
+#### PostgreSQL Exporter
+
+PostgreSQL metrics are exposed for Prometheus at:
+**http://localhost:9187/metrics**
+
+Custom metrics include:
+- FarmFactory-specific time-series record counts
+- Recent data volume (24h, 7d metrics)
+- Cache hit ratios by type
+- Table and index statistics
+- TimescaleDB chunk and compression stats
+- Query performance metrics
+
+#### Performance Targets
+
+| Metric | Target | Validation |
+|--------|--------|------------|
+| Cache hit ratio | >95% | `make db-cache` |
+| Query time (30 days) | <200ms | Performance tests |
+| Query time (90 days) | <500ms | Performance tests |
+| Table bloat | <20% | `make db-bloat` |
+| Index usage | All used regularly | `make db-index-usage` |
+| Compression ratio | >10:1 for time-series | `make db-compression` |
+
+#### Database Tuning Commands
+
+```bash
+# Performance monitoring
+make db-stats          # Show slow queries
+make db-cache          # Show cache hit ratio
+make db-bloat          # Show table bloat
+make db-chunks         # Show chunk statistics
+make db-compression    # Show compression savings
+make db-connections    # Show connection stats
+make db-index-usage    # Show index usage
+make db-summary        # Quick overview
+make db-performance    # Full performance report
+
+# Database optimization
+make db-tune           # Run VACUUM ANALYZE
+
+# TimescaleDB configuration
+make db-apply-timescale-config  # Apply compression/retention policies
+```
+
+#### Resource Limits
+
+Docker Compose includes resource limits for PostgreSQL:
+```yaml
+deploy:
+  resources:
+    limits:
+      memory: 8G
+      cpus: '4'
+    reservations:
+      memory: 4G
+      cpus: '2'
+```
+
+Adjust in `.env`:
+```bash
+POSTGRES_MEMORY_LIMIT=8G
+POSTGRES_CPU_LIMIT=4
+POSTGRES_MEMORY_RESERVATION=4G
+POSTGRES_CPU_RESERVATION=2
+```
+
+#### Performance Validation
+
+After applying configurations:
+
+1. **Restart PostgreSQL with new config:**
+   ```bash
+   docker-compose restart postgres
+   ```
+
+2. **Wait for startup:**
+   ```bash
+   docker-compose logs -f postgres
+   ```
+
+3. **Check configuration loaded:**
+   ```bash
+   docker-compose exec postgres psql -U farm_user -d farmfactory \
+     -c "SHOW shared_buffers; SHOW effective_cache_size;"
+   ```
+
+4. **Run performance checks:**
+   ```bash
+   make db-summary
+   make db-cache
+   ```
+
+5. **Verify monitoring:**
+   - Visit Grafana: http://localhost:3001/d/farmfactory-db-perf
+   - Check Prometheus: http://localhost:9187/metrics
+
+#### Troubleshooting Performance Issues
+
+**Low Cache Hit Ratio (<95%):**
+- Increase `shared_buffers` and `effective_cache_size`
+- Check for table bloat: `make db-bloat`
+- Run VACUUM ANALYZE: `make db-tune`
+
+**Slow Queries:**
+- Check missing indexes: `make db-index-usage`
+- Review query plans in slow query log
+- Consider adding covering indexes
+
+**High Table Bloat:**
+- Run manual VACUUM: `make db-tune`
+- Adjust autovacuum settings
+- Check for long-running transactions
+
+**Compression Not Working:**
+- Check chunk age (compression applies after 30 days)
+- Verify policies: `make db-chunks`
+- Check logs for compression job failures
+
+### Backend Performance
 ```bash
 # More Uvicorn workers (in production)
 --workers 4  # (2 x CPU cores) + 1
 
 # More Celery workers
 CELERY_CONCURRENCY=8
+
+# Database connection pool
+DB_POOL_SIZE=20
+DB_MAX_OVERFLOW=40
 ```
 
-### Redis
+### Redis Performance
 ```bash
 # Increase max memory
 maxmemory 512mb
 maxmemory-policy allkeys-lru
 ```
 
-### Frontend
+### Frontend Performance
 - Enable gzip compression (already in nginx.conf)
 - Use CDN for static assets (production)
 - Lazy load components

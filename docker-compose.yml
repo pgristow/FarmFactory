@@ -9,11 +9,21 @@ services:
       POSTGRES_USER: ${POSTGRES_USER:-farm_user}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-farmpass123}
       PGDATA: /var/lib/postgresql/data/pgdata
+      # Performance tuning environment variables
+      POSTGRES_SHARED_BUFFERS: ${POSTGRES_SHARED_BUFFERS:-2GB}
+      POSTGRES_EFFECTIVE_CACHE_SIZE: ${POSTGRES_EFFECTIVE_CACHE_SIZE:-6GB}
+      POSTGRES_WORK_MEM: ${POSTGRES_WORK_MEM:-64MB}
+      POSTGRES_MAINTENANCE_WORK_MEM: ${POSTGRES_MAINTENANCE_WORK_MEM:-512MB}
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./scripts/init-db.sql:/docker-entrypoint-initdb.d/01-init.sql
+      - ./infrastructure/database/init-performance.sql:/docker-entrypoint-initdb.d/20-performance.sql
+      - ./infrastructure/database/postgresql.conf:/etc/postgresql/postgresql.conf
+      - ./scripts:/scripts
     ports:
       - "${POSTGRES_PORT:-5432}:5432"
+    command: postgres -c config_file=/etc/postgresql/postgresql.conf
+    shm_size: 256MB
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-farm_user} -d ${POSTGRES_DB:-farmfactory}"]
       interval: 10s
@@ -23,6 +33,37 @@ services:
     networks:
       - farmfactory
     restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: ${POSTGRES_MEMORY_LIMIT:-8G}
+          cpus: ${POSTGRES_CPU_LIMIT:-4}
+        reservations:
+          memory: ${POSTGRES_MEMORY_RESERVATION:-4G}
+          cpus: ${POSTGRES_CPU_RESERVATION:-2}
+
+  postgres_exporter:
+    image: prometheuscommunity/postgres-exporter:latest
+    container_name: farmfactory_postgres_exporter
+    environment:
+      DATA_SOURCE_NAME: "postgresql://${POSTGRES_USER:-farm_user}:${POSTGRES_PASSWORD:-farmpass123}@postgres:5432/${POSTGRES_DB:-farmfactory}?sslmode=disable"
+      PG_EXPORTER_EXTEND_QUERY_PATH: /etc/postgres_exporter/queries.yaml
+    ports:
+      - "${POSTGRES_EXPORTER_PORT:-9187}:9187"
+    volumes:
+      - ./monitoring/prometheus/postgres-exporter-queries.yaml:/etc/postgres_exporter/queries.yaml
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - farmfactory
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:9187/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
 
   redis:
     image: redis:7-alpine

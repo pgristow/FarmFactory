@@ -1,0 +1,268 @@
+{
+  "temperature_trends": {
+    "type": "line_with_bands",
+    "title": "Temperature Trends",
+    "description": "Air temperature with min/max range bands",
+    "xAxis": {
+      "field": "timestamp",
+      "label": "Time",
+      "format": "MMM DD HH:mm"
+    },
+    "yAxis": {
+      "field": "temperature_c",
+      "label": "Temperature",
+      "unit": "°C",
+      "format": "0.0"
+    },
+    "series": [
+      {
+        "field": "avg_temperature",
+        "label": "Average",
+        "color": "#ff5722",
+        "lineWidth": 2
+      },
+      {
+        "field": "min_temperature",
+        "label": "Minimum",
+        "color": "#2196f3",
+        "lineStyle": "dashed"
+      },
+      {
+        "field": "max_temperature",
+        "label": "Maximum",
+        "color": "#f44336",
+        "lineStyle": "dashed"
+      }
+    ],
+    "bandArea": {
+      "min": "min_temperature",
+      "max": "max_temperature",
+      "color": "#ffebee",
+      "opacity": 0.3
+    },
+    "aggregation": "hourly",
+    "showLegend": true,
+    "responsive": true
+  },
+  "soil_moisture_heatmap": {
+    "type": "heatmap",
+    "title": "Soil Moisture Heatmap",
+    "description": "Soil moisture levels across time and plots",
+    "xAxis": {
+      "field": "date",
+      "label": "Date",
+      "format": "MMM DD"
+    },
+    "yAxis": {
+      "field": "plot_name",
+      "label": "Plot"
+    },
+    "valueField": "soil_moisture_percent",
+    "colorScale": {
+      "min": 20,
+      "max": 60,
+      "colors": ["#d32f2f", "#ff9800", "#ffeb3b", "#8bc34a", "#4caf50"]
+    },
+    "aggregation": "average",
+    "groupBy": "day",
+    "showValues": false,
+    "responsive": true
+  },
+  "humidity_trends": {
+    "type": "area",
+    "title": "Humidity Trends",
+    "description": "Relative humidity over time",
+    "xAxis": {
+      "field": "timestamp",
+      "label": "Time",
+      "format": "MMM DD HH:mm"
+    },
+    "yAxis": {
+      "field": "humidity_percent",
+      "label": "Humidity",
+      "unit": "%",
+      "format": "0",
+      "min": 0,
+      "max": 100
+    },
+    "colors": ["#03a9f4"],
+    "aggregation": "average",
+    "groupBy": "hour",
+    "showGrid": true,
+    "fillOpacity": 0.3,
+    "responsive": true
+  },
+  "rainfall_cumulative": {
+    "type": "area",
+    "title": "Cumulative Rainfall",
+    "description": "Total rainfall accumulated over time",
+    "xAxis": {
+      "field": "date",
+      "label": "Date",
+      "format": "MMM DD"
+    },
+    "yAxis": {
+      "field": "rainfall_mm",
+      "label": "Rainfall",
+      "unit": "mm",
+      "format": "0.0"
+    },
+    "colors": ["#0288d1"],
+    "aggregation": "sum",
+    "groupBy": "day",
+    "cumulative": true,
+    "fillOpacity": 0.5,
+    "responsive": true
+  },
+  "multi_metric_comparison": {
+    "type": "multi_line",
+    "title": "Environmental Metrics Overview",
+    "description": "Multiple environmental metrics on normalized scales",
+    "xAxis": {
+      "field": "timestamp",
+      "label": "Time",
+      "format": "MMM DD"
+    },
+    "series": [
+      {
+        "field": "temperature_c",
+        "label": "Temperature",
+        "color": "#ff5722",
+        "yAxis": "left",
+        "unit": "°C"
+      },
+      {
+        "field": "humidity_percent",
+        "label": "Humidity",
+        "color": "#03a9f4",
+        "yAxis": "left",
+        "unit": "%"
+      },
+      {
+        "field": "soil_moisture_percent",
+        "label": "Soil Moisture",
+        "color": "#8bc34a",
+        "yAxis": "left",
+        "unit": "%"
+      }
+    ],
+    "aggregation": "average",
+    "groupBy": "day",
+    "showLegend": true,
+    "responsive": true
+  },
+  "soil_vs_air_temperature": {
+    "type": "dual_line",
+    "title": "Soil vs Air Temperature",
+    "description": "Comparison of soil and air temperatures",
+    "xAxis": {
+      "field": "timestamp",
+      "label": "Time",
+      "format": "MMM DD HH:mm"
+    },
+    "yAxis": {
+      "field": "temperature",
+      "label": "Temperature",
+      "unit": "°C",
+      "format": "0.0"
+    },
+    "series": [
+      {
+        "field": "temperature_c",
+        "label": "Air Temperature",
+        "color": "#ff5722"
+      },
+      {
+        "field": "soil_temperature_c",
+        "label": "Soil Temperature",
+        "color": "#795548"
+      }
+    ],
+    "aggregation": "average",
+    "groupBy": "hour",
+    "showLegend": true,
+    "responsive": true
+  },
+  "light_intensity_daily": {
+    "type": "area",
+    "title": "Daily Light Intensity Pattern",
+    "description": "Light intensity throughout the day",
+    "xAxis": {
+      "field": "hour",
+      "label": "Hour of Day",
+      "format": "HH:00"
+    },
+    "yAxis": {
+      "field": "light_intensity_lux",
+      "label": "Light Intensity",
+      "unit": "lux",
+      "format": "0,0"
+    },
+    "colors": ["#ffc107"],
+    "aggregation": "average",
+    "groupBy": "hour",
+    "fillOpacity": 0.4,
+    "responsive": true
+  },
+  "environmental_correlation_matrix": {
+    "type": "correlation_matrix",
+    "title": "Environmental Metrics Correlation",
+    "description": "Correlation matrix of environmental variables",
+    "metrics": [
+      "temperature_c",
+      "humidity_percent",
+      "soil_moisture_percent",
+      "soil_temperature_c"
+    ],
+    "colorScale": {
+      "min": -1,
+      "max": 1,
+      "colors": ["#2196f3", "#ffffff", "#f44336"]
+    },
+    "showValues": true,
+    "responsive": true
+  },
+  "daily_temperature_range": {
+    "type": "candlestick",
+    "title": "Daily Temperature Range",
+    "description": "Daily min, max, and average temperatures",
+    "xAxis": {
+      "field": "date",
+      "label": "Date",
+      "format": "MMM DD"
+    },
+    "yAxis": {
+      "field": "temperature",
+      "label": "Temperature",
+      "unit": "°C",
+      "format": "0.0"
+    },
+    "fields": {
+      "min": "min_temperature",
+      "max": "max_temperature",
+      "open": "morning_temperature",
+      "close": "evening_temperature"
+    },
+    "colors": {
+      "rising": "#f44336",
+      "falling": "#2196f3"
+    },
+    "aggregation": "daily",
+    "responsive": true
+  },
+  "environmental_alerts": {
+    "type": "timeline_markers",
+    "title": "Environmental Alert Events",
+    "description": "Timeline of out-of-range environmental conditions",
+    "dateField": "timestamp",
+    "eventField": "alert_type",
+    "severityField": "severity",
+    "colors": {
+      "low": "#ffeb3b",
+      "medium": "#ff9800",
+      "high": "#f44336"
+    },
+    "showTooltip": true,
+    "responsive": true
+  }
+}

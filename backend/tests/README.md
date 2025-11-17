@@ -756,3 +756,406 @@ pytest -m "not slow"
 **Sprint**: Sprint 2 - Data Import System
 **Test Count**: 335+ import-specific tests
 **Coverage Target**: 85% for import modules
+
+---
+
+## Sprint 3: Core Data Management Testing
+
+### Overview
+
+Sprint 3 introduces comprehensive testing for core farm data management, including crops, irrigation, nutrients, environmental data, water quality, phenology observations, and financial tracking. The testing framework includes 200+ tests with a focus on CRUD operations, time-series queries, and performance optimization.
+
+### Sprint 3 Test Files
+
+```
+tests/
+├── integration/
+│   ├── test_crops_api.py              # Crop & Planting CRUD (25+ tests)
+│   ├── test_irrigation_api.py         # Irrigation CRUD & summaries (30+ tests)
+│   ├── test_nutrients_api.py          # Nutrient applications & NPK balance (25+ tests)
+│   ├── test_environmental_api.py      # Environmental readings & aggregations (35+ tests)
+│   ├── test_water_quality_api.py      # Water quality tests & trends (20+ tests)
+│   ├── test_phenology_api.py          # Phenology observations & timeline (25+ tests)
+│   └── test_financial_api.py          # Input costs, harvests & P&L (30+ tests)
+├── performance/
+│   ├── test_timeseries_queries.py     # Time-series query performance (25+ tests)
+│   └── test_aggregations.py           # Aggregation performance (15+ tests)
+└── conftest.py                        # Sprint 3 fixtures added
+```
+
+### Running Sprint 3 Tests
+
+```bash
+# All Sprint 3 integration tests
+pytest tests/integration/test_crops_api.py \
+       tests/integration/test_irrigation_api.py \
+       tests/integration/test_nutrients_api.py \
+       tests/integration/test_environmental_api.py \
+       tests/integration/test_water_quality_api.py \
+       tests/integration/test_phenology_api.py \
+       tests/integration/test_financial_api.py -v
+
+# Crop management tests only
+pytest tests/integration/test_crops_api.py -v
+
+# Irrigation tests only
+pytest tests/integration/test_irrigation_api.py -v
+
+# Performance tests (SLOW)
+pytest tests/performance/test_timeseries_queries.py \
+       tests/performance/test_aggregations.py -v -m performance
+
+# Quick tests (skip slow performance tests)
+pytest tests/integration/ -m "not slow"
+```
+
+### Test Categories
+
+#### 1. Crop Management Tests (`test_crops_api.py`)
+
+**Coverage**: Crop and Planting CRUD operations
+
+**Key Test Classes**:
+- `TestCropsAPI` - Crop creation, listing, updating, deletion (10+ tests)
+- `TestPlantingsAPI` - Planting management and status tracking (8+ tests)
+- `TestCropsValidation` - Input validation and error handling (7+ tests)
+
+**Example**:
+```bash
+# Run crop tests
+pytest tests/integration/test_crops_api.py::TestCropsAPI -v
+
+# Run planting tests
+pytest tests/integration/test_crops_api.py::TestPlantingsAPI -v
+```
+
+#### 2. Irrigation Tests (`test_irrigation_api.py`)
+
+**Coverage**: Irrigation events, water usage summaries, date filtering
+
+**Key Test Classes**:
+- `TestIrrigationAPI` - Irrigation event CRUD (12+ tests)
+- `TestIrrigationSummaryAPI` - Water usage calculations (8+ tests)
+- `TestIrrigationValidation` - Data validation (10+ tests)
+
+**Example**:
+```bash
+# Run irrigation CRUD tests
+pytest tests/integration/test_irrigation_api.py::TestIrrigationAPI -v
+
+# Run summary/aggregation tests
+pytest tests/integration/test_irrigation_api.py::TestIrrigationSummaryAPI -v
+```
+
+#### 3. Nutrient Management Tests (`test_nutrients_api.py`)
+
+**Coverage**: Nutrient applications, NPK balance calculations
+
+**Key Test Classes**:
+- `TestNutrientsAPI` - Nutrient application CRUD (12+ tests)
+- `TestNPKBalanceAPI` - NPK balance calculations (7+ tests)
+- `TestNutrientCostTracking` - Cost tracking (3+ tests)
+- `TestNutrientsValidation` - Validation (7+ tests)
+
+**Example**:
+```bash
+# Run NPK balance tests
+pytest tests/integration/test_nutrients_api.py::TestNPKBalanceAPI -v
+```
+
+#### 4. Environmental Data Tests (`test_environmental_api.py`)
+
+**Coverage**: Sensor readings, aggregations, latest values
+
+**Key Test Classes**:
+- `TestEnvironmentalAPI` - Environmental data CRUD (15+ tests)
+- `TestEnvironmentalLatestAPI` - Latest readings (5+ tests)
+- `TestEnvironmentalAggregationAPI` - Time-series aggregations (7+ tests)
+- `TestEnvironmentalValidation` - Data validation (8+ tests)
+
+**Example**:
+```bash
+# Run aggregation tests
+pytest tests/integration/test_environmental_api.py::TestEnvironmentalAggregationAPI -v
+```
+
+#### 5. Water Quality Tests (`test_water_quality_api.py`)
+
+**Coverage**: Water quality tests, trends, quality indicators
+
+**Key Test Classes**:
+- `TestWaterQualityAPI` - Water quality CRUD (12+ tests)
+- `TestWaterQualityTrendsAPI` - Trend analysis (6+ tests)
+- `TestWaterQualityValidation` - Data validation (8+ tests)
+
+**Example**:
+```bash
+# Run water quality trends tests
+pytest tests/integration/test_water_quality_api.py::TestWaterQualityTrendsAPI -v
+```
+
+#### 6. Phenology Tests (`test_phenology_api.py`)
+
+**Coverage**: Growth observations, timelines, photo uploads
+
+**Key Test Classes**:
+- `TestPhenologyAPI` - Phenology observation CRUD (13+ tests)
+- `TestPhenologyTimelineAPI` - Growth timeline (5+ tests)
+- `TestPhenologyPhotoUpload` - Photo handling (3+ tests)
+- `TestPhenologyValidation` - Data validation (8+ tests)
+
+**Example**:
+```bash
+# Run phenology timeline tests
+pytest tests/integration/test_phenology_api.py::TestPhenologyTimelineAPI -v
+```
+
+#### 7. Financial Data Tests (`test_financial_api.py`)
+
+**Coverage**: Input costs, harvests, P&L, ROI calculations
+
+**Key Test Classes**:
+- `TestInputCostsAPI` - Input cost tracking (12+ tests)
+- `TestHarvestsAPI` - Harvest records (8+ tests)
+- `TestFinancialSummaryAPI` - P&L and ROI (6+ tests)
+- `TestFinancialValidation` - Data validation (8+ tests)
+
+**Example**:
+```bash
+# Run financial summary tests
+pytest tests/integration/test_financial_api.py::TestFinancialSummaryAPI -v
+```
+
+### Performance Testing
+
+#### Time-Series Query Performance (`test_timeseries_queries.py`)
+
+**Performance Targets**:
+- 30-day query: < 200ms
+- 90-day query: < 500ms
+- 365-day query: < 2000ms
+- Daily aggregation: < 300ms
+- Concurrent queries: < 300ms max
+
+**Key Test Classes**:
+- `TestTimeSeriesQueryPerformance` - Date range queries (5+ tests)
+- `TestIrrigationQueryPerformance` - Irrigation queries (2+ tests)
+- `TestNutrientQueryPerformance` - Nutrient queries (1+ tests)
+- `TestMultiPlotQueryPerformance` - Multi-plot queries (1+ tests)
+- `TestIndexEffectiveness` - Index optimization (2+ tests)
+
+**Example**:
+```bash
+# Run 30-day performance test
+pytest tests/performance/test_timeseries_queries.py::TestTimeSeriesQueryPerformance::test_30day_query_performance -v
+
+# Run all time-series performance tests (SLOW)
+pytest tests/performance/test_timeseries_queries.py -v -m performance
+```
+
+#### Aggregation Performance (`test_aggregations.py`)
+
+**Performance Targets**:
+- Daily aggregation (30 days): < 300ms
+- Daily aggregation (90 days): < 500ms
+- Weekly aggregation (12 weeks): < 400ms
+- Monthly aggregation (12 months): < 600ms
+- Irrigation summary: < 300ms
+
+**Key Test Classes**:
+- `TestDailyAggregationPerformance` - Daily aggregations (2+ tests)
+- `TestWeeklyAggregationPerformance` - Weekly aggregations (1+ tests)
+- `TestMonthlyAggregationPerformance` - Monthly aggregations (1+ tests)
+- `TestIrrigationAggregationPerformance` - Irrigation summaries (2+ tests)
+- `TestNutrientAggregationPerformance` - NPK balance (1+ tests)
+- `TestMultiMetricAggregationPerformance` - Multi-metric (1+ tests)
+
+**Example**:
+```bash
+# Run daily aggregation tests
+pytest tests/performance/test_aggregations.py::TestDailyAggregationPerformance -v
+
+# Run all aggregation performance tests (SLOW)
+pytest tests/performance/test_aggregations.py -v -m performance
+```
+
+### Sprint 3 Fixtures (conftest.py)
+
+New fixtures added for Sprint 3:
+
+```python
+# Crop management fixtures
+@pytest.fixture
+def sample_crop(test_db):
+    """Create a sample crop for testing."""
+    # Returns a Crop instance
+
+@pytest.fixture
+def sample_planting(test_db, sample_plot, sample_crop):
+    """Create a sample planting for testing."""
+    # Returns a Planting instance
+
+# Plot fixture
+@pytest.fixture
+def sample_plot(test_db):
+    """Create a sample plot with farm for testing."""
+    # Returns a Plot instance
+
+# Performance testing fixture
+@pytest.fixture
+def sample_plot_with_data(test_db, sample_plot):
+    """Create plot with 90 days of irrigation data."""
+    # Returns a Plot with 90 irrigation events
+```
+
+### Test Markers for Sprint 3
+
+```bash
+# Integration tests
+pytest -m integration tests/integration/test_crops_api.py
+
+# API tests
+pytest -m api tests/integration/
+
+# Performance tests
+pytest -m performance tests/performance/
+
+# Slow tests (performance benchmarks)
+pytest -m slow
+
+# Skip slow tests
+pytest -m "not slow" tests/integration/
+```
+
+### Coverage Targets for Sprint 3 Modules
+
+| Module | Target | Priority |
+|--------|--------|----------|
+| Crops API | 85% | High |
+| Irrigation API | 85% | High |
+| Nutrients API | 85% | High |
+| Environmental API | 85% | High |
+| Water Quality API | 80% | Medium |
+| Phenology API | 80% | Medium |
+| Financial API | 85% | High |
+| Time-Series Services | 80% | High |
+
+### Generating Sprint 3 Coverage Report
+
+```bash
+# Coverage for all Sprint 3 modules
+pytest --cov=app.api.v1.endpoints.crops \
+       --cov=app.api.v1.endpoints.irrigation \
+       --cov=app.api.v1.endpoints.nutrients \
+       --cov=app.api.v1.endpoints.environmental \
+       --cov=app.api.v1.endpoints.water_quality \
+       --cov=app.api.v1.endpoints.phenology \
+       --cov=app.api.v1.endpoints.financial \
+       --cov=app.services.aggregation_service \
+       --cov-report=html \
+       --cov-report=term-missing \
+       tests/integration/
+
+# Open coverage report
+open htmlcov/index.html
+```
+
+### Known Issues (Sprint 3)
+
+1. **API endpoints not yet fully implemented**
+   - Tests are written based on API specifications
+   - Some endpoints may return 404 or different status codes
+   - Tests will be updated as APIs are implemented
+   - Status: Sprint 3 in progress
+
+2. **Performance targets based on PostgreSQL + TimescaleDB**
+   - Performance tests assume proper database setup
+   - Indexes must be in place (see `004_add_timeseries_indexes.py`)
+   - SQLite used in tests will have different performance
+   - Real performance should be measured in staging environment
+
+3. **Async test client setup**
+   - Some tests use synchronous TestClient
+   - May need to switch to AsyncClient for async endpoints
+   - Currently using `httpx.AsyncClient` for async tests
+
+4. **Photo upload functionality**
+   - Phenology photo upload tests are marked as skipped
+   - Requires multipart/form-data handling
+   - Will be implemented when file upload is added
+
+### Running All Sprint 3 Tests
+
+```bash
+# Quick test suite (integration tests only, skip slow)
+pytest tests/integration/ -m "integration and not slow" -v
+
+# Full test suite (including performance tests)
+pytest tests/integration/ tests/performance/ -v
+
+# With coverage
+pytest tests/integration/ \
+       --cov=app.api.v1.endpoints \
+       --cov=app.services \
+       --cov-report=html \
+       --cov-report=term-missing
+
+# Parallel execution (faster)
+pytest tests/integration/ -n auto -v
+```
+
+### Performance Benchmark Summary
+
+Run comprehensive performance benchmarks:
+
+```bash
+# Generate performance report
+pytest tests/performance/test_timeseries_queries.py::TestQueryPerformanceBenchmarks::test_benchmark_all_query_types -v
+pytest tests/performance/test_aggregations.py::TestAggregationBenchmarks::test_benchmark_aggregation_types -v
+
+# Results are printed to console with timing for:
+# - Raw data queries
+# - Date range filters
+# - Daily/weekly/monthly aggregations
+# - Multi-metric aggregations
+```
+
+### Test Data Best Practices
+
+1. **Use fixtures for test data** - Leverage conftest.py fixtures
+2. **Clean test data** - Tests use database transactions (auto-rollback)
+3. **Realistic data volumes** - Performance tests use realistic data sizes
+4. **Date consistency** - Use fixed dates (2024-01-01) for reproducibility
+5. **Incremental IDs** - Don't rely on specific ID values in assertions
+
+### Debugging Failed Tests
+
+```bash
+# Run single test with verbose output
+pytest tests/integration/test_crops_api.py::TestCropsAPI::test_create_crop -vv
+
+# Run with print statements visible
+pytest tests/integration/test_crops_api.py -s
+
+# Run with debugger on failure
+pytest tests/integration/test_crops_api.py --pdb
+
+# Show local variables on failure
+pytest tests/integration/test_crops_api.py -l
+```
+
+### Next Steps
+
+1. **Implement remaining API endpoints** (Backend team)
+2. **Add async support** where needed
+3. **Optimize database queries** based on performance test results
+4. **Add E2E tests** for complete workflows
+5. **Frontend integration tests** (React/TypeScript)
+
+---
+
+**Sprint 3 Testing Last Updated**: 2025-11-17
+**Sprint**: Sprint 3 - Core Data Management
+**Test Count**: 200+ integration and performance tests
+**Coverage Target**: 85% for core modules
+**Performance**: Sub-second queries for 90-day time ranges

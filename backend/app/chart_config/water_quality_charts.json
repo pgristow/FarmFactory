@@ -1,0 +1,332 @@
+{
+  "ph_trends_over_time": {
+    "type": "line",
+    "title": "pH Trends Over Time",
+    "description": "Water pH levels with target range bands",
+    "xAxis": {
+      "field": "date",
+      "label": "Date",
+      "format": "MMM DD"
+    },
+    "yAxis": {
+      "field": "ph",
+      "label": "pH Level",
+      "format": "0.00",
+      "min": 6.0,
+      "max": 8.0
+    },
+    "colors": ["#2196f3"],
+    "targetBands": [
+      {
+        "min": 6.5,
+        "max": 7.5,
+        "color": "#c8e6c9",
+        "label": "Optimal Range",
+        "opacity": 0.3
+      },
+      {
+        "min": 6.0,
+        "max": 6.5,
+        "color": "#fff9c4",
+        "label": "Acceptable",
+        "opacity": 0.2
+      },
+      {
+        "min": 7.5,
+        "max": 8.0,
+        "color": "#fff9c4",
+        "label": "Acceptable",
+        "opacity": 0.2
+      }
+    ],
+    "showLegend": true,
+    "showGrid": true,
+    "responsive": true
+  },
+  "ec_trends_with_bands": {
+    "type": "line",
+    "title": "Electrical Conductivity Trends",
+    "description": "EC levels with target range indicators",
+    "xAxis": {
+      "field": "date",
+      "label": "Date",
+      "format": "MMM DD"
+    },
+    "yAxis": {
+      "field": "ec_ds_per_m",
+      "label": "EC",
+      "unit": "dS/m",
+      "format": "0.00"
+    },
+    "colors": ["#ff9800"],
+    "targetBands": [
+      {
+        "min": 0.5,
+        "max": 1.5,
+        "color": "#c8e6c9",
+        "label": "Optimal Range",
+        "opacity": 0.3
+      }
+    ],
+    "showLegend": true,
+    "responsive": true
+  },
+  "water_temperature_trends": {
+    "type": "line",
+    "title": "Water Temperature Trends",
+    "description": "Water temperature over time",
+    "xAxis": {
+      "field": "date",
+      "label": "Date",
+      "format": "MMM DD"
+    },
+    "yAxis": {
+      "field": "temperature_c",
+      "label": "Temperature",
+      "unit": "°C",
+      "format": "0.0"
+    },
+    "colors": ["#f44336"],
+    "showArea": true,
+    "fillOpacity": 0.2,
+    "responsive": true
+  },
+  "multi_parameter_radar": {
+    "type": "radar",
+    "title": "Water Quality Parameters",
+    "description": "Multi-parameter water quality assessment",
+    "metrics": [
+      {
+        "field": "ph_normalized",
+        "label": "pH",
+        "max": 10,
+        "optimal": 7
+      },
+      {
+        "field": "ec_normalized",
+        "label": "EC",
+        "max": 10,
+        "optimal": 8
+      },
+      {
+        "field": "tds_normalized",
+        "label": "TDS",
+        "max": 10,
+        "optimal": 7
+      },
+      {
+        "field": "turbidity_normalized",
+        "label": "Turbidity",
+        "max": 10,
+        "optimal": 9
+      },
+      {
+        "field": "do_normalized",
+        "label": "Dissolved Oxygen",
+        "max": 10,
+        "optimal": 8
+      }
+    ],
+    "seriesField": "plot_name",
+    "colors": ["#4caf50", "#2196f3", "#ff9800"],
+    "showLegend": true,
+    "responsive": true
+  },
+  "tds_vs_ec_correlation": {
+    "type": "scatter",
+    "title": "TDS vs EC Correlation",
+    "description": "Relationship between Total Dissolved Solids and Electrical Conductivity",
+    "xAxis": {
+      "field": "ec_ds_per_m",
+      "label": "EC",
+      "unit": "dS/m",
+      "format": "0.00"
+    },
+    "yAxis": {
+      "field": "tds_ppm",
+      "label": "TDS",
+      "unit": "ppm",
+      "format": "0"
+    },
+    "colorBy": "source",
+    "colors": {
+      "well": "#8bc34a",
+      "municipal": "#2196f3",
+      "rainwater": "#03a9f4",
+      "irrigation_return": "#ff9800"
+    },
+    "showTrendline": true,
+    "showLegend": true,
+    "responsive": true
+  },
+  "water_source_comparison": {
+    "type": "grouped_bar",
+    "title": "Water Quality by Source",
+    "description": "Comparison of water quality parameters across sources",
+    "xAxis": {
+      "field": "source",
+      "label": "Water Source"
+    },
+    "yAxis": {
+      "field": "value",
+      "label": "Average Value",
+      "format": "0.00"
+    },
+    "series": [
+      {
+        "field": "avg_ph",
+        "label": "pH",
+        "color": "#2196f3"
+      },
+      {
+        "field": "avg_ec",
+        "label": "EC",
+        "color": "#ff9800"
+      },
+      {
+        "field": "avg_turbidity",
+        "label": "Turbidity",
+        "color": "#4caf50"
+      }
+    ],
+    "showLegend": true,
+    "responsive": true
+  },
+  "turbidity_timeline": {
+    "type": "bar",
+    "title": "Turbidity Levels Over Time",
+    "description": "Water turbidity measurements",
+    "xAxis": {
+      "field": "date",
+      "label": "Date",
+      "format": "MMM DD"
+    },
+    "yAxis": {
+      "field": "turbidity_ntu",
+      "label": "Turbidity",
+      "unit": "NTU",
+      "format": "0.00"
+    },
+    "colors": ["#795548"],
+    "threshold": {
+      "value": 5.0,
+      "color": "#f44336",
+      "label": "High Turbidity"
+    },
+    "responsive": true
+  },
+  "dissolved_oxygen_trend": {
+    "type": "line",
+    "title": "Dissolved Oxygen Levels",
+    "description": "Dissolved oxygen concentration over time",
+    "xAxis": {
+      "field": "date",
+      "label": "Date",
+      "format": "MMM DD"
+    },
+    "yAxis": {
+      "field": "dissolved_oxygen_mg_per_l",
+      "label": "Dissolved Oxygen",
+      "unit": "mg/L",
+      "format": "0.0"
+    },
+    "colors": ["#00bcd4"],
+    "targetBands": [
+      {
+        "min": 5.0,
+        "max": 9.0,
+        "color": "#c8e6c9",
+        "label": "Optimal Range",
+        "opacity": 0.3
+      }
+    ],
+    "showLegend": true,
+    "responsive": true
+  },
+  "quality_score_gauge": {
+    "type": "gauge",
+    "title": "Overall Water Quality Score",
+    "description": "Composite water quality score (0-100)",
+    "valueField": "quality_score",
+    "ranges": [
+      {
+        "min": 0,
+        "max": 50,
+        "color": "#f44336",
+        "label": "Poor"
+      },
+      {
+        "min": 50,
+        "max": 70,
+        "color": "#ff9800",
+        "label": "Fair"
+      },
+      {
+        "min": 70,
+        "max": 85,
+        "color": "#ffeb3b",
+        "label": "Good"
+      },
+      {
+        "min": 85,
+        "max": 100,
+        "color": "#4caf50",
+        "label": "Excellent"
+      }
+    ],
+    "showValue": true,
+    "responsive": true
+  },
+  "parameter_comparison_table": {
+    "type": "table",
+    "title": "Water Quality Parameters Summary",
+    "description": "Latest water quality test results across all plots",
+    "columns": [
+      {
+        "field": "plot_name",
+        "label": "Plot",
+        "type": "text"
+      },
+      {
+        "field": "date",
+        "label": "Test Date",
+        "type": "date",
+        "format": "MMM DD, YYYY"
+      },
+      {
+        "field": "ph",
+        "label": "pH",
+        "type": "number",
+        "format": "0.00",
+        "indicator": true,
+        "thresholds": {
+          "good": [6.5, 7.5],
+          "warning": [6.0, 8.0]
+        }
+      },
+      {
+        "field": "ec_ds_per_m",
+        "label": "EC (dS/m)",
+        "type": "number",
+        "format": "0.00",
+        "indicator": true
+      },
+      {
+        "field": "tds_ppm",
+        "label": "TDS (ppm)",
+        "type": "number",
+        "format": "0"
+      },
+      {
+        "field": "turbidity_ntu",
+        "label": "Turbidity (NTU)",
+        "type": "number",
+        "format": "0.00",
+        "indicator": true
+      }
+    ],
+    "sortable": true,
+    "filterable": true,
+    "responsive": true
+  }
+}

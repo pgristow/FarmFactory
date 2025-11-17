@@ -1,0 +1,338 @@
+{
+  "water_use_efficiency": {
+    "name": "Water Use Efficiency",
+    "description": "Liters of water required per kilogram of yield produced",
+    "formula": "total_water_liters / total_harvest_kg",
+    "unit": "L/kg",
+    "category": "water_management",
+    "target": {
+      "min": 0,
+      "optimal": 50,
+      "max": 100
+    },
+    "trend": "lower_is_better",
+    "aggregation": "average",
+    "data_sources": [
+      "irrigation_events",
+      "harvest_records"
+    ],
+    "calculation_period": "per_crop_cycle",
+    "visualization": "line_chart",
+    "threshold_alerts": {
+      "warning": 80,
+      "critical": 120
+    }
+  },
+  "nutrient_balance": {
+    "name": "NPK Balance Ratio",
+    "description": "Ratio of Nitrogen:Phosphorus:Potassium applied to crops",
+    "formula": "ratio(sum(total_N), sum(total_P), sum(total_K))",
+    "unit": "ratio",
+    "category": "nutrient_management",
+    "target": {
+      "optimal": "3:1:2",
+      "acceptable_range": "2.5-3.5:0.8-1.2:1.5-2.5"
+    },
+    "trend": "balance_optimal",
+    "aggregation": "ratio_calculation",
+    "data_sources": [
+      "nutrient_applications"
+    ],
+    "calculation_period": "monthly",
+    "visualization": "radar_chart",
+    "notes": "Optimal NPK ratio varies by crop type and growth stage"
+  },
+  "irrigation_frequency": {
+    "name": "Irrigation Frequency",
+    "description": "Average number of days between irrigation events",
+    "formula": "total_days / count(irrigation_events)",
+    "unit": "days",
+    "category": "water_management",
+    "target": {
+      "min": 1,
+      "optimal": 3,
+      "max": 7
+    },
+    "trend": "range_optimal",
+    "aggregation": "average",
+    "data_sources": [
+      "irrigation_events"
+    ],
+    "calculation_period": "monthly",
+    "visualization": "bar_chart",
+    "threshold_alerts": {
+      "warning": 10,
+      "critical": 14
+    }
+  },
+  "crop_health_score": {
+    "name": "Average Crop Health Score",
+    "description": "Mean health score from phenology observations (0-10 scale)",
+    "formula": "avg(health_score)",
+    "unit": "score",
+    "category": "crop_performance",
+    "target": {
+      "min": 7,
+      "optimal": 9,
+      "max": 10
+    },
+    "trend": "higher_is_better",
+    "aggregation": "average",
+    "data_sources": [
+      "phenology_observations"
+    ],
+    "calculation_period": "weekly",
+    "visualization": "line_chart",
+    "threshold_alerts": {
+      "warning": 6,
+      "critical": 5
+    }
+  },
+  "cost_per_hectare": {
+    "name": "Cost per Hectare",
+    "description": "Total input costs divided by cultivated area",
+    "formula": "sum(input_costs) / sum(plot_area_hectares)",
+    "unit": "USD/ha",
+    "category": "financial",
+    "target": {
+      "optimal": "varies_by_crop",
+      "benchmark": 5000
+    },
+    "trend": "lower_is_better",
+    "aggregation": "sum",
+    "data_sources": [
+      "input_costs",
+      "plot_metadata"
+    ],
+    "calculation_period": "per_season",
+    "visualization": "bar_chart",
+    "notes": "Compare against industry benchmarks for specific crop types"
+  },
+  "yield_per_hectare": {
+    "name": "Yield per Hectare",
+    "description": "Total harvest quantity per hectare of cultivated area",
+    "formula": "sum(harvest_kg) / sum(plot_area_hectares)",
+    "unit": "kg/ha",
+    "category": "crop_performance",
+    "target": {
+      "optimal": "varies_by_crop",
+      "benchmark": 10000
+    },
+    "trend": "higher_is_better",
+    "aggregation": "sum",
+    "data_sources": [
+      "harvest_records",
+      "plot_metadata"
+    ],
+    "calculation_period": "per_season",
+    "visualization": "bar_chart",
+    "notes": "Benchmark varies significantly by crop type"
+  },
+  "profit_margin": {
+    "name": "Profit Margin",
+    "description": "Net profit as a percentage of total revenue",
+    "formula": "((revenue - costs) / revenue) * 100",
+    "unit": "%",
+    "category": "financial",
+    "target": {
+      "min": 20,
+      "optimal": 40,
+      "max": 100
+    },
+    "trend": "higher_is_better",
+    "aggregation": "calculated",
+    "data_sources": [
+      "harvest_records",
+      "input_costs"
+    ],
+    "calculation_period": "monthly",
+    "visualization": "line_chart",
+    "threshold_alerts": {
+      "warning": 15,
+      "critical": 10
+    }
+  },
+  "water_cost_efficiency": {
+    "name": "Water Cost Efficiency",
+    "description": "Cost of water per kilogram of yield",
+    "formula": "total_water_costs / total_harvest_kg",
+    "unit": "USD/kg",
+    "category": "water_management",
+    "target": {
+      "optimal": 0.05,
+      "max": 0.15
+    },
+    "trend": "lower_is_better",
+    "aggregation": "average",
+    "data_sources": [
+      "irrigation_events",
+      "input_costs",
+      "harvest_records"
+    ],
+    "calculation_period": "per_crop_cycle",
+    "visualization": "line_chart"
+  },
+  "fertilizer_efficiency": {
+    "name": "Fertilizer Use Efficiency",
+    "description": "Kilograms of yield per kilogram of fertilizer applied",
+    "formula": "total_harvest_kg / total_fertilizer_kg",
+    "unit": "kg_yield/kg_fertilizer",
+    "category": "nutrient_management",
+    "target": {
+      "optimal": 100,
+      "min": 50
+    },
+    "trend": "higher_is_better",
+    "aggregation": "average",
+    "data_sources": [
+      "nutrient_applications",
+      "harvest_records"
+    ],
+    "calculation_period": "per_crop_cycle",
+    "visualization": "bar_chart"
+  },
+  "growth_rate": {
+    "name": "Average Growth Rate",
+    "description": "Average plant height increase per day",
+    "formula": "(final_height - initial_height) / days_elapsed",
+    "unit": "cm/day",
+    "category": "crop_performance",
+    "target": {
+      "optimal": "varies_by_crop",
+      "benchmark": 1.5
+    },
+    "trend": "higher_is_better",
+    "aggregation": "average",
+    "data_sources": [
+      "phenology_observations"
+    ],
+    "calculation_period": "weekly",
+    "visualization": "line_chart"
+  },
+  "water_quality_index": {
+    "name": "Water Quality Index",
+    "description": "Composite score of water quality parameters (0-100)",
+    "formula": "weighted_average(ph_score, ec_score, turbidity_score, do_score)",
+    "unit": "index",
+    "category": "water_management",
+    "target": {
+      "min": 70,
+      "optimal": 85,
+      "max": 100
+    },
+    "trend": "higher_is_better",
+    "aggregation": "weighted_average",
+    "data_sources": [
+      "water_quality_tests"
+    ],
+    "calculation_period": "weekly",
+    "visualization": "gauge_chart",
+    "weights": {
+      "ph_score": 0.3,
+      "ec_score": 0.25,
+      "turbidity_score": 0.25,
+      "do_score": 0.2
+    }
+  },
+  "crop_cycle_duration": {
+    "name": "Crop Cycle Duration",
+    "description": "Days from planting to harvest",
+    "formula": "harvest_date - planting_date",
+    "unit": "days",
+    "category": "crop_performance",
+    "target": {
+      "optimal": "varies_by_crop",
+      "variance_acceptable": "±10%"
+    },
+    "trend": "on_target_optimal",
+    "aggregation": "average",
+    "data_sources": [
+      "planting_records",
+      "harvest_records"
+    ],
+    "calculation_period": "per_crop_cycle",
+    "visualization": "bar_chart",
+    "notes": "Compare actual vs expected days to maturity"
+  },
+  "roi": {
+    "name": "Return on Investment",
+    "description": "Percentage return on total input costs",
+    "formula": "((revenue - costs) / costs) * 100",
+    "unit": "%",
+    "category": "financial",
+    "target": {
+      "min": 50,
+      "optimal": 150,
+      "max": 300
+    },
+    "trend": "higher_is_better",
+    "aggregation": "calculated",
+    "data_sources": [
+      "harvest_records",
+      "input_costs"
+    ],
+    "calculation_period": "per_crop_cycle",
+    "visualization": "bar_chart"
+  },
+  "canopy_development_rate": {
+    "name": "Canopy Development Rate",
+    "description": "Rate of canopy cover increase per week",
+    "formula": "(current_canopy_percent - previous_canopy_percent) / weeks_elapsed",
+    "unit": "%/week",
+    "category": "crop_performance",
+    "target": {
+      "optimal": "varies_by_growth_stage",
+      "vegetative_stage": 8
+    },
+    "trend": "higher_is_better",
+    "aggregation": "average",
+    "data_sources": [
+      "phenology_observations"
+    ],
+    "calculation_period": "weekly",
+    "visualization": "line_chart"
+  },
+  "pest_pressure_index": {
+    "name": "Pest Pressure Index",
+    "description": "Indicator of pest and disease pressure on crops",
+    "formula": "weighted_score(health_score_decline, intervention_frequency)",
+    "unit": "index",
+    "category": "crop_health",
+    "target": {
+      "min": 0,
+      "optimal": 3,
+      "max": 10
+    },
+    "trend": "lower_is_better",
+    "aggregation": "weighted_score",
+    "data_sources": [
+      "phenology_observations",
+      "treatment_records"
+    ],
+    "calculation_period": "weekly",
+    "visualization": "line_chart",
+    "threshold_alerts": {
+      "warning": 7,
+      "critical": 9
+    }
+  },
+  "labor_efficiency": {
+    "name": "Labor Efficiency",
+    "description": "Yield produced per labor hour",
+    "formula": "total_harvest_kg / total_labor_hours",
+    "unit": "kg/hour",
+    "category": "operational",
+    "target": {
+      "optimal": "varies_by_operation",
+      "benchmark": 50
+    },
+    "trend": "higher_is_better",
+    "aggregation": "average",
+    "data_sources": [
+      "harvest_records",
+      "labor_records"
+    ],
+    "calculation_period": "per_season",
+    "visualization": "bar_chart"
+  }
+}

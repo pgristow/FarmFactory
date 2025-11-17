@@ -20,14 +20,108 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+# OpenAPI Tags Metadata
+tags_metadata = [
+    {
+        "name": "Health",
+        "description": "Health check and system status endpoints"
+    },
+    {
+        "name": "Farms",
+        "description": "Farm management operations - create, read, update, delete farms"
+    },
+    {
+        "name": "Plots",
+        "description": "Plot management operations - manage farm plots and their properties"
+    },
+    {
+        "name": "Crops",
+        "description": "Crop variety management - manage crop types and their characteristics"
+    },
+    {
+        "name": "Plantings",
+        "description": "Planting operations - track crop plantings, growth cycles, and harvests"
+    },
+    {
+        "name": "Irrigation",
+        "description": "Irrigation event tracking - log and analyze water usage across plots"
+    },
+    {
+        "name": "Nutrients",
+        "description": "Nutrient application tracking - manage fertilizer applications and NPK balance"
+    },
+    {
+        "name": "Environmental",
+        "description": "Environmental monitoring - track temperature, humidity, soil moisture, and weather data"
+    },
+    {
+        "name": "Water Quality",
+        "description": "Water quality monitoring - track pH, EC, TDS, and other water parameters"
+    },
+    {
+        "name": "Phenology",
+        "description": "Phenology observations - track plant growth stages, height, health, and photos"
+    },
+    {
+        "name": "Financial",
+        "description": "Financial tracking - manage input costs, harvest revenue, and profitability analysis"
+    },
+    {
+        "name": "Aggregations",
+        "description": "Time-series data aggregations - daily, weekly, monthly summaries and statistics"
+    },
+    {
+        "name": "Import",
+        "description": "Data import operations - bulk import data from CSV and Excel files"
+    }
+]
+
 # Create FastAPI application
 app = FastAPI(
     title="FarmFactory API",
-    description="Farm Optimization and Management System API",
+    description="""
+## Farm Optimization and Management System API
+
+FarmFactory provides a comprehensive REST API for modern farm management, optimization, and data-driven decision making.
+
+### Features
+
+- **Farm & Plot Management**: Organize your farm structure with plots and boundaries
+- **Crop Management**: Track crop varieties, plantings, and growth cycles
+- **Irrigation Tracking**: Monitor water usage and optimize irrigation schedules
+- **Nutrient Management**: Track fertilizer applications and NPK balance
+- **Environmental Monitoring**: Real-time sensor data for temperature, humidity, soil moisture, and more
+- **Water Quality**: Monitor irrigation water quality parameters
+- **Phenology Tracking**: Document plant growth stages with photos and observations
+- **Financial Analytics**: Track costs, revenue, and calculate ROI
+- **Time-Series Aggregations**: Daily, weekly, and monthly data summaries
+- **Data Import**: Bulk import historical data from CSV and Excel files
+
+### Authentication
+
+Authentication is currently not required. Future versions will implement JWT-based authentication.
+
+### Rate Limiting
+
+No rate limiting is currently enforced. Production deployments should implement rate limiting.
+
+### Support
+
+For issues or questions, contact support or visit our documentation.
+    """,
     version="1.0.0",
     docs_url="/api/docs",
     redoc_url="/api/redoc",
-    openapi_url="/api/openapi.json"
+    openapi_url="/api/openapi.json",
+    openapi_tags=tags_metadata,
+    contact={
+        "name": "FarmFactory Support",
+        "email": "support@farmfactory.com"
+    },
+    license_info={
+        "name": "MIT License",
+        "url": "https://opensource.org/licenses/MIT"
+    }
 )
 
 # CORS Configuration

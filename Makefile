@@ -310,6 +310,69 @@ backup-uploads: ## Backup upload files
 	@echo "$(CYAN)Backing up upload files...$(NC)"
 	@./scripts/backup-imports.sh
 
+##@ Database Performance
+
+db-tune: ## Apply TimescaleDB performance tuning
+	@echo "$(CYAN)Applying TimescaleDB performance tuning...$(NC)"
+	@docker-compose exec -T postgres psql -U $(POSTGRES_USER) -d $(POSTGRES_DB) -f /scripts/tune-timescaledb.sql
+	@echo "$(GREEN)TimescaleDB tuning applied!$(NC)"
+
+db-stats: ## Show database statistics
+	@echo "$(CYAN)Database Statistics:$(NC)"
+	@docker-compose exec postgres psql -U $(POSTGRES_USER) -d $(POSTGRES_DB) -c "\
+		SELECT schemaname, tablename, \
+		       pg_size_pretty(pg_total_relation_size(schemaname||'.'||tablename)) AS size, \
+		       n_tup_ins AS inserts, n_tup_upd AS updates, n_tup_del AS deletes \
+		FROM pg_stat_user_tables ORDER BY pg_total_relation_size(schemaname||'.'||tablename) DESC LIMIT 10;"
+
+db-vacuum: ## Manual VACUUM ANALYZE
+	@echo "$(CYAN)Running VACUUM ANALYZE...$(NC)"
+	@docker-compose exec postgres psql -U $(POSTGRES_USER) -d $(POSTGRES_DB) -c "VACUUM ANALYZE;"
+	@echo "$(GREEN)VACUUM ANALYZE complete!$(NC)"
+
+db-reindex: ## Reindex all indexes
+	@echo "$(CYAN)Reindexing database...$(NC)"
+	@docker-compose exec postgres psql -U $(POSTGRES_USER) -d $(POSTGRES_DB) -c "REINDEX DATABASE $(POSTGRES_DB);"
+	@echo "$(GREEN)Reindex complete!$(NC)"
+
+db-bloat: ## Show table bloat statistics
+	@echo "$(CYAN)Table Bloat Statistics:$(NC)"
+	@docker-compose exec postgres psql -U $(POSTGRES_USER) -d $(POSTGRES_DB) -c "SELECT * FROM v_table_bloat;"
+
+db-cache: ## Show cache hit ratio (should be >95%)
+	@echo "$(CYAN)Cache Hit Ratio:$(NC)"
+	@docker-compose exec postgres psql -U $(POSTGRES_USER) -d $(POSTGRES_DB) -c "SELECT * FROM v_cache_hit_ratio;"
+
+db-connections: ## Show connection statistics
+	@echo "$(CYAN)Connection Statistics:$(NC)"
+	@docker-compose exec postgres psql -U $(POSTGRES_USER) -d $(POSTGRES_DB) -c "SELECT * FROM v_connection_stats;"
+
+db-chunks: ## Show TimescaleDB chunk statistics
+	@echo "$(CYAN)TimescaleDB Chunk Statistics:$(NC)"
+	@docker-compose exec postgres psql -U $(POSTGRES_USER) -d $(POSTGRES_DB) -c "SELECT * FROM v_chunk_stats;"
+
+db-compression: ## Show compression statistics and savings
+	@echo "$(CYAN)Compression Statistics:$(NC)"
+	@docker-compose exec postgres psql -U $(POSTGRES_USER) -d $(POSTGRES_DB) -c "SELECT * FROM v_compression_stats;"
+
+db-performance: ## Show comprehensive performance report
+	@echo "$(CYAN)Database Performance Report$(NC)"
+	@echo "$(CYAN)=============================$(NC)"
+	@docker-compose exec postgres psql -U $(POSTGRES_USER) -d $(POSTGRES_DB) -f /scripts/performance-monitoring.sql
+
+db-summary: ## Show quick performance summary
+	@echo "$(CYAN)Quick Performance Summary:$(NC)"
+	@docker-compose exec postgres psql -U $(POSTGRES_USER) -d $(POSTGRES_DB) -c "SELECT * FROM performance_summary();"
+
+db-index-usage: ## Show index usage statistics
+	@echo "$(CYAN)Index Usage Statistics:$(NC)"
+	@docker-compose exec postgres psql -U $(POSTGRES_USER) -d $(POSTGRES_DB) -c "SELECT * FROM v_index_usage WHERE usage_status LIKE '%UNUSED%' OR usage_status = 'Low usage';"
+
+db-apply-timescale-config: ## Apply TimescaleDB compression and retention policies
+	@echo "$(CYAN)Applying TimescaleDB configuration...$(NC)"
+	@docker-compose exec postgres psql -U $(POSTGRES_USER) -d $(POSTGRES_DB) -f /infrastructure/database/timescaledb.conf
+	@echo "$(GREEN)TimescaleDB configuration applied!$(NC)"
+
 ##@ Monitoring & Performance
 
 monitoring-urls: ## Display monitoring service URLs
@@ -318,6 +381,7 @@ monitoring-urls: ## Display monitoring service URLs
 	@echo "  Grafana:         http://localhost:3001 (admin/admin123)"
 	@echo "  Prometheus:      http://localhost:9090"
 	@echo "  Backend API:     http://localhost:8000/docs"
+	@echo "  PostgreSQL Exp:  http://localhost:9187/metrics"
 
 init: ## Initialize project (first time setup)
 	@echo "$(CYAN)Initializing FarmFactory...$(NC)"

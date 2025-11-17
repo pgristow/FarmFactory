@@ -1,0 +1,295 @@
+{
+  "plant_height_progression": {
+    "type": "line",
+    "title": "Plant Height Progression",
+    "description": "Plant height growth over time",
+    "xAxis": {
+      "field": "observation_date",
+      "label": "Date",
+      "format": "MMM DD"
+    },
+    "yAxis": {
+      "field": "plant_height_cm",
+      "label": "Plant Height",
+      "unit": "cm",
+      "format": "0",
+      "min": 0
+    },
+    "seriesBy": "plot_name",
+    "colors": ["#4caf50", "#2196f3", "#ff9800"],
+    "showMarkers": true,
+    "showLegend": true,
+    "showTrendline": true,
+    "responsive": true
+  },
+  "growth_stage_timeline": {
+    "type": "gantt",
+    "title": "Growth Stage Timeline",
+    "description": "Timeline showing progression through growth stages",
+    "dateField": "observation_date",
+    "stageField": "growth_stage",
+    "seriesField": "plot_name",
+    "stages": [
+      {
+        "id": "germination",
+        "label": "Germination",
+        "color": "#e0e0e0"
+      },
+      {
+        "id": "seedling",
+        "label": "Seedling",
+        "color": "#c8e6c9"
+      },
+      {
+        "id": "vegetative",
+        "label": "Vegetative",
+        "color": "#81c784"
+      },
+      {
+        "id": "budding",
+        "label": "Budding",
+        "color": "#66bb6a"
+      },
+      {
+        "id": "flowering",
+        "label": "Flowering",
+        "color": "#ffeb3b"
+      },
+      {
+        "id": "fruit_set",
+        "label": "Fruit Set",
+        "color": "#ffc107"
+      },
+      {
+        "id": "maturation",
+        "label": "Maturation",
+        "color": "#ff9800"
+      },
+      {
+        "id": "harvest_ready",
+        "label": "Harvest Ready",
+        "color": "#f44336"
+      }
+    ],
+    "showLegend": true,
+    "responsive": true
+  },
+  "health_score_trends": {
+    "type": "line",
+    "title": "Crop Health Score Trends",
+    "description": "Health scores over time with moving average",
+    "xAxis": {
+      "field": "observation_date",
+      "label": "Date",
+      "format": "MMM DD"
+    },
+    "yAxis": {
+      "field": "health_score",
+      "label": "Health Score",
+      "format": "0.0",
+      "min": 0,
+      "max": 10
+    },
+    "seriesBy": "plot_name",
+    "colors": ["#4caf50", "#2196f3", "#ff9800"],
+    "showMarkers": true,
+    "movingAverage": {
+      "period": 3,
+      "showLine": true,
+      "lineStyle": "dashed"
+    },
+    "targetBands": [
+      {
+        "min": 7,
+        "max": 10,
+        "color": "#c8e6c9",
+        "label": "Healthy",
+        "opacity": 0.2
+      },
+      {
+        "min": 5,
+        "max": 7,
+        "color": "#fff9c4",
+        "label": "Fair",
+        "opacity": 0.2
+      }
+    ],
+    "showLegend": true,
+    "responsive": true
+  },
+  "canopy_cover_progression": {
+    "type": "area",
+    "title": "Canopy Cover Progression",
+    "description": "Canopy cover percentage over time",
+    "xAxis": {
+      "field": "observation_date",
+      "label": "Date",
+      "format": "MMM DD"
+    },
+    "yAxis": {
+      "field": "canopy_cover_percent",
+      "label": "Canopy Cover",
+      "unit": "%",
+      "format": "0",
+      "min": 0,
+      "max": 100
+    },
+    "seriesBy": "plot_name",
+    "colors": ["#4caf50", "#2196f3", "#ff9800"],
+    "fillOpacity": 0.3,
+    "showLegend": true,
+    "responsive": true
+  },
+  "leaf_count_growth": {
+    "type": "bar",
+    "title": "Leaf Count Over Time",
+    "description": "Number of leaves per plant",
+    "xAxis": {
+      "field": "observation_date",
+      "label": "Date",
+      "format": "MMM DD"
+    },
+    "yAxis": {
+      "field": "leaf_count",
+      "label": "Leaf Count",
+      "format": "0"
+    },
+    "seriesBy": "plot_name",
+    "colors": ["#4caf50", "#2196f3", "#ff9800"],
+    "showLegend": true,
+    "stacked": false,
+    "responsive": true
+  },
+  "flowering_and_fruiting": {
+    "type": "grouped_bar",
+    "title": "Flowering and Fruiting Progress",
+    "description": "Flower and fruit counts over time",
+    "xAxis": {
+      "field": "observation_date",
+      "label": "Date",
+      "format": "MMM DD"
+    },
+    "yAxis": {
+      "field": "count",
+      "label": "Count",
+      "format": "0"
+    },
+    "series": [
+      {
+        "field": "flower_count",
+        "label": "Flowers",
+        "color": "#ffeb3b"
+      },
+      {
+        "field": "fruit_count",
+        "label": "Fruits",
+        "color": "#ff9800"
+      }
+    ],
+    "groupBy": "plot_name",
+    "showLegend": true,
+    "responsive": true
+  },
+  "growth_rate_comparison": {
+    "type": "bar",
+    "title": "Growth Rate Comparison",
+    "description": "Average daily growth rate by plot",
+    "xAxis": {
+      "field": "plot_name",
+      "label": "Plot"
+    },
+    "yAxis": {
+      "field": "growth_rate_cm_per_day",
+      "label": "Growth Rate",
+      "unit": "cm/day",
+      "format": "0.00"
+    },
+    "colors": ["#4caf50"],
+    "showValues": true,
+    "responsive": true
+  },
+  "multi_metric_dashboard": {
+    "type": "multi_metric_card",
+    "title": "Latest Growth Metrics",
+    "description": "Current snapshot of key phenology metrics",
+    "metrics": [
+      {
+        "field": "plant_height_cm",
+        "label": "Plant Height",
+        "unit": "cm",
+        "icon": "height",
+        "color": "#4caf50",
+        "trend": true
+      },
+      {
+        "field": "canopy_cover_percent",
+        "label": "Canopy Cover",
+        "unit": "%",
+        "icon": "nature",
+        "color": "#66bb6a",
+        "trend": true
+      },
+      {
+        "field": "health_score",
+        "label": "Health Score",
+        "unit": "/10",
+        "icon": "favorite",
+        "color": "#f44336",
+        "trend": true
+      },
+      {
+        "field": "leaf_count",
+        "label": "Leaf Count",
+        "icon": "eco",
+        "color": "#8bc34a",
+        "trend": true
+      }
+    ],
+    "seriesBy": "plot_name",
+    "responsive": true
+  },
+  "growth_stage_distribution": {
+    "type": "pie",
+    "title": "Current Growth Stage Distribution",
+    "description": "Distribution of plants across growth stages",
+    "dataField": "growth_stage",
+    "valueField": "count",
+    "colors": ["#e0e0e0", "#c8e6c9", "#81c784", "#66bb6a", "#ffeb3b", "#ffc107", "#ff9800", "#f44336"],
+    "showPercentage": true,
+    "showLegend": true,
+    "responsive": true
+  },
+  "phenology_photo_gallery": {
+    "type": "image_gallery",
+    "title": "Observation Photos",
+    "description": "Visual timeline of crop development",
+    "dateField": "observation_date",
+    "imageField": "photo_url",
+    "captionFields": ["growth_stage", "plant_height_cm", "health_score"],
+    "sortBy": "observation_date",
+    "sortOrder": "desc",
+    "thumbnailSize": "medium",
+    "showMetadata": true,
+    "responsive": true
+  },
+  "health_vs_growth_correlation": {
+    "type": "scatter",
+    "title": "Health Score vs Growth Rate",
+    "description": "Correlation between plant health and growth rate",
+    "xAxis": {
+      "field": "health_score",
+      "label": "Health Score",
+      "format": "0.0"
+    },
+    "yAxis": {
+      "field": "height_change_cm",
+      "label": "Growth Rate",
+      "unit": "cm/week",
+      "format": "0.0"
+    },
+    "colorBy": "growth_stage",
+    "showTrendline": true,
+    "showLegend": true,
+    "responsive": true
+  }
+}

@@ -7,6 +7,7 @@ import Farms from './pages/Farms';
 import Plots from './pages/Plots';
 import Import from './pages/Import';
 import ImportHistory from './pages/ImportHistory';
+import ChartExamples from './pages/ChartExamples';
 import NotFound from './pages/NotFound';
 import ErrorBoundary from './components/common/ErrorBoundary';
 
@@ -69,6 +70,7 @@ function App() {
               <Route path="plots" element={<Plots />} />
               <Route path="import" element={<Import />} />
               <Route path="import-history" element={<ImportHistory />} />
+              <Route path="chart-examples" element={<ChartExamples />} />
               <Route path="*" element={<NotFound />} />
             </Route>
           </Routes>
