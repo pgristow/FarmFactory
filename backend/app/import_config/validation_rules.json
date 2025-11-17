@@ -1,0 +1,705 @@
+{
+  "farms_and_plots": {
+    "farm_name": {
+      "type": "string",
+      "required": true,
+      "min_length": 1,
+      "max_length": 200,
+      "pattern": null,
+      "error_messages": {
+        "required": "Farm name is required",
+        "min_length": "Farm name must be at least 1 character",
+        "max_length": "Farm name cannot exceed 200 characters"
+      }
+    },
+    "farm_latitude": {
+      "type": "float",
+      "required": false,
+      "min_value": -90.0,
+      "max_value": 90.0,
+      "allow_null": true,
+      "error_messages": {
+        "type": "Latitude must be a number",
+        "range": "Latitude must be between -90 and 90 degrees"
+      }
+    },
+    "farm_longitude": {
+      "type": "float",
+      "required": false,
+      "min_value": -180.0,
+      "max_value": 180.0,
+      "allow_null": true,
+      "error_messages": {
+        "type": "Longitude must be a number",
+        "range": "Longitude must be between -180 and 180 degrees"
+      }
+    },
+    "farm_address": {
+      "type": "string",
+      "required": false,
+      "max_length": 500,
+      "allow_null": true,
+      "error_messages": {
+        "max_length": "Address cannot exceed 500 characters"
+      }
+    },
+    "farm_total_area_hectares": {
+      "type": "float",
+      "required": false,
+      "min_value": 0.01,
+      "max_value": 1000000.0,
+      "allow_null": true,
+      "error_messages": {
+        "type": "Farm area must be a number",
+        "range": "Farm area must be between 0.01 and 1,000,000 hectares"
+      }
+    },
+    "farm_timezone": {
+      "type": "string",
+      "required": false,
+      "pattern": "^[A-Za-z]+/[A-Za-z_]+$",
+      "allow_null": true,
+      "examples": ["America/New_York", "America/Los_Angeles", "Europe/London"],
+      "error_messages": {
+        "pattern": "Timezone must be in IANA format (e.g., America/New_York)"
+      }
+    },
+    "plot_name": {
+      "type": "string",
+      "required": true,
+      "min_length": 1,
+      "max_length": 200,
+      "error_messages": {
+        "required": "Plot name is required",
+        "min_length": "Plot name must be at least 1 character",
+        "max_length": "Plot name cannot exceed 200 characters"
+      }
+    },
+    "plot_number": {
+      "type": "string",
+      "required": false,
+      "max_length": 50,
+      "allow_null": true,
+      "error_messages": {
+        "max_length": "Plot number cannot exceed 50 characters"
+      }
+    },
+    "plot_area_hectares": {
+      "type": "float",
+      "required": true,
+      "min_value": 0.001,
+      "max_value": 100000.0,
+      "error_messages": {
+        "required": "Plot area is required",
+        "type": "Plot area must be a number",
+        "range": "Plot area must be between 0.001 and 100,000 hectares"
+      }
+    },
+    "plot_elevation_meters": {
+      "type": "float",
+      "required": false,
+      "min_value": -500.0,
+      "max_value": 9000.0,
+      "allow_null": true,
+      "error_messages": {
+        "type": "Elevation must be a number",
+        "range": "Elevation must be between -500 and 9,000 meters"
+      }
+    },
+    "plot_slope_degrees": {
+      "type": "float",
+      "required": false,
+      "min_value": 0.0,
+      "max_value": 90.0,
+      "allow_null": true,
+      "error_messages": {
+        "type": "Slope must be a number",
+        "range": "Slope must be between 0 and 90 degrees"
+      }
+    },
+    "soil_type": {
+      "type": "string",
+      "required": false,
+      "enum": [
+        "Clay", "Sandy", "Loam", "Clay Loam", "Sandy Loam",
+        "Silt", "Silt Loam", "Silty Clay", "Silty Clay Loam",
+        "Sandy Clay", "Sandy Clay Loam", "Loamy Sand", "Peat"
+      ],
+      "allow_null": true,
+      "case_insensitive": true,
+      "error_messages": {
+        "enum": "Soil type must be one of the standard classifications (Clay, Sandy, Loam, etc.)"
+      }
+    },
+    "soil_ph_level": {
+      "type": "float",
+      "required": false,
+      "min_value": 0.0,
+      "max_value": 14.0,
+      "typical_range": [4.0, 9.0],
+      "allow_null": true,
+      "warning_outside_typical": true,
+      "error_messages": {
+        "type": "pH level must be a number",
+        "range": "pH level must be between 0 and 14",
+        "warning": "pH level outside typical agricultural range (4-9)"
+      }
+    },
+    "organic_matter_percent": {
+      "type": "float",
+      "required": false,
+      "min_value": 0.0,
+      "max_value": 100.0,
+      "allow_null": true,
+      "error_messages": {
+        "type": "Organic matter must be a number",
+        "range": "Organic matter must be between 0 and 100 percent"
+      }
+    },
+    "drainage_class": {
+      "type": "string",
+      "required": false,
+      "enum": [
+        "Well Drained", "Moderately Well Drained", "Somewhat Poorly Drained",
+        "Poorly Drained", "Very Poorly Drained", "Excessively Drained"
+      ],
+      "allow_null": true,
+      "case_insensitive": true,
+      "error_messages": {
+        "enum": "Drainage class must be a standard classification"
+      }
+    }
+  },
+  "irrigation_events": {
+    "date_time": {
+      "type": "datetime",
+      "required": true,
+      "formats": [
+        "%Y-%m-%d %H:%M:%S",
+        "%Y-%m-%d %H:%M",
+        "%Y-%m-%d",
+        "%m/%d/%Y %H:%M:%S",
+        "%m/%d/%Y %H:%M",
+        "%m/%d/%Y",
+        "%d-%m-%Y %H:%M:%S",
+        "%d-%m-%Y"
+      ],
+      "allow_future": false,
+      "max_past_years": 50,
+      "error_messages": {
+        "required": "Date/time is required",
+        "format": "Date must be in format YYYY-MM-DD HH:MM:SS or similar",
+        "future": "Date cannot be in the future",
+        "too_old": "Date cannot be more than 50 years in the past"
+      }
+    },
+    "plot_name": {
+      "type": "string",
+      "required": true,
+      "min_length": 1,
+      "max_length": 200,
+      "reference_check": "plot",
+      "error_messages": {
+        "required": "Plot name is required",
+        "reference": "Plot name must match an existing plot in the system"
+      }
+    },
+    "irrigation_method": {
+      "type": "string",
+      "required": true,
+      "enum": [
+        "drip", "sprinkler", "flood", "manual", "center_pivot",
+        "furrow", "micro_sprinkler", "subsurface", "overhead"
+      ],
+      "case_insensitive": true,
+      "error_messages": {
+        "required": "Irrigation method is required",
+        "enum": "Irrigation method must be one of: drip, sprinkler, flood, manual, center_pivot, furrow, etc."
+      }
+    },
+    "duration_minutes": {
+      "type": "integer",
+      "required": true,
+      "min_value": 1,
+      "max_value": 10080,
+      "error_messages": {
+        "required": "Duration is required",
+        "type": "Duration must be a whole number",
+        "range": "Duration must be between 1 minute and 7 days (10,080 minutes)"
+      }
+    },
+    "water_volume_liters": {
+      "type": "float",
+      "required": true,
+      "min_value": 0.1,
+      "max_value": 10000000.0,
+      "error_messages": {
+        "required": "Water volume is required",
+        "type": "Water volume must be a number",
+        "range": "Water volume must be between 0.1 and 10,000,000 liters"
+      }
+    },
+    "water_source": {
+      "type": "string",
+      "required": false,
+      "enum": ["well", "municipal", "river", "pond", "reservoir", "canal", "rainwater", "other"],
+      "allow_null": true,
+      "case_insensitive": true,
+      "error_messages": {
+        "enum": "Water source must be one of: well, municipal, river, pond, reservoir, canal, rainwater, other"
+      }
+    },
+    "flow_rate_lpm": {
+      "type": "float",
+      "required": false,
+      "min_value": 0.1,
+      "max_value": 100000.0,
+      "allow_null": true,
+      "error_messages": {
+        "type": "Flow rate must be a number",
+        "range": "Flow rate must be between 0.1 and 100,000 liters per minute"
+      }
+    },
+    "pressure_bar": {
+      "type": "float",
+      "required": false,
+      "min_value": 0.1,
+      "max_value": 20.0,
+      "allow_null": true,
+      "error_messages": {
+        "type": "Pressure must be a number",
+        "range": "Pressure must be between 0.1 and 20 bar"
+      }
+    },
+    "notes": {
+      "type": "string",
+      "required": false,
+      "max_length": 1000,
+      "allow_null": true,
+      "error_messages": {
+        "max_length": "Notes cannot exceed 1000 characters"
+      }
+    }
+  },
+  "nutrient_applications": {
+    "date_time": {
+      "type": "datetime",
+      "required": true,
+      "formats": [
+        "%Y-%m-%d %H:%M:%S",
+        "%Y-%m-%d %H:%M",
+        "%Y-%m-%d",
+        "%m/%d/%Y %H:%M:%S",
+        "%m/%d/%Y"
+      ],
+      "allow_future": false,
+      "max_past_years": 50,
+      "error_messages": {
+        "required": "Date/time is required",
+        "format": "Date must be in format YYYY-MM-DD HH:MM:SS",
+        "future": "Date cannot be in the future"
+      }
+    },
+    "plot_name": {
+      "type": "string",
+      "required": true,
+      "reference_check": "plot",
+      "error_messages": {
+        "required": "Plot name is required",
+        "reference": "Plot name must match an existing plot"
+      }
+    },
+    "nutrient_type": {
+      "type": "string",
+      "required": true,
+      "min_length": 1,
+      "max_length": 200,
+      "error_messages": {
+        "required": "Nutrient type is required"
+      }
+    },
+    "application_method": {
+      "type": "string",
+      "required": true,
+      "enum": [
+        "broadcast", "fertigation", "foliar", "band", "side_dress",
+        "incorporation", "injection", "top_dress", "starter"
+      ],
+      "case_insensitive": true,
+      "error_messages": {
+        "required": "Application method is required",
+        "enum": "Application method must be one of: broadcast, fertigation, foliar, band, side_dress, etc."
+      }
+    },
+    "amount_kg": {
+      "type": "float",
+      "required": true,
+      "min_value": 0.001,
+      "max_value": 100000.0,
+      "error_messages": {
+        "required": "Amount is required",
+        "type": "Amount must be a number",
+        "range": "Amount must be between 0.001 and 100,000 kg"
+      }
+    },
+    "npk_ratio": {
+      "type": "string",
+      "required": false,
+      "pattern": "^\\d+[-:]\\d+[-:]\\d+$",
+      "allow_null": true,
+      "examples": ["10-10-10", "20-5-10", "15:15:15"],
+      "error_messages": {
+        "pattern": "NPK ratio must be in format N-P-K (e.g., 10-10-10 or 20:5:10)"
+      }
+    },
+    "nitrogen_kg": {
+      "type": "float",
+      "required": false,
+      "min_value": 0.0,
+      "max_value": 100000.0,
+      "allow_null": true,
+      "error_messages": {
+        "type": "Nitrogen amount must be a number",
+        "range": "Nitrogen amount must be between 0 and 100,000 kg"
+      }
+    },
+    "phosphorus_kg": {
+      "type": "float",
+      "required": false,
+      "min_value": 0.0,
+      "max_value": 100000.0,
+      "allow_null": true,
+      "error_messages": {
+        "type": "Phosphorus amount must be a number",
+        "range": "Phosphorus amount must be between 0 and 100,000 kg"
+      }
+    },
+    "potassium_kg": {
+      "type": "float",
+      "required": false,
+      "min_value": 0.0,
+      "max_value": 100000.0,
+      "allow_null": true,
+      "error_messages": {
+        "type": "Potassium amount must be a number",
+        "range": "Potassium amount must be between 0 and 100,000 kg"
+      }
+    },
+    "cost_usd": {
+      "type": "float",
+      "required": false,
+      "min_value": 0.0,
+      "max_value": 10000000.0,
+      "allow_null": true,
+      "error_messages": {
+        "type": "Cost must be a number",
+        "range": "Cost must be between 0 and 10,000,000"
+      }
+    },
+    "notes": {
+      "type": "string",
+      "required": false,
+      "max_length": 1000,
+      "allow_null": true,
+      "error_messages": {
+        "max_length": "Notes cannot exceed 1000 characters"
+      }
+    }
+  },
+  "phenology_observations": {
+    "observation_date": {
+      "type": "date",
+      "required": true,
+      "formats": ["%Y-%m-%d", "%m/%d/%Y", "%d-%m-%Y"],
+      "allow_future": true,
+      "max_future_days": 30,
+      "max_past_years": 10,
+      "error_messages": {
+        "required": "Observation date is required",
+        "format": "Date must be in format YYYY-MM-DD",
+        "too_future": "Date cannot be more than 30 days in the future",
+        "too_old": "Date cannot be more than 10 years in the past"
+      }
+    },
+    "plot_name": {
+      "type": "string",
+      "required": true,
+      "reference_check": "plot",
+      "error_messages": {
+        "required": "Plot name is required",
+        "reference": "Plot name must match an existing plot"
+      }
+    },
+    "growth_stage": {
+      "type": "string",
+      "required": true,
+      "enum": [
+        "germination", "emergence", "seedling", "vegetative", "tillering",
+        "stem_elongation", "booting", "heading", "flowering", "pollination",
+        "fruiting", "fruit_development", "ripening", "maturity", "harvest_ready",
+        "senescence"
+      ],
+      "case_insensitive": true,
+      "error_messages": {
+        "required": "Growth stage is required",
+        "enum": "Growth stage must be a recognized phenological stage"
+      }
+    },
+    "bbch_code": {
+      "type": "integer",
+      "required": false,
+      "min_value": 0,
+      "max_value": 99,
+      "allow_null": true,
+      "error_messages": {
+        "type": "BBCH code must be a whole number",
+        "range": "BBCH code must be between 0 and 99"
+      }
+    },
+    "height_cm": {
+      "type": "float",
+      "required": false,
+      "min_value": 0.1,
+      "max_value": 10000.0,
+      "allow_null": true,
+      "error_messages": {
+        "type": "Height must be a number",
+        "range": "Height must be between 0.1 and 10,000 cm"
+      }
+    },
+    "canopy_cover_percent": {
+      "type": "float",
+      "required": false,
+      "min_value": 0.0,
+      "max_value": 100.0,
+      "allow_null": true,
+      "error_messages": {
+        "type": "Canopy cover must be a number",
+        "range": "Canopy cover must be between 0 and 100 percent"
+      }
+    },
+    "health_score": {
+      "type": "integer",
+      "required": false,
+      "min_value": 1,
+      "max_value": 10,
+      "allow_null": true,
+      "error_messages": {
+        "type": "Health score must be a whole number",
+        "range": "Health score must be between 1 and 10"
+      }
+    },
+    "notes": {
+      "type": "string",
+      "required": false,
+      "max_length": 2000,
+      "allow_null": true,
+      "error_messages": {
+        "max_length": "Notes cannot exceed 2000 characters"
+      }
+    }
+  },
+  "financial_data": {
+    "transaction_type": {
+      "type": "string",
+      "required": true,
+      "enum": ["cost", "revenue", "expense", "income"],
+      "case_insensitive": true,
+      "error_messages": {
+        "required": "Transaction type is required",
+        "enum": "Transaction type must be either 'cost' or 'revenue'"
+      }
+    },
+    "transaction_date": {
+      "type": "date",
+      "required": true,
+      "formats": ["%Y-%m-%d", "%m/%d/%Y", "%d-%m-%Y"],
+      "allow_future": false,
+      "max_past_years": 20,
+      "error_messages": {
+        "required": "Transaction date is required",
+        "format": "Date must be in format YYYY-MM-DD",
+        "future": "Transaction date cannot be in the future",
+        "too_old": "Transaction date cannot be more than 20 years in the past"
+      }
+    },
+    "plot_name": {
+      "type": "string",
+      "required": false,
+      "reference_check": "plot",
+      "allow_null": true,
+      "special_values": ["All Plots", "Farm Level", "General"],
+      "error_messages": {
+        "reference": "Plot name must match an existing plot or use 'All Plots'"
+      }
+    },
+    "category": {
+      "type": "string",
+      "required": true,
+      "enum": [
+        "seeds", "fertilizer", "water", "labor", "equipment", "pest_control",
+        "irrigation", "fuel", "maintenance", "harvest", "government_subsidy",
+        "insurance", "rent", "utilities", "other"
+      ],
+      "case_insensitive": true,
+      "error_messages": {
+        "required": "Category is required",
+        "enum": "Category must be a recognized expense or revenue category"
+      }
+    },
+    "description": {
+      "type": "string",
+      "required": true,
+      "min_length": 1,
+      "max_length": 500,
+      "error_messages": {
+        "required": "Description is required",
+        "max_length": "Description cannot exceed 500 characters"
+      }
+    },
+    "quantity": {
+      "type": "float",
+      "required": false,
+      "min_value": 0.0,
+      "max_value": 1000000000.0,
+      "allow_null": true,
+      "error_messages": {
+        "type": "Quantity must be a number",
+        "range": "Quantity must be positive"
+      }
+    },
+    "unit": {
+      "type": "string",
+      "required": false,
+      "max_length": 50,
+      "allow_null": true,
+      "error_messages": {
+        "max_length": "Unit cannot exceed 50 characters"
+      }
+    },
+    "unit_cost": {
+      "type": "float",
+      "required": false,
+      "min_value": 0.0,
+      "max_value": 1000000000.0,
+      "allow_null": true,
+      "error_messages": {
+        "type": "Unit cost must be a number",
+        "range": "Unit cost must be positive"
+      }
+    },
+    "total_amount": {
+      "type": "float",
+      "required": true,
+      "min_value": -1000000000.0,
+      "max_value": 1000000000.0,
+      "error_messages": {
+        "required": "Total amount is required",
+        "type": "Total amount must be a number"
+      }
+    },
+    "currency": {
+      "type": "string",
+      "required": false,
+      "enum": ["USD", "EUR", "GBP", "CAD", "AUD", "JPY", "CNY", "INR"],
+      "default": "USD",
+      "allow_null": true,
+      "error_messages": {
+        "enum": "Currency must be a valid 3-letter currency code"
+      }
+    },
+    "crop_name": {
+      "type": "string",
+      "required": false,
+      "max_length": 100,
+      "allow_null": true,
+      "error_messages": {
+        "max_length": "Crop name cannot exceed 100 characters"
+      }
+    },
+    "quality_grade": {
+      "type": "string",
+      "required": false,
+      "enum": ["A", "B", "C", "Premium", "Standard", "Grade 1", "Grade 2", "Grade 3"],
+      "allow_null": true,
+      "case_insensitive": true,
+      "error_messages": {
+        "enum": "Quality grade must be a recognized classification"
+      }
+    },
+    "market": {
+      "type": "string",
+      "required": false,
+      "max_length": 200,
+      "allow_null": true,
+      "error_messages": {
+        "max_length": "Market name cannot exceed 200 characters"
+      }
+    },
+    "notes": {
+      "type": "string",
+      "required": false,
+      "max_length": 1000,
+      "allow_null": true,
+      "error_messages": {
+        "max_length": "Notes cannot exceed 1000 characters"
+      }
+    }
+  },
+  "cross_field_validations": {
+    "farms_and_plots": [
+      {
+        "rule": "plot_area_less_than_farm_area",
+        "fields": ["plot_area_hectares", "farm_total_area_hectares"],
+        "condition": "plot_area_hectares <= farm_total_area_hectares",
+        "error_message": "Plot area cannot exceed total farm area"
+      }
+    ],
+    "irrigation_events": [
+      {
+        "rule": "volume_matches_flow_and_duration",
+        "fields": ["water_volume_liters", "flow_rate_lpm", "duration_minutes"],
+        "condition": "abs(water_volume_liters - (flow_rate_lpm * duration_minutes)) / water_volume_liters < 0.1",
+        "warning_only": true,
+        "error_message": "Water volume doesn't match flow rate and duration (>10% difference)"
+      }
+    ],
+    "financial_data": [
+      {
+        "rule": "quantity_and_unit_cost_match_total",
+        "fields": ["quantity", "unit_cost", "total_amount"],
+        "condition": "quantity is None or unit_cost is None or abs(total_amount - (quantity * unit_cost)) / abs(total_amount) < 0.01",
+        "warning_only": true,
+        "error_message": "Total amount doesn't match quantity × unit cost"
+      }
+    ]
+  },
+  "duplicate_detection": {
+    "farms_and_plots": {
+      "enabled": true,
+      "unique_fields": ["farm_name", "plot_name"],
+      "error_message": "Duplicate farm/plot combination detected"
+    },
+    "irrigation_events": {
+      "enabled": true,
+      "unique_fields": ["plot_name", "date_time"],
+      "tolerance": "5 minutes",
+      "error_message": "Duplicate irrigation event detected (same plot and time)"
+    },
+    "nutrient_applications": {
+      "enabled": true,
+      "unique_fields": ["plot_name", "date_time", "nutrient_type"],
+      "tolerance": "1 hour",
+      "error_message": "Duplicate nutrient application detected"
+    },
+    "phenology_observations": {
+      "enabled": true,
+      "unique_fields": ["plot_name", "observation_date"],
+      "error_message": "Duplicate observation for same plot and date"
+    },
+    "financial_data": {
+      "enabled": false,
+      "comment": "Multiple transactions on same date are allowed"
+    }
+  }
+}

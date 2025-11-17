@@ -258,8 +258,66 @@ requirements: ## Update Python requirements
 npm-update: ## Update npm packages
 	docker-compose exec frontend npm update
 
-celery-flower: ## Start Celery Flower monitoring (port 5555)
-	docker-compose exec celery_worker celery -A app.tasks.celery_app flower
+##@ Celery & Task Management
+
+celery-status: ## Check Celery worker status
+	@echo "$(CYAN)Celery Worker Status:$(NC)"
+	docker-compose exec celery_worker celery -A app.tasks.celery_app inspect active
+
+celery-stats: ## Show Celery worker statistics
+	@echo "$(CYAN)Celery Worker Statistics:$(NC)"
+	docker-compose exec celery_worker celery -A app.tasks.celery_app inspect stats
+
+celery-tasks: ## List registered Celery tasks
+	@echo "$(CYAN)Registered Celery Tasks:$(NC)"
+	docker-compose exec celery_worker celery -A app.tasks.celery_app inspect registered
+
+celery-queues: ## Show Celery queue status
+	@echo "$(CYAN)Celery Queue Status:$(NC)"
+	docker-compose exec celery_worker celery -A app.tasks.celery_app inspect active_queues
+
+celery-purge: ## Purge all tasks from queues (WARNING: removes all pending tasks)
+	@echo "$(RED)WARNING: This will remove all pending tasks!$(NC)"
+	@read -p "Are you sure? [y/N] " -n 1 -r; \
+	echo; \
+	if [[ $$REPLY =~ ^[Yy]$$ ]]; then \
+		docker-compose exec celery_worker celery -A app.tasks.celery_app purge -f; \
+		echo "$(GREEN)All tasks purged!$(NC)"; \
+	fi
+
+flower-open: ## Open Flower monitoring UI in browser
+	@echo "$(CYAN)Opening Flower UI...$(NC)"
+	@echo "$(CYAN)Flower:$(NC) http://localhost:5555"
+	@echo "$(CYAN)Credentials:$(NC) admin / admin123"
+
+logs-flower: ## Tail logs from Flower
+	docker-compose logs -f flower
+
+logs-beat: ## Tail logs from Celery beat scheduler
+	docker-compose logs -f celery_beat
+
+##@ Import & Storage
+
+storage-stats: ## Show file storage statistics
+	@echo "$(CYAN)File Storage Statistics:$(NC)"
+	docker-compose exec backend python -c "from app.core.storage import storage_service; import json; print(json.dumps(storage_service.get_storage_stats(), indent=2))"
+
+storage-cleanup: ## Clean up old upload files (>30 days)
+	@echo "$(CYAN)Cleaning up old files...$(NC)"
+	docker-compose exec backend python -c "from app.core.storage import storage_service; import json; print(json.dumps(storage_service.cleanup_old_files(), indent=2))"
+
+backup-uploads: ## Backup upload files
+	@echo "$(CYAN)Backing up upload files...$(NC)"
+	@./scripts/backup-imports.sh
+
+##@ Monitoring & Performance
+
+monitoring-urls: ## Display monitoring service URLs
+	@echo "$(CYAN)Monitoring Services:$(NC)"
+	@echo "  Flower (Celery): http://localhost:5555 (admin/admin123)"
+	@echo "  Grafana:         http://localhost:3001 (admin/admin123)"
+	@echo "  Prometheus:      http://localhost:9090"
+	@echo "  Backend API:     http://localhost:8000/docs"
 
 init: ## Initialize project (first time setup)
 	@echo "$(CYAN)Initializing FarmFactory...$(NC)"

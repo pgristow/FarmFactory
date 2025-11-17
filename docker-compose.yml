@@ -105,7 +105,7 @@ services:
       dockerfile: Dockerfile
       target: development
     container_name: farmfactory_celery_worker
-    command: celery -A app.tasks.celery_app worker --loglevel=info --concurrency=${CELERY_CONCURRENCY:-4}
+    command: celery -A app.tasks.celery_app worker --loglevel=info --concurrency=${CELERY_CONCURRENCY:-4} --queues=imports,default,maintenance
     volumes:
       - ./backend:/app
       - upload_data:/app/uploads
@@ -119,6 +119,11 @@ services:
       # Security
       SECRET_KEY: ${SECRET_KEY:-dev-secret-key-change-in-production-please}
 
+      # File Upload
+      MAX_UPLOAD_SIZE_MB: ${MAX_UPLOAD_SIZE_MB:-100}
+      UPLOAD_DIR: /app/uploads
+      FILE_RETENTION_DAYS: ${FILE_RETENTION_DAYS:-30}
+
       # Environment
       ENVIRONMENT: development
       DEBUG: "true"
@@ -131,6 +136,14 @@ services:
     networks:
       - farmfactory
     restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 2G
+        reservations:
+          cpus: '0.5'
+          memory: 512M
 
   celery_beat:
     build:
@@ -163,6 +176,39 @@ services:
     networks:
       - farmfactory
     restart: unless-stopped
+
+  flower:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      target: development
+    container_name: farmfactory_flower
+    command: celery -A app.tasks.celery_app flower --port=5555 --basic_auth=${FLOWER_USER:-admin}:${FLOWER_PASSWORD:-admin123}
+    ports:
+      - "${FLOWER_PORT:-5555}:5555"
+    environment:
+      # Redis
+      REDIS_URL: redis://:${REDIS_PASSWORD:-redispass123}@redis:6379/0
+
+      # Flower settings
+      FLOWER_BASIC_AUTH: ${FLOWER_USER:-admin}:${FLOWER_PASSWORD:-admin123}
+      FLOWER_PORT: 5555
+
+      # Environment
+      ENVIRONMENT: development
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
+    depends_on:
+      redis:
+        condition: service_healthy
+    networks:
+      - farmfactory
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5555"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
 
   frontend:
     build:

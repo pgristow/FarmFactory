@@ -1,0 +1,21 @@
+# FarmFactory Import Template: Nutrient Applications
+# Track fertilizer and nutrient applications across plots
+# Required columns are marked with (*), optional columns can be left empty
+#
+# Column Descriptions:
+# - date_time (*): Application date and time (YYYY-MM-DD HH:MM:SS format)
+# - plot_name (*): Plot identifier (must match existing plot name)
+# - nutrient_type (*): Type of nutrient/fertilizer (Urea, NPK, Compost, Manure, Ammonium Nitrate, etc.)
+# - application_method (*): Method of application (broadcast, fertigation, foliar, band, side_dress, incorporation)
+# - amount_kg (*): Amount applied in kilograms (or use amount_lbs for auto-conversion)
+# - npk_ratio: NPK ratio (e.g., "10-10-10", "20-5-10")
+# - nitrogen_kg: Nitrogen (N) content in kg
+# - phosphorus_kg: Phosphorus (P) content in kg
+# - potassium_kg: Potassium (K) content in kg
+# - cost_usd: Total cost in USD (or specify currency with cost_eur, cost_gbp, etc.)
+# - notes: Additional details or observations
+#
+date_time,plot_name,nutrient_type,application_method,amount_kg,npk_ratio,nitrogen_kg,phosphorus_kg,potassium_kg,cost_usd,notes
+2024-10-15 08:00:00,North Field,NPK Fertilizer,broadcast,250,20-10-10,50,25,25,180.50,Pre-season fertilization
+2024-10-20 09:30:00,South Field,Urea,fertigation,100,,46,0,0,85.00,Nitrogen boost during growth phase
+2024-10-25 14:00:00,Main Plot,Organic Compost,incorporation,500,5-3-2,25,15,10,120.00,Soil amendment - organic matter addition

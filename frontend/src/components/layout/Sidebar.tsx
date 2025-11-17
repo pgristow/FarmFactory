@@ -19,6 +19,8 @@ import {
   Science as NutrientIcon,
   AttachMoney as FinancialIcon,
   Analytics as AnalyticsIcon,
+  Upload as ImportIcon,
+  History as HistoryIcon,
 } from '@mui/icons-material';
 
 interface SidebarProps {
@@ -29,6 +31,8 @@ const menuItems = [
   { text: 'Dashboard', icon: <DashboardIcon />, path: '/' },
   { text: 'Farms', icon: <FarmIcon />, path: '/farms' },
   { text: 'Plots', icon: <PlotIcon />, path: '/plots' },
+  { text: 'Import Data', icon: <ImportIcon />, path: '/import' },
+  { text: 'Import History', icon: <HistoryIcon />, path: '/import-history' },
   { text: 'Irrigation', icon: <IrrigationIcon />, path: '/irrigation', disabled: true },
   { text: 'Nutrients', icon: <NutrientIcon />, path: '/nutrients', disabled: true },
   { text: 'Financial', icon: <FinancialIcon />, path: '/financial', disabled: true },

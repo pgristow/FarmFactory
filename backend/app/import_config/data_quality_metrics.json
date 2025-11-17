@@ -1,0 +1,310 @@
+{
+  "metrics_config": {
+    "enabled": true,
+    "track_per_import": true,
+    "track_historical": true,
+    "alert_thresholds": {
+      "error_rate_warning": 0.05,
+      "error_rate_critical": 0.15,
+      "completeness_warning": 0.80,
+      "completeness_critical": 0.60,
+      "mapping_accuracy_warning": 0.75,
+      "mapping_accuracy_critical": 0.60
+    }
+  },
+  "metric_definitions": {
+    "completeness": {
+      "name": "Data Completeness",
+      "description": "Percentage of non-null values across all fields",
+      "calculation": "non_null_values / total_values * 100",
+      "unit": "percent",
+      "target": 90.0,
+      "warning_threshold": 80.0,
+      "critical_threshold": 60.0,
+      "higher_is_better": true
+    },
+    "validity": {
+      "name": "Data Validity",
+      "description": "Percentage of values passing validation rules",
+      "calculation": "valid_values / total_values * 100",
+      "unit": "percent",
+      "target": 95.0,
+      "warning_threshold": 90.0,
+      "critical_threshold": 80.0,
+      "higher_is_better": true
+    },
+    "accuracy": {
+      "name": "Data Accuracy",
+      "description": "Percentage of values within expected ranges",
+      "calculation": "values_in_range / total_numeric_values * 100",
+      "unit": "percent",
+      "target": 98.0,
+      "warning_threshold": 95.0,
+      "critical_threshold": 90.0,
+      "higher_is_better": true
+    },
+    "consistency": {
+      "name": "Data Consistency",
+      "description": "Percentage of values matching reference data",
+      "calculation": "matching_references / total_references * 100",
+      "unit": "percent",
+      "target": 95.0,
+      "warning_threshold": 90.0,
+      "critical_threshold": 85.0,
+      "higher_is_better": true
+    },
+    "duplicate_rate": {
+      "name": "Duplicate Rate",
+      "description": "Percentage of duplicate records",
+      "calculation": "duplicate_rows / total_rows * 100",
+      "unit": "percent",
+      "target": 0.0,
+      "warning_threshold": 2.0,
+      "critical_threshold": 5.0,
+      "higher_is_better": false
+    },
+    "mapping_accuracy": {
+      "name": "Column Mapping Accuracy",
+      "description": "Percentage of columns successfully auto-mapped",
+      "calculation": "auto_mapped_columns / total_columns * 100",
+      "unit": "percent",
+      "target": 90.0,
+      "warning_threshold": 80.0,
+      "critical_threshold": 70.0,
+      "higher_is_better": true
+    },
+    "mapping_confidence": {
+      "name": "Average Mapping Confidence",
+      "description": "Average confidence score of column mappings",
+      "calculation": "sum(confidence_scores) / mapped_columns",
+      "unit": "score",
+      "min_value": 0.0,
+      "max_value": 1.0,
+      "target": 0.90,
+      "warning_threshold": 0.80,
+      "critical_threshold": 0.70,
+      "higher_is_better": true
+    },
+    "error_rate": {
+      "name": "Validation Error Rate",
+      "description": "Percentage of rows with validation errors",
+      "calculation": "rows_with_errors / total_rows * 100",
+      "unit": "percent",
+      "target": 0.0,
+      "warning_threshold": 5.0,
+      "critical_threshold": 15.0,
+      "higher_is_better": false
+    },
+    "warning_rate": {
+      "name": "Validation Warning Rate",
+      "description": "Percentage of rows with validation warnings",
+      "calculation": "rows_with_warnings / total_rows * 100",
+      "unit": "percent",
+      "target": 0.0,
+      "warning_threshold": 10.0,
+      "critical_threshold": 25.0,
+      "higher_is_better": false
+    },
+    "import_success_rate": {
+      "name": "Import Success Rate",
+      "description": "Percentage of imports completing successfully",
+      "calculation": "successful_imports / total_imports * 100",
+      "unit": "percent",
+      "target": 98.0,
+      "warning_threshold": 95.0,
+      "critical_threshold": 90.0,
+      "higher_is_better": true
+    }
+  },
+  "field_level_metrics": {
+    "required_fields": {
+      "completeness": {
+        "description": "Completeness of required fields",
+        "target": 100.0,
+        "critical_threshold": 99.0
+      }
+    },
+    "optional_fields": {
+      "completeness": {
+        "description": "Completeness of optional fields",
+        "target": 75.0,
+        "warning_threshold": 50.0
+      }
+    },
+    "numeric_fields": {
+      "accuracy": {
+        "description": "Percentage within valid range",
+        "target": 98.0
+      },
+      "outlier_rate": {
+        "description": "Percentage identified as outliers",
+        "target": 2.0,
+        "warning_threshold": 5.0
+      }
+    },
+    "reference_fields": {
+      "consistency": {
+        "description": "Percentage matching reference data",
+        "target": 100.0,
+        "critical_threshold": 95.0
+      }
+    },
+    "date_fields": {
+      "validity": {
+        "description": "Percentage with valid date format",
+        "target": 100.0,
+        "critical_threshold": 98.0
+      },
+      "future_date_rate": {
+        "description": "Percentage with future dates (when not allowed)",
+        "target": 0.0,
+        "warning_threshold": 1.0
+      }
+    }
+  },
+  "data_type_specific_metrics": {
+    "farms_and_plots": {
+      "coordinate_completeness": {
+        "description": "Percentage of farms with GPS coordinates",
+        "target": 90.0,
+        "calculation": "farms_with_coordinates / total_farms * 100"
+      },
+      "soil_data_completeness": {
+        "description": "Percentage of plots with soil profile data",
+        "target": 85.0,
+        "calculation": "plots_with_soil_data / total_plots * 100"
+      },
+      "plot_area_consistency": {
+        "description": "Plots where sum of plot areas ≤ farm total area",
+        "target": 100.0,
+        "calculation": "farms_with_consistent_areas / total_farms * 100"
+      }
+    },
+    "irrigation_events": {
+      "flow_calculation_accuracy": {
+        "description": "Events where volume matches flow × duration",
+        "target": 95.0,
+        "tolerance": 10,
+        "calculation": "matching_flows / total_events * 100"
+      },
+      "temporal_coverage": {
+        "description": "Average events per plot per month",
+        "target": 8.0,
+        "warning_threshold": 4.0
+      }
+    },
+    "nutrient_applications": {
+      "npk_data_completeness": {
+        "description": "Applications with NPK breakdown",
+        "target": 80.0,
+        "calculation": "applications_with_npk / total_applications * 100"
+      },
+      "cost_data_completeness": {
+        "description": "Applications with cost information",
+        "target": 90.0,
+        "calculation": "applications_with_cost / total_applications * 100"
+      }
+    },
+    "phenology_observations": {
+      "observation_frequency": {
+        "description": "Average observations per plot per month",
+        "target": 4.0,
+        "warning_threshold": 2.0
+      },
+      "bbch_usage_rate": {
+        "description": "Observations with BBCH codes",
+        "target": 70.0,
+        "calculation": "observations_with_bbch / total_observations * 100"
+      }
+    },
+    "financial_data": {
+      "calculation_accuracy": {
+        "description": "Transactions where total = quantity × unit_cost",
+        "target": 98.0,
+        "tolerance": 1,
+        "calculation": "matching_calculations / applicable_transactions * 100"
+      },
+      "category_distribution": {
+        "description": "Balance between costs and revenues",
+        "target_cost_percentage": 70.0,
+        "target_revenue_percentage": 30.0
+      }
+    }
+  },
+  "time_series_metrics": {
+    "daily_import_volume": {
+      "description": "Number of rows imported per day",
+      "aggregation": "sum",
+      "alert_on_spike": true,
+      "spike_threshold_multiplier": 3.0
+    },
+    "daily_error_rate": {
+      "description": "Error rate by day",
+      "aggregation": "average",
+      "alert_on_spike": true,
+      "spike_threshold": 10.0
+    },
+    "weekly_success_rate": {
+      "description": "Import success rate by week",
+      "aggregation": "average",
+      "alert_on_drop": true,
+      "drop_threshold": 5.0
+    }
+  },
+  "quality_score_calculation": {
+    "enabled": true,
+    "formula": "weighted_average",
+    "weights": {
+      "completeness": 0.20,
+      "validity": 0.25,
+      "accuracy": 0.20,
+      "consistency": 0.15,
+      "duplicate_rate": 0.10,
+      "mapping_accuracy": 0.10
+    },
+    "score_ranges": {
+      "excellent": {
+        "min": 90,
+        "max": 100,
+        "label": "Excellent",
+        "color": "green"
+      },
+      "good": {
+        "min": 75,
+        "max": 89,
+        "label": "Good",
+        "color": "blue"
+      },
+      "fair": {
+        "min": 60,
+        "max": 74,
+        "label": "Fair",
+        "color": "yellow"
+      },
+      "poor": {
+        "min": 0,
+        "max": 59,
+        "label": "Poor",
+        "color": "red"
+      }
+    }
+  },
+  "reporting": {
+    "generate_per_import": true,
+    "include_in_api_response": true,
+    "save_to_database": true,
+    "dashboard_metrics": [
+      "quality_score",
+      "import_success_rate",
+      "error_rate",
+      "completeness",
+      "mapping_accuracy"
+    ],
+    "alert_on_metrics": [
+      "error_rate",
+      "import_success_rate",
+      "consistency",
+      "duplicate_rate"
+    ]
+  }
+}

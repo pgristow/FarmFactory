@@ -1,0 +1,20 @@
+# FarmFactory Import Template: Phenology Observations
+# Track crop growth stages and development observations
+# Required columns are marked with (*), optional columns can be left empty
+#
+# Column Descriptions:
+# - observation_date (*): Date of observation (YYYY-MM-DD format)
+# - plot_name (*): Plot identifier (must match existing plot name)
+# - growth_stage (*): Growth stage description (germination, vegetative, flowering, fruiting, ripening, harvest_ready)
+# - bbch_code: BBCH phenological scale code (0-99, standardized growth stage coding)
+# - height_cm: Plant height in centimeters (or use height_inches for auto-conversion)
+# - canopy_cover_percent: Canopy coverage percentage (0-100)
+# - health_score: Overall plant health rating (1-10 scale, 10 = excellent)
+# - notes: Detailed observations, pest presence, stress indicators, etc.
+#
+observation_date,plot_name,growth_stage,bbch_code,height_cm,canopy_cover_percent,health_score,notes
+2024-10-05,North Field,germination,09,5,10,8,Uniform germination observed - 90% emergence
+2024-10-20,North Field,vegetative,19,35,45,9,Strong vegetative growth - good leaf development
+2024-11-10,North Field,flowering,65,85,75,8,Flowering initiated - bees active in field
+2024-10-05,South Field,vegetative,15,28,35,7,Slightly slower growth - possible nutrient deficiency in west corner
+2024-11-01,Main Plot,fruiting,71,120,90,9,Fruit set excellent - high pollination success rate

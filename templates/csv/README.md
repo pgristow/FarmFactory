@@ -286,14 +286,236 @@ To use auto-conversion, include the unit in the column header:
 - `area_acres` → will convert to hectares
 - `temp_fahrenheit` → will convert to celsius
 
+## Sprint 2: Data Import System Features
+
+### New Import Templates
+
+Sprint 2 introduces specialized import templates optimized for bulk data upload:
+
+1. **farms_and_plots_import.csv** - Combined farm and plot data import
+2. **irrigation_events_import.csv** - Bulk irrigation event tracking
+3. **nutrient_applications_import.csv** - Fertilizer application history
+4. **phenology_observations_import.csv** - Growth stage observations
+5. **financial_data_import.csv** - Combined costs and revenues
+
+### Import System Features
+
+#### Intelligent Column Mapping
+- **Auto-detection**: System automatically maps your column names to database fields
+- **Fuzzy matching**: Handles variations like "Farm Name", "farm_name", "FarmName"
+- **Confidence scoring**: Shows mapping confidence (aim for >80%)
+- **Manual override**: Adjust any auto-mapped columns before import
+
+#### Automatic Unit Conversions
+The system automatically detects and converts units from column names:
+
+- `area_acres` → Converts to hectares
+- `volume_gallons` → Converts to liters
+- `temp_fahrenheit` → Converts to Celsius
+- `height_inches` → Converts to centimeters
+- `weight_lbs` → Converts to kilograms
+- `pressure_psi` → Converts to bar
+- `flow_rate_gpm` → Converts to liters per minute
+
+**Example**: If your CSV has `plot_area_acres`, the system will automatically convert to hectares for storage.
+
+#### Comprehensive Data Validation
+
+**Automatic checks include:**
+- Required fields validation
+- Data type validation (numbers, dates, text)
+- Range validation (pH 0-14, coordinates, percentages)
+- Reference validation (plot names must exist)
+- Duplicate detection
+- Cross-field validation (plot area ≤ farm area)
+- Date format validation with multiple format support
+
+**Validation Error Messages**: Clear, actionable messages help you fix issues quickly.
+
+#### Import Workflow
+
+1. **Upload**: Drag-and-drop or browse to select your CSV file
+2. **Preview**: Review first 100 rows of your data
+3. **Map Columns**: Verify auto-detected column mappings
+4. **Validate**: System checks all data against validation rules
+5. **Review Errors**: Fix any validation errors (if needed)
+6. **Process**: Import runs in background with progress tracking
+7. **Complete**: View import summary and any warnings
+
+#### Performance
+
+- Files up to 100MB supported
+- Processes 10,000+ rows in under 2 minutes
+- Batch processing with progress updates
+- Resume capability on connection loss
+
+### Import Best Practices
+
+#### Preparing Your Data
+
+1. **Start with templates**: Download and use provided import templates
+2. **Clean your data**: Remove empty rows, fix formatting issues
+3. **Test with small batch**: Import 10-20 rows first to verify
+4. **Use consistent naming**: Keep farm/plot names consistent across all imports
+5. **Include units in headers**: Use `area_acres` or `area_hectares` for clarity
+
+#### Column Naming Tips
+
+The system recognizes many column name variations:
+
+**Farm Name variations:**
+- farm_name, Farm Name, FarmName, farm, Farm ID
+
+**Date/Time variations:**
+- date_time, Date Time, timestamp, date, datetime
+
+**Plot Name variations:**
+- plot_name, Plot Name, field_name, Field, plot
+
+**Amount variations:**
+- amount_kg, Amount, quantity_kg, kg, kilograms
+
+#### Handling Errors
+
+**Common Errors and Solutions:**
+
+1. **"Required field missing"**
+   - Solution: Ensure all required columns have values
+   - Required fields marked with (*) in template comments
+
+2. **"Invalid date format"**
+   - Solution: Use YYYY-MM-DD or YYYY-MM-DD HH:MM:SS
+   - Supported formats: YYYY-MM-DD, MM/DD/YYYY, DD-MM-YYYY
+
+3. **"Value out of range"**
+   - Solution: Check value is reasonable (pH 0-14, etc.)
+   - See validation rules documentation
+
+4. **"Plot not found"**
+   - Solution: Import farms/plots first
+   - Ensure plot names match exactly (case-sensitive)
+
+5. **"Duplicate entry"**
+   - Solution: Check for duplicate rows
+   - System detects duplicates by plot name + date/time
+
+#### Data Quality Tips
+
+- **Completeness**: Aim for 90%+ non-empty values
+- **Accuracy**: Double-check numeric values and units
+- **Consistency**: Use same plot names across all files
+- **Validation**: System reports data quality score after import
+- **Documentation**: Add notes for unusual values
+
+### Import Order for New Farms
+
+For best results, import data in this sequence:
+
+1. **Farms and Plots** ← Start here (creates farm structure)
+2. **Irrigation Events**
+3. **Nutrient Applications**
+4. **Phenology Observations**
+5. **Financial Data**
+
+### Advanced Features
+
+#### Batch Processing
+- Large files processed in chunks
+- Progress tracking in real-time
+- Can cancel import in progress
+
+#### Import History
+- View all past imports
+- Download original files
+- Re-run imports with same settings
+- Detailed error logs
+
+#### Data Quality Metrics
+After each import, view:
+- Completeness score
+- Validity score
+- Mapping accuracy
+- Error summary
+- Data quality recommendations
+
+#### Template Customization
+- Save your own column mapping templates
+- Reuse mappings for future imports
+- Share templates with team members
+
+### File Format Requirements
+
+**CSV Files:**
+- UTF-8 encoding required
+- Comma, semicolon, or tab delimiters supported
+- Headers must be in first row
+- Comments (lines starting with #) are ignored
+
+**Excel Files:**
+- .xlsx and .xls formats supported
+- Uses first sheet by default
+- Headers in first row
+- Blank rows are skipped
+
+### API Import (Advanced)
+
+For automated imports, use the REST API:
+
+```bash
+# Upload file
+curl -X POST http://localhost:8000/api/v1/import/upload \
+  -F "file=@your_data.csv" \
+  -F "data_type=farms_and_plots"
+
+# Check status
+curl http://localhost:8000/api/v1/import/status/{job_id}
+
+# Download errors (if any)
+curl http://localhost:8000/api/v1/import/{job_id}/errors
+```
+
+### Troubleshooting
+
+**Import stuck at "Processing"?**
+- Check job status in Import History
+- Large files may take several minutes
+- Check server logs if import exceeds expected time
+
+**High error rate?**
+- Download error report
+- Common issue: Column names not recognized
+- Solution: Use manual column mapping
+
+**Performance slow?**
+- Optimize CSV: Remove unnecessary columns
+- Split large files into smaller batches
+- Import during off-peak hours
+
+### Getting Help
+
+**Import Issues:**
+1. Check Import History for error details
+2. Download error report (CSV format)
+3. Review validation rules documentation
+4. Contact support with import job ID
+
+**Data Questions:**
+- See field descriptions in template comments
+- Check validation rules: `/backend/app/import_config/validation_rules.json`
+- Review data type documentation
+
 ## Need Help?
 
 - **Documentation**: See full documentation in `/docs/user-guide`
 - **API Reference**: http://localhost:8000/docs
+- **Import System Guide**: `/docs/import-system.md`
+- **Validation Rules**: `/backend/app/import_config/validation_rules.json`
 - **Support**: Contact support through the dashboard
+- **Sample Data**: Check `/test_data/` for examples
 
 ---
 
-**Template Version**: 1.0
-**Last Updated**: 2025-11-16
-**Compatible with**: FarmFactory v1.0+
+**Template Version**: 2.0
+**Last Updated**: 2025-11-17
+**Compatible with**: FarmFactory v1.0+ (Sprint 2 Import System)
+**Import System Version**: 1.0

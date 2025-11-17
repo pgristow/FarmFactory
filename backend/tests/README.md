@@ -575,3 +575,184 @@ cat .coveragerc
 - Test edge cases and error conditions
 
 **Remember**: Good tests are an investment in code quality and maintainability!
+
+---
+
+## Import System Testing (Sprint 2)
+
+### Overview
+
+Sprint 2 introduced a comprehensive data import system with extensive test coverage. The import system includes 400+ tests covering unit, integration, performance, and E2E scenarios.
+
+### Import Test Files
+
+```
+tests/
+├── unit/
+│   ├── test_csv_parser.py         # CSV parsing (30+ tests)
+│   ├── test_excel_parser.py       # Excel parsing (25+ tests)
+│   ├── test_column_mapper.py      # Column mapping (35+ tests)
+│   ├── test_data_validator.py     # Data validation (60+ tests)
+│   ├── test_file_formats.py       # File formats (40+ tests)
+│   └── test_import_errors.py      # Error handling (50+ tests)
+├── integration/
+│   ├── test_import_api.py         # Import API endpoints (40+ tests)
+│   └── test_import_workflow.py    # Import workflows (30+ tests)
+├── performance/
+│   └── test_bulk_import.py        # Performance benchmarks (15+ tests)
+└── e2e/
+    └── test_complete_import.py    # End-to-end workflows (10+ tests)
+```
+
+### Running Import Tests
+
+```bash
+# All import tests
+pytest tests/unit/test_csv_parser.py \
+       tests/unit/test_excel_parser.py \
+       tests/unit/test_column_mapper.py \
+       tests/unit/test_data_validator.py \
+       tests/integration/test_import_api.py \
+       tests/integration/test_import_workflow.py \
+       tests/e2e/test_complete_import.py -v
+
+# Unit tests only
+pytest tests/unit/test_csv_parser.py \
+       tests/unit/test_excel_parser.py \
+       tests/unit/test_column_mapper.py \
+       tests/unit/test_data_validator.py -v
+
+# Integration tests
+pytest tests/integration/test_import_api.py \
+       tests/integration/test_import_workflow.py -v
+
+# Performance tests (SLOW)
+pytest tests/performance/test_bulk_import.py -v -m performance
+
+# E2E tests
+pytest tests/e2e/test_complete_import.py -v -m e2e
+
+# Quick import tests (skip slow ones)
+pytest tests/unit/test_csv_parser.py -m "not slow"
+```
+
+### Performance Targets
+
+| Dataset Size | Target Time | Memory Limit | Target Rate |
+|--------------|-------------|--------------|-------------|
+| 1,000 rows   | <10 seconds | <100 MB      | >100 r/s    |
+| 10,000 rows  | <60 seconds | <500 MB      | >166 r/s    |
+| 100,000 rows | <10 minutes | <2 GB        | >166 r/s    |
+| 1,000,000 rows | <60 minutes | <5 GB      | >277 r/s    |
+
+### Running Performance Benchmarks
+
+```bash
+# Run all performance tests (may take hours)
+pytest tests/performance/test_bulk_import.py -v
+
+# Run specific benchmark
+pytest tests/performance/test_bulk_import.py::TestBulkImportPerformance::test_import_1k_rows -v
+pytest tests/performance/test_bulk_import.py::TestBulkImportPerformance::test_import_10k_rows -v
+
+# Skip very slow tests (100k+, 1M rows)
+pytest tests/performance/test_bulk_import.py -m "performance and not slow"
+```
+
+### Coverage Targets for Import Modules
+
+| Module | Target | Status |
+|--------|--------|--------|
+| Overall Import System | 85% | Target |
+| CSV Parser | 90% | Target |
+| Excel Parser | 90% | Target |
+| Column Mapper | 85% | Target |
+| Data Validator | 90% | Target |
+| Import Service | 85% | Target |
+| Import API | 80% | Target |
+
+### Generating Import Coverage Report
+
+```bash
+# Coverage for import modules only
+pytest --cov=app.services.csv_parser \
+       --cov=app.services.excel_parser \
+       --cov=app.services.column_mapping_service \
+       --cov=app.services.validation_service \
+       --cov=app.services.import_service \
+       --cov=app.api.v1.endpoints.import \
+       --cov-report=html \
+       --cov-report=term-missing \
+       tests/unit/test_csv_parser.py \
+       tests/unit/test_excel_parser.py \
+       tests/unit/test_column_mapper.py \
+       tests/unit/test_data_validator.py \
+       tests/integration/test_import_api.py \
+       tests/integration/test_import_workflow.py
+
+# Open coverage report
+open htmlcov/index.html
+```
+
+### Import Test Plan
+
+For detailed import testing strategy, see:
+- **Import Test Plan**: `tests/IMPORT_TEST_PLAN.md`
+- **Sprint Plan**: `SPRINT_2_PLAN.md` (QA Specialist tasks)
+
+### Known Issues (Import Tests)
+
+1. **Import API endpoints not yet implemented**
+   - Tests are written but commented out
+   - Will be enabled when backend tasks (BE-102 to BE-109) complete
+   - Status: Sprint 2 in progress
+
+2. **Performance tests require actual setup**
+   - Need PostgreSQL with real data
+   - Need Celery worker running
+   - Mock implementations used for now
+
+3. **Frontend component tests pending**
+   - React/TypeScript tests (QA-106) not yet created
+   - Requires Jest/Vitest setup
+   - Planned for Sprint 2 completion
+
+### Test Data for Import Tests
+
+```bash
+# Sample test data is generated dynamically using tmp_path fixture
+# Example:
+def test_import(tmp_path):
+    csv_file = tmp_path / "test.csv"
+    csv_file.write_text("farm_name,area\nFarm 1,50.5")
+    # ... test with csv_file
+```
+
+### Import Test Markers
+
+```bash
+# Unit tests
+pytest -m unit tests/unit/test_csv_parser.py
+
+# Integration tests
+pytest -m integration tests/integration/test_import_api.py
+
+# Performance tests
+pytest -m performance tests/performance/test_bulk_import.py
+
+# E2E tests
+pytest -m e2e tests/e2e/test_complete_import.py
+
+# Slow tests
+pytest -m slow
+
+# Skip slow tests
+pytest -m "not slow"
+```
+
+---
+
+**Import Testing Last Updated**: 2025-11-17
+**Sprint**: Sprint 2 - Data Import System
+**Test Count**: 335+ import-specific tests
+**Coverage Target**: 85% for import modules

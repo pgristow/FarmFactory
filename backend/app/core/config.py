@@ -43,10 +43,16 @@ class Settings(BaseSettings):
     DEFAULT_PAGE_SIZE: int = 20
     MAX_PAGE_SIZE: int = 100
 
-    # File Upload
-    MAX_UPLOAD_SIZE: int = 10 * 1024 * 1024  # 10MB
+    # File Upload & Import
+    MAX_UPLOAD_SIZE: int = 100 * 1024 * 1024  # 100MB for import files
     UPLOAD_DIR: Path = Path("uploads")
     ALLOWED_EXTENSIONS: List[str] = [".csv", ".xlsx", ".xls"]
+
+    # Import settings
+    IMPORT_BATCH_SIZE: int = 500  # Number of rows to process per batch
+    IMPORT_MAX_ERRORS: int = 100  # Maximum errors to collect during validation
+    IMPORT_FILE_RETENTION_DAYS: int = 30  # Days to keep processed import files
+    IMPORT_MIN_CONFIDENCE: float = 60.0  # Minimum confidence for auto column mapping (%)
 
     class Config:
         env_file = ".env"

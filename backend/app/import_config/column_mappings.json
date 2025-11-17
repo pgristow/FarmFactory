@@ -1,0 +1,606 @@
+{
+  "farms_and_plots": {
+    "farm_name": {
+      "variations": [
+        "farm_name", "Farm Name", "FarmName", "farmName", "FARM_NAME",
+        "farm", "Farm", "FARM", "farm_id", "FarmID", "Farm ID"
+      ],
+      "field_type": "text",
+      "required": true,
+      "priority": 100
+    },
+    "farm_latitude": {
+      "variations": [
+        "farm_latitude", "Farm Latitude", "FarmLatitude", "farmLatitude", "FARM_LATITUDE",
+        "farm_lat", "Farm Lat", "FarmLat", "latitude", "Latitude", "LAT", "lat"
+      ],
+      "field_type": "float",
+      "required": false,
+      "priority": 90
+    },
+    "farm_longitude": {
+      "variations": [
+        "farm_longitude", "Farm Longitude", "FarmLongitude", "farmLongitude", "FARM_LONGITUDE",
+        "farm_lon", "Farm Lon", "FarmLon", "farm_lng", "longitude", "Longitude", "LON", "lon", "lng", "long"
+      ],
+      "field_type": "float",
+      "required": false,
+      "priority": 90
+    },
+    "farm_address": {
+      "variations": [
+        "farm_address", "Farm Address", "FarmAddress", "farmAddress", "FARM_ADDRESS",
+        "address", "Address", "ADDRESS", "location", "Location"
+      ],
+      "field_type": "text",
+      "required": false,
+      "priority": 70
+    },
+    "farm_total_area_hectares": {
+      "variations": [
+        "farm_total_area_hectares", "Farm Total Area Hectares", "FarmTotalAreaHectares",
+        "farm_area_hectares", "farm_area", "total_area_hectares", "total_area",
+        "area_hectares", "area_ha", "farm_size_hectares", "farm_size"
+      ],
+      "field_type": "float",
+      "required": false,
+      "priority": 80,
+      "unit_conversions": {
+        "farm_total_area_acres": "acres_to_hectares",
+        "farm_area_acres": "acres_to_hectares",
+        "total_area_acres": "acres_to_hectares"
+      }
+    },
+    "farm_timezone": {
+      "variations": [
+        "farm_timezone", "Farm Timezone", "FarmTimezone", "farmTimezone", "FARM_TIMEZONE",
+        "timezone", "Timezone", "time_zone", "Time Zone", "tz"
+      ],
+      "field_type": "text",
+      "required": false,
+      "priority": 60
+    },
+    "plot_name": {
+      "variations": [
+        "plot_name", "Plot Name", "PlotName", "plotName", "PLOT_NAME",
+        "plot", "Plot", "PLOT", "field_name", "Field Name", "FieldName",
+        "field", "Field", "plot_id", "PlotID", "Plot ID"
+      ],
+      "field_type": "text",
+      "required": true,
+      "priority": 100
+    },
+    "plot_number": {
+      "variations": [
+        "plot_number", "Plot Number", "PlotNumber", "plotNumber", "PLOT_NUMBER",
+        "plot_no", "Plot No", "field_number", "Field Number", "plot_code", "Plot Code"
+      ],
+      "field_type": "text",
+      "required": false,
+      "priority": 70
+    },
+    "plot_area_hectares": {
+      "variations": [
+        "plot_area_hectares", "Plot Area Hectares", "PlotAreaHectares",
+        "plot_area", "area_hectares", "area", "Area", "plot_size", "field_area"
+      ],
+      "field_type": "float",
+      "required": true,
+      "priority": 95,
+      "unit_conversions": {
+        "plot_area_acres": "acres_to_hectares",
+        "area_acres": "acres_to_hectares"
+      }
+    },
+    "plot_elevation_meters": {
+      "variations": [
+        "plot_elevation_meters", "Plot Elevation Meters", "elevation_meters",
+        "elevation", "Elevation", "altitude", "Altitude"
+      ],
+      "field_type": "float",
+      "required": false,
+      "priority": 60,
+      "unit_conversions": {
+        "plot_elevation_feet": "feet_to_meters",
+        "elevation_feet": "feet_to_meters"
+      }
+    },
+    "plot_slope_degrees": {
+      "variations": [
+        "plot_slope_degrees", "Plot Slope Degrees", "slope_degrees",
+        "slope", "Slope", "grade", "Grade"
+      ],
+      "field_type": "float",
+      "required": false,
+      "priority": 60
+    },
+    "soil_type": {
+      "variations": [
+        "soil_type", "Soil Type", "SoilType", "soilType", "SOIL_TYPE",
+        "soil", "Soil", "soil_class", "Soil Class", "soil_classification"
+      ],
+      "field_type": "text",
+      "required": false,
+      "priority": 70
+    },
+    "soil_ph_level": {
+      "variations": [
+        "soil_ph_level", "Soil pH Level", "SoilPHLevel", "soil_ph", "Soil pH",
+        "ph_level", "pH Level", "ph", "pH", "PH"
+      ],
+      "field_type": "float",
+      "required": false,
+      "priority": 75
+    },
+    "organic_matter_percent": {
+      "variations": [
+        "organic_matter_percent", "Organic Matter Percent", "organic_matter",
+        "om_percent", "OM%", "organic_matter_%", "om"
+      ],
+      "field_type": "float",
+      "required": false,
+      "priority": 65
+    },
+    "drainage_class": {
+      "variations": [
+        "drainage_class", "Drainage Class", "DrainageClass", "drainage",
+        "Drainage", "drainage_type", "Drainage Type"
+      ],
+      "field_type": "text",
+      "required": false,
+      "priority": 60
+    }
+  },
+  "irrigation_events": {
+    "date_time": {
+      "variations": [
+        "date_time", "Date Time", "DateTime", "dateTime", "DATE_TIME",
+        "date", "Date", "DATE", "timestamp", "Timestamp", "time", "Time",
+        "datetime", "event_date", "Event Date", "irrigation_date"
+      ],
+      "field_type": "datetime",
+      "required": true,
+      "priority": 100
+    },
+    "plot_name": {
+      "variations": [
+        "plot_name", "Plot Name", "PlotName", "plotName", "PLOT_NAME",
+        "plot", "Plot", "field_name", "Field Name", "field", "Field"
+      ],
+      "field_type": "text",
+      "required": true,
+      "priority": 100
+    },
+    "irrigation_method": {
+      "variations": [
+        "irrigation_method", "Irrigation Method", "IrrigationMethod",
+        "method", "Method", "irrigation_type", "Irrigation Type", "type"
+      ],
+      "field_type": "text",
+      "required": true,
+      "priority": 95
+    },
+    "duration_minutes": {
+      "variations": [
+        "duration_minutes", "Duration Minutes", "DurationMinutes",
+        "duration", "Duration", "time_minutes", "minutes", "Minutes"
+      ],
+      "field_type": "integer",
+      "required": true,
+      "priority": 90,
+      "unit_conversions": {
+        "duration_hours": "hours_to_minutes"
+      }
+    },
+    "water_volume_liters": {
+      "variations": [
+        "water_volume_liters", "Water Volume Liters", "WaterVolumeLiters",
+        "water_volume", "volume_liters", "volume", "Volume", "water_liters",
+        "liters", "Liters"
+      ],
+      "field_type": "float",
+      "required": true,
+      "priority": 95,
+      "unit_conversions": {
+        "water_volume_gallons": "gallons_to_liters",
+        "volume_gallons": "gallons_to_liters",
+        "gallons": "gallons_to_liters"
+      }
+    },
+    "water_source": {
+      "variations": [
+        "water_source", "Water Source", "WaterSource", "waterSource",
+        "source", "Source", "water_supply", "Water Supply"
+      ],
+      "field_type": "text",
+      "required": false,
+      "priority": 70
+    },
+    "flow_rate_lpm": {
+      "variations": [
+        "flow_rate_lpm", "Flow Rate LPM", "FlowRateLPM", "flow_rate",
+        "Flow Rate", "lpm", "LPM", "flow"
+      ],
+      "field_type": "float",
+      "required": false,
+      "priority": 65,
+      "unit_conversions": {
+        "flow_rate_gpm": "gallons_to_liters"
+      }
+    },
+    "pressure_bar": {
+      "variations": [
+        "pressure_bar", "Pressure Bar", "PressureBar", "pressure",
+        "Pressure", "bar", "Bar"
+      ],
+      "field_type": "float",
+      "required": false,
+      "priority": 60,
+      "unit_conversions": {
+        "pressure_psi": "psi_to_bar"
+      }
+    },
+    "notes": {
+      "variations": [
+        "notes", "Notes", "NOTES", "note", "Note", "comments",
+        "Comments", "comment", "Comment", "remarks", "Remarks"
+      ],
+      "field_type": "text",
+      "required": false,
+      "priority": 50
+    }
+  },
+  "nutrient_applications": {
+    "date_time": {
+      "variations": [
+        "date_time", "Date Time", "DateTime", "dateTime", "DATE_TIME",
+        "date", "Date", "DATE", "timestamp", "Timestamp", "application_date",
+        "Application Date", "datetime"
+      ],
+      "field_type": "datetime",
+      "required": true,
+      "priority": 100
+    },
+    "plot_name": {
+      "variations": [
+        "plot_name", "Plot Name", "PlotName", "plotName", "PLOT_NAME",
+        "plot", "Plot", "field_name", "Field Name", "field", "Field"
+      ],
+      "field_type": "text",
+      "required": true,
+      "priority": 100
+    },
+    "nutrient_type": {
+      "variations": [
+        "nutrient_type", "Nutrient Type", "NutrientType", "nutrientType",
+        "type", "Type", "fertilizer_type", "Fertilizer Type", "fertilizer",
+        "Fertilizer", "nutrient", "Nutrient"
+      ],
+      "field_type": "text",
+      "required": true,
+      "priority": 95
+    },
+    "application_method": {
+      "variations": [
+        "application_method", "Application Method", "ApplicationMethod",
+        "method", "Method", "application_type", "Application Type"
+      ],
+      "field_type": "text",
+      "required": true,
+      "priority": 90
+    },
+    "amount_kg": {
+      "variations": [
+        "amount_kg", "Amount Kg", "AmountKg", "amount", "Amount",
+        "quantity_kg", "Quantity Kg", "kg", "Kg", "kilograms"
+      ],
+      "field_type": "float",
+      "required": true,
+      "priority": 95,
+      "unit_conversions": {
+        "amount_lbs": "pounds_to_kg",
+        "amount_pounds": "pounds_to_kg",
+        "quantity_lbs": "pounds_to_kg"
+      }
+    },
+    "npk_ratio": {
+      "variations": [
+        "npk_ratio", "NPK Ratio", "NPKRatio", "npk", "NPK",
+        "ratio", "Ratio", "fertilizer_ratio"
+      ],
+      "field_type": "text",
+      "required": false,
+      "priority": 75
+    },
+    "nitrogen_kg": {
+      "variations": [
+        "nitrogen_kg", "Nitrogen Kg", "NitrogenKg", "nitrogen",
+        "Nitrogen", "n_kg", "N", "n_content"
+      ],
+      "field_type": "float",
+      "required": false,
+      "priority": 70,
+      "unit_conversions": {
+        "nitrogen_lbs": "pounds_to_kg"
+      }
+    },
+    "phosphorus_kg": {
+      "variations": [
+        "phosphorus_kg", "Phosphorus Kg", "PhosphorusKg", "phosphorus",
+        "Phosphorus", "p_kg", "P", "p_content"
+      ],
+      "field_type": "float",
+      "required": false,
+      "priority": 70,
+      "unit_conversions": {
+        "phosphorus_lbs": "pounds_to_kg"
+      }
+    },
+    "potassium_kg": {
+      "variations": [
+        "potassium_kg", "Potassium Kg", "PotassiumKg", "potassium",
+        "Potassium", "k_kg", "K", "k_content"
+      ],
+      "field_type": "float",
+      "required": false,
+      "priority": 70,
+      "unit_conversions": {
+        "potassium_lbs": "pounds_to_kg"
+      }
+    },
+    "cost_usd": {
+      "variations": [
+        "cost_usd", "Cost USD", "CostUSD", "cost", "Cost", "price",
+        "Price", "total_cost", "Total Cost", "amount_usd"
+      ],
+      "field_type": "float",
+      "required": false,
+      "priority": 65
+    },
+    "notes": {
+      "variations": [
+        "notes", "Notes", "NOTES", "note", "Note", "comments",
+        "Comments", "comment", "Comment", "remarks", "Remarks"
+      ],
+      "field_type": "text",
+      "required": false,
+      "priority": 50
+    }
+  },
+  "phenology_observations": {
+    "observation_date": {
+      "variations": [
+        "observation_date", "Observation Date", "ObservationDate",
+        "date", "Date", "DATE", "obs_date", "Obs Date", "timestamp"
+      ],
+      "field_type": "date",
+      "required": true,
+      "priority": 100
+    },
+    "plot_name": {
+      "variations": [
+        "plot_name", "Plot Name", "PlotName", "plotName", "PLOT_NAME",
+        "plot", "Plot", "field_name", "Field Name", "field", "Field"
+      ],
+      "field_type": "text",
+      "required": true,
+      "priority": 100
+    },
+    "growth_stage": {
+      "variations": [
+        "growth_stage", "Growth Stage", "GrowthStage", "growthStage",
+        "stage", "Stage", "phenology_stage", "Phenology Stage",
+        "development_stage", "Development Stage"
+      ],
+      "field_type": "text",
+      "required": true,
+      "priority": 95
+    },
+    "bbch_code": {
+      "variations": [
+        "bbch_code", "BBCH Code", "BBCHCode", "bbch", "BBCH",
+        "stage_code", "Stage Code", "phenology_code"
+      ],
+      "field_type": "integer",
+      "required": false,
+      "priority": 75
+    },
+    "height_cm": {
+      "variations": [
+        "height_cm", "Height Cm", "HeightCm", "height", "Height",
+        "plant_height_cm", "Plant Height", "cm", "centimeters"
+      ],
+      "field_type": "float",
+      "required": false,
+      "priority": 70,
+      "unit_conversions": {
+        "height_inches": "inches_to_cm",
+        "plant_height_inches": "inches_to_cm"
+      }
+    },
+    "canopy_cover_percent": {
+      "variations": [
+        "canopy_cover_percent", "Canopy Cover Percent", "canopy_cover",
+        "Canopy Cover", "cover_percent", "Cover %", "canopy_%",
+        "coverage", "Coverage"
+      ],
+      "field_type": "float",
+      "required": false,
+      "priority": 70
+    },
+    "health_score": {
+      "variations": [
+        "health_score", "Health Score", "HealthScore", "health",
+        "Health", "plant_health", "Plant Health", "score", "Score",
+        "rating", "Rating"
+      ],
+      "field_type": "integer",
+      "required": false,
+      "priority": 70
+    },
+    "notes": {
+      "variations": [
+        "notes", "Notes", "NOTES", "note", "Note", "comments",
+        "Comments", "comment", "Comment", "observations", "Observations",
+        "remarks", "Remarks"
+      ],
+      "field_type": "text",
+      "required": false,
+      "priority": 50
+    }
+  },
+  "financial_data": {
+    "transaction_type": {
+      "variations": [
+        "transaction_type", "Transaction Type", "TransactionType",
+        "type", "Type", "trans_type", "category_type"
+      ],
+      "field_type": "text",
+      "required": true,
+      "priority": 100
+    },
+    "transaction_date": {
+      "variations": [
+        "transaction_date", "Transaction Date", "TransactionDate",
+        "date", "Date", "DATE", "trans_date", "timestamp"
+      ],
+      "field_type": "date",
+      "required": true,
+      "priority": 100
+    },
+    "plot_name": {
+      "variations": [
+        "plot_name", "Plot Name", "PlotName", "plotName", "PLOT_NAME",
+        "plot", "Plot", "field_name", "Field Name", "field", "Field"
+      ],
+      "field_type": "text",
+      "required": false,
+      "priority": 80
+    },
+    "category": {
+      "variations": [
+        "category", "Category", "CATEGORY", "expense_category",
+        "Expense Category", "cost_category", "Cost Category",
+        "revenue_category", "Revenue Category"
+      ],
+      "field_type": "text",
+      "required": true,
+      "priority": 95
+    },
+    "description": {
+      "variations": [
+        "description", "Description", "DESCRIPTION", "desc", "Desc",
+        "details", "Details", "item", "Item"
+      ],
+      "field_type": "text",
+      "required": true,
+      "priority": 90
+    },
+    "quantity": {
+      "variations": [
+        "quantity", "Quantity", "QUANTITY", "qty", "Qty", "amount",
+        "Amount", "count", "Count"
+      ],
+      "field_type": "float",
+      "required": false,
+      "priority": 70
+    },
+    "unit": {
+      "variations": [
+        "unit", "Unit", "UNIT", "unit_of_measure", "Unit of Measure",
+        "uom", "UOM"
+      ],
+      "field_type": "text",
+      "required": false,
+      "priority": 60
+    },
+    "unit_cost": {
+      "variations": [
+        "unit_cost", "Unit Cost", "UnitCost", "price_per_unit",
+        "Price Per Unit", "cost_per_unit", "Cost Per Unit",
+        "unit_price", "Unit Price"
+      ],
+      "field_type": "float",
+      "required": false,
+      "priority": 65
+    },
+    "total_amount": {
+      "variations": [
+        "total_amount", "Total Amount", "TotalAmount", "total",
+        "Total", "amount", "Amount", "total_cost", "Total Cost",
+        "total_revenue", "Total Revenue", "value", "Value"
+      ],
+      "field_type": "float",
+      "required": true,
+      "priority": 95
+    },
+    "currency": {
+      "variations": [
+        "currency", "Currency", "CURRENCY", "curr", "Curr",
+        "currency_code", "Currency Code"
+      ],
+      "field_type": "text",
+      "required": false,
+      "priority": 60
+    },
+    "crop_name": {
+      "variations": [
+        "crop_name", "Crop Name", "CropName", "crop", "Crop",
+        "product", "Product", "commodity", "Commodity"
+      ],
+      "field_type": "text",
+      "required": false,
+      "priority": 70
+    },
+    "quality_grade": {
+      "variations": [
+        "quality_grade", "Quality Grade", "QualityGrade", "quality",
+        "Quality", "grade", "Grade", "class", "Class"
+      ],
+      "field_type": "text",
+      "required": false,
+      "priority": 60
+    },
+    "market": {
+      "variations": [
+        "market", "Market", "MARKET", "buyer", "Buyer",
+        "customer", "Customer", "purchaser", "Purchaser"
+      ],
+      "field_type": "text",
+      "required": false,
+      "priority": 60
+    },
+    "notes": {
+      "variations": [
+        "notes", "Notes", "NOTES", "note", "Note", "comments",
+        "Comments", "comment", "Comment", "remarks", "Remarks"
+      ],
+      "field_type": "text",
+      "required": false,
+      "priority": 50
+    }
+  },
+  "fuzzy_matching": {
+    "enabled": true,
+    "similarity_threshold": 0.8,
+    "algorithms": ["levenshtein", "jaro_winkler"],
+    "case_sensitive": false,
+    "ignore_special_chars": true,
+    "strip_whitespace": true
+  },
+  "auto_detection_rules": {
+    "date_patterns": [
+      "date", "time", "timestamp", "datetime", "when", "on"
+    ],
+    "amount_patterns": [
+      "amount", "cost", "price", "total", "value", "revenue", "expense"
+    ],
+    "location_patterns": [
+      "plot", "field", "farm", "location", "area", "site"
+    ],
+    "measurement_patterns": [
+      "kg", "lbs", "liters", "gallons", "hectares", "acres", "cm", "inches",
+      "meters", "feet", "celsius", "fahrenheit", "percent", "%"
+    ]
+  }
+}

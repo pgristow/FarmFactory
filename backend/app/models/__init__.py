@@ -27,6 +27,16 @@ from app.models.financial import InputCost, Harvest
 # Alert models
 from app.models.alert import AlertThreshold, Alert
 
+# Import models
+from app.models.import_job import (
+    ImportJob,
+    ImportError,
+    ImportTemplate,
+    ImportStatus,
+    DataType,
+    ErrorType,
+)
+
 # Export all models for easy importing
 __all__ = [
     "Base",
@@ -46,4 +56,10 @@ __all__ = [
     "Harvest",
     "AlertThreshold",
     "Alert",
+    "ImportJob",
+    "ImportError",
+    "ImportTemplate",
+    "ImportStatus",
+    "DataType",
+    "ErrorType",
 ]

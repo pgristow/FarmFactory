@@ -5,6 +5,8 @@ import Layout from './components/layout/Layout';
 import Dashboard from './pages/Dashboard';
 import Farms from './pages/Farms';
 import Plots from './pages/Plots';
+import Import from './pages/Import';
+import ImportHistory from './pages/ImportHistory';
 import NotFound from './pages/NotFound';
 import ErrorBoundary from './components/common/ErrorBoundary';
 
@@ -65,6 +67,8 @@ function App() {
               <Route index element={<Dashboard />} />
               <Route path="farms" element={<Farms />} />
               <Route path="plots" element={<Plots />} />
+              <Route path="import" element={<Import />} />
+              <Route path="import-history" element={<ImportHistory />} />
               <Route path="*" element={<NotFound />} />
             </Route>
           </Routes>

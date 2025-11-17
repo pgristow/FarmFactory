@@ -1,0 +1,30 @@
+# FarmFactory Import Template: Financial Data (Costs and Revenues)
+# Combined template for tracking input costs and harvest revenues
+# Required columns are marked with (*), optional columns can be left empty
+#
+# Column Descriptions:
+# - transaction_type (*): Type of transaction (cost, revenue)
+# - transaction_date (*): Date of transaction (YYYY-MM-DD format)
+# - plot_name: Specific plot (leave empty or use "All Plots" for farm-level expenses)
+# - category (*): For costs: seeds, fertilizer, water, labor, equipment, pest_control, irrigation, fuel, maintenance, other
+#                 For revenue: harvest, government_subsidy, other
+# - description (*): Description of transaction
+# - quantity: Quantity involved (optional, depends on transaction)
+# - unit: Unit of measure (kg, hours, acres, etc.)
+# - unit_cost: Cost or price per unit
+# - total_amount (*): Total amount (positive for revenue, can be positive or negative for costs)
+# - currency: Currency code (USD, EUR, GBP, etc.) - default: USD
+# - crop_name: For harvest revenue - crop that was harvested
+# - quality_grade: For harvest revenue - quality classification (A, B, C, Premium, Standard)
+# - market: For harvest revenue - market or buyer name
+# - notes: Additional details
+#
+transaction_type,transaction_date,plot_name,category,description,quantity,unit,unit_cost,total_amount,currency,crop_name,quality_grade,market,notes
+cost,2024-09-15,All Plots,seeds,Corn seeds purchase,50,kg,8.50,425.00,USD,,,,"High-yield hybrid variety"
+cost,2024-10-15,North Field,fertilizer,NPK Fertilizer application,250,kg,0.72,180.50,USD,,,,Pre-season fertilization
+cost,2024-10-20,South Field,labor,Field preparation and planting,40,hours,18.00,720.00,USD,,,,Seasonal workers
+cost,2024-10-25,Main Plot,irrigation,Irrigation system maintenance,1,job,350.00,350.00,USD,,,,Annual maintenance check
+cost,2024-11-01,All Plots,pest_control,Organic pesticide application,30,liters,12.50,375.00,USD,,,,Preventive treatment
+revenue,2024-11-15,North Field,harvest,Corn harvest - North Field,5200,kg,0.85,4420.00,USD,Corn,A,Local Co-op,Excellent yield - above average quality
+revenue,2024-11-16,South Field,harvest,Corn harvest - South Field,4800,kg,0.82,3936.00,USD,Corn,B,Local Co-op,Good yield - standard quality
+revenue,2024-11-18,Main Plot,harvest,Tomato harvest - Main Plot,3500,kg,2.15,7525.00,USD,Tomato,Premium,Farmers Market,Organic certified - premium price

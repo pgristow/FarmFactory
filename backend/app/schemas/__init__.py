@@ -11,6 +11,26 @@ from app.schemas.plot import PlotCreate, PlotUpdate, PlotInDB, PlotResponse, Plo
 from app.schemas.crop import CropCreate, CropUpdate, CropInDB, PlantingCreate, PlantingUpdate, PlantingInDB
 from app.schemas.irrigation import IrrigationEventCreate, IrrigationEventUpdate, IrrigationEventInDB
 from app.schemas.nutrient import NutrientApplicationCreate, NutrientApplicationUpdate, NutrientApplicationInDB
+from app.schemas.import_job import (
+    ImportJobCreate,
+    ImportJobUpdate,
+    ImportJobInDB,
+    ImportJobResponse,
+    ImportJobListItem,
+    ImportErrorResponse,
+    ImportTemplateCreate,
+    ImportTemplateInDB,
+    ImportTemplateResponse,
+    ColumnMappingSuggestion,
+    ColumnMappingRequest,
+    ColumnMappingResponse,
+    ValidationError,
+    ValidationResultResponse,
+    FileUploadResponse,
+    DataPreviewResponse,
+    ImportStatus,
+    DataType,
+)
 
 __all__ = [
     "PaginatedResponse",
@@ -40,4 +60,22 @@ __all__ = [
     "NutrientApplicationCreate",
     "NutrientApplicationUpdate",
     "NutrientApplicationInDB",
+    "ImportJobCreate",
+    "ImportJobUpdate",
+    "ImportJobInDB",
+    "ImportJobResponse",
+    "ImportJobListItem",
+    "ImportErrorResponse",
+    "ImportTemplateCreate",
+    "ImportTemplateInDB",
+    "ImportTemplateResponse",
+    "ColumnMappingSuggestion",
+    "ColumnMappingRequest",
+    "ColumnMappingResponse",
+    "ValidationError",
+    "ValidationResultResponse",
+    "FileUploadResponse",
+    "DataPreviewResponse",
+    "ImportStatus",
+    "DataType",
 ]

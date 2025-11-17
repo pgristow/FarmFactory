@@ -1,0 +1,25 @@
+# FarmFactory Import Template: Farms and Plots
+# This template combines farm information and plot data for bulk import
+# Required columns are marked with (*), optional columns can be left empty
+#
+# Column Descriptions:
+# - farm_name (*): Name of the farm (text, unique identifier)
+# - farm_latitude: GPS latitude (-90 to 90)
+# - farm_longitude: GPS longitude (-180 to 180)
+# - farm_address: Physical address of the farm
+# - farm_total_area_hectares: Total farm area in hectares (or use farm_total_area_acres for auto-conversion)
+# - farm_timezone: IANA timezone (e.g., America/New_York, America/Los_Angeles)
+# - plot_name (*): Name of the plot/field (text, unique within farm)
+# - plot_number: Plot identification number or code
+# - plot_area_hectares (*): Plot area in hectares (or use plot_area_acres for auto-conversion)
+# - plot_elevation_meters: Elevation above sea level in meters (or use plot_elevation_feet)
+# - plot_slope_degrees: Average slope in degrees
+# - soil_type: Soil classification (Clay, Sandy, Loam, Clay Loam, Sandy Loam, Silt, Silt Loam, etc.)
+# - soil_ph_level: Soil pH value (0-14, typical range 4-9)
+# - organic_matter_percent: Organic matter percentage (0-100)
+# - drainage_class: Drainage classification (Well Drained, Moderately Well Drained, Poorly Drained, Excessively Drained)
+#
+farm_name,farm_latitude,farm_longitude,farm_address,farm_total_area_hectares,farm_timezone,plot_name,plot_number,plot_area_hectares,plot_elevation_meters,plot_slope_degrees,soil_type,soil_ph_level,organic_matter_percent,drainage_class
+Green Valley Farm,40.7128,-74.0060,"123 Farm Road, Rural County, State 12345",25.5,America/New_York,North Field,NF-001,5.2,150,2.5,Loamy Clay,6.8,3.2,Well Drained
+Green Valley Farm,40.7128,-74.0060,"123 Farm Road, Rural County, State 12345",25.5,America/New_York,South Field,SF-001,4.8,145,1.8,Sandy Loam,7.1,2.8,Moderately Well Drained
+Sunny Acres,34.0522,-118.2437,"456 Agriculture Way, Farm Town, State 54321",18.3,America/Los_Angeles,Main Plot,MP-001,10.5,250,1.2,Sandy,7.3,2.1,Excessively Drained

@@ -3,7 +3,7 @@ API v1 Router
 Includes all endpoint routers for API version 1
 """
 from fastapi import APIRouter
-from app.api.v1.endpoints import health, farms, plots
+from app.api.v1.endpoints import health, farms, plots, import_api
 
 # Create main API router
 api_router = APIRouter()
@@ -28,6 +28,13 @@ api_router.include_router(
     tags=["Plots"]
 )
 
+# Include import endpoints
+api_router.include_router(
+    import_api.router,
+    prefix="/import",
+    tags=["Import"]
+)
+
 # TODO: Add more endpoint routers as they are implemented:
 # - /crops
 # - /plantings
@@ -35,4 +42,3 @@ api_router.include_router(
 # - /nutrients
 # - /analytics
 # - /alerts
-# - /import
